@@ -1,0 +1,21 @@
+program PROYECTO_CRUD;
+
+uses
+  Vcl.Forms,
+  AdminAlbaran in 'AdminAlbaran.pas' {FormAlbaran},
+  Main in 'Main.pas' {FormMenu},
+  AddAlbaran in 'AddAlbaran.pas' {FormAddAlbaran},
+  UpdateAlbaran in 'UpdateAlbaran.pas' {FormUpdateAlbaran},
+  MenuAlbaran in 'MenuAlbaran.pas' {Albaran};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TAlbaran, Albaran);
+  Application.CreateForm(TFormMenu, FormMenu);
+  Application.CreateForm(TFormAddAlbaran, FormAddAlbaran);
+  Application.CreateForm(TFormUpdateAlbaran, FormUpdateAlbaran);
+  Application.Run;
+end.

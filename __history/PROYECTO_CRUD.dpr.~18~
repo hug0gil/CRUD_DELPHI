@@ -1,0 +1,22 @@
+program PROYECTO_CRUD;
+
+uses
+  Vcl.Forms,
+  AddAlbaran in 'Albaran\AddAlbaran.pas' {FormAddAlbaran},
+  UpdateAlbaran in 'Albaran\UpdateAlbaran.pas' {FormUpdateAlbaran},
+  MenuAlbaran in 'Albaran\MenuAlbaran.pas' {FormAlbaran},
+  Main in 'Main.pas' {FormMain},
+  FichaBase in 'Bases\FichaBase.pas' {FormFichaBase},
+  ModuloDatos in 'Bases\ModuloDatos.pas' {DataModule2: TDataModule},
+  MenuBase in 'Bases\MenuBase.pas' {FormMenuBase},
+  FichaAlbaran in 'Albaran\FichaAlbaran.pas' {FormFichaBase1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFormMenuBase, FormMenuBase);
+  Application.CreateForm(TDataModule2, DataModule2);
+   Application.Run;
+end.

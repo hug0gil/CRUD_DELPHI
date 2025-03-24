@@ -1,0 +1,13 @@
+object DataModule2: TDataModule2
+  Height = 480
+  Width = 640
+  object FDConnection1: TFDConnection
+    Left = 304
+    Top = 120
+  end
+  object FDTransaction1: TFDTransaction
+    Connection = FDConnection1
+    Left = 432
+    Top = 136
+  end
+end

@@ -1,0 +1,135 @@
+object FormAddAlbaran: TFormAddAlbaran
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'A'#241'adir albaran'
+  ClientHeight = 340
+  ClientWidth = 728
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  TextHeight = 15
+  object LabelCodigo: TLabel
+    Left = 72
+    Top = 35
+    Width = 44
+    Height = 17
+    Caption = 'Codigo'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object LabelFecha: TLabel
+    Left = 310
+    Top = 35
+    Width = 35
+    Height = 17
+    Caption = 'Fecha'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object LabelObservaciones: TLabel
+    Left = 55
+    Top = 136
+    Width = 90
+    Height = 17
+    Caption = 'Observaciones'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object LabelCliente: TLabel
+    Left = 273
+    Top = 136
+    Width = 112
+    Height = 17
+    Caption = 'Codigo del cliente'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object ButtonAdd: TButton
+    Left = 538
+    Top = 57
+    Width = 111
+    Height = 60
+    Caption = 'A'#241'adir'
+    TabOrder = 0
+    OnClick = ButtonAddClick
+  end
+  object ButtonCancelar: TButton
+    Left = 536
+    Top = 215
+    Width = 113
+    Height = 60
+    Caption = 'Cancelar'
+    TabOrder = 1
+    OnClick = ButtonCancelarClick
+  end
+  object MemoObservaciones: TMemo
+    Left = 32
+    Top = 184
+    Width = 153
+    Height = 121
+    Hint = 'Escribe las observaciones oportunas'
+    Lines.Strings = (
+      'Memo1')
+    ParentShowHint = False
+    ScrollBars = ssVertical
+    ShowHint = True
+    TabOrder = 2
+  end
+  object FechaDate: TDateTimePicker
+    Left = 256
+    Top = 75
+    Width = 138
+    Height = 23
+    Date = 45736.000000000000000000
+    Time = 0.575730659722467000
+    TabOrder = 3
+  end
+  object ComboBoxCliente: TComboBox
+    Left = 256
+    Top = 184
+    Width = 145
+    Height = 23
+    TabOrder = 4
+  end
+  object EditCodigo: TEdit
+    Left = 32
+    Top = 75
+    Width = 121
+    Height = 23
+    Enabled = False
+    TabOrder = 5
+  end
+  object Connection: TFDConnection
+    Params.Strings = (
+      'Database=C:\Users\Pr1\DataBases\BDDCRUD.FDB'
+      'Dialect=3'
+      'CharacterSet=ISO8859_1'
+      'User_Name=SYSDBA'
+      'Password=hugoAstec'
+      'DriverID=FB')
+    Connected = True
+    Left = 640
+  end
+end

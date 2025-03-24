@@ -1,0 +1,66 @@
+object NewFormAlbaran: TNewFormAlbaran
+  Left = 0
+  Top = 0
+  Caption = 'NewFormAlbaran'
+  ClientHeight = 441
+  ClientWidth = 624
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  TextHeight = 15
+  object DBGrid: TDBGrid
+    Left = 56
+    Top = 63
+    Width = 473
+    Height = 354
+    ReadOnly = True
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -12
+    TitleFont.Name = 'Segoe UI'
+    TitleFont.Style = []
+  end
+  object ButtonVolver: TButton
+    Left = 32
+    Top = 18
+    Width = 73
+    Height = 40
+    Caption = '<--'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+  end
+  object DBNavigator: TDBNavigator
+    Left = 56
+    Top = 80
+    Width = 472
+    Height = 25
+    DataSource = DataSource
+    VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
+    TabOrder = 2
+  end
+  object DataSource: TDataSource
+    Left = 128
+    Top = 8
+  end
+  object Connection: TFDConnection
+    Params.Strings = (
+      'Database=C:\Users\Pr1\DataBases\BDDCRUD.FDB'
+      'Dialect=3'
+      'CharacterSet=ISO8859_1'
+      'User_Name=SYSDBA'
+      'Password=hugoAstec'
+      'DriverID=FB')
+    Connected = True
+    Left = 136
+    Top = 16
+  end
+end

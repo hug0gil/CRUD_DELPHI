@@ -1,0 +1,254 @@
+unit NewAdmin;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error,
+  FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
+  FireDAC.Stan.Async, FireDAC.Phys, FireDAC.VCLUI.Wait, Data.DB,
+  FireDAC.Comp.Client, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
+  FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Phys.FB, FireDAC.Phys.FBDef,
+  Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls, Vcl.WinXPickers, Vcl.ExtCtrls,
+  Vcl.Buttons, Vcl.DBCtrls;
+
+type
+  TFormAlbaran = class(TForm)
+    ButtonVolver: TButton;
+    FDQuerySelec: TFDQuery;
+    DataSource: TDataSource;
+    Connection: TFDConnection;
+    ComboBoxCodigo: TComboBox;
+    FechaDateTime: TDateTimePicker;
+    Memo: TMemo;
+    Label1: TLabel;
+    ComboBoxCliente: TComboBox;
+    FDQueryDetalle: TFDQuery;
+    DBNavigator: TDBNavigator;
+    ButtonAgregar: TButton;
+    DBGrid: TDBGrid;
+    procedure FormCreate(Sender: TObject);
+    procedure ComboBoxCodigoOnExit(Sender: TObject);
+    procedure ComboBoxCodigoOnSelect(Sender: TObject);
+    procedure ComboBoxClienteOnExit(Sender: TObject);
+    procedure ComboBoxClienteOnSelect(Sender: TObject);
+    procedure DBNavigatorInsert(Sender: TObject);
+    procedure ButtonVolverClick(Sender: TObject);
+    procedure ButtonAgregarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormAlbaran: TAdminAlbaran;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  Main, AddAlbaran, UpdateAlbaran;
+
+procedure TFormAlbaran.FormCreate(Sender: TObject);
+begin
+  Memo.Lines.Clear;
+  Memo.Lines.Add('Observaciones');
+
+  // Establecer la conexión y ejecutar la consulta para llenar ComboBox y DBGrid
+  FDQuerySelec.Connection := Connection;
+
+  // Abre la consulta para el DataSource (para el DBGrid)
+  FDQuerySelec.SQL.Text := 'SELECT * FROM ALBARAN';
+  // Consulta principal para llenar el DBGrid
+  FDQuerySelec.Open;
+
+  // Vincular el DataSource con la consulta
+  DataSource.DataSet := FDQuerySelec;
+
+  // Asignar el DataSource al DBGrid
+  DBGrid.DataSource := DataSource;
+
+  // Configurar el ancho de las columnas del DBGrid
+
+  DBGrid.Columns[0].Title.Caption := 'Código';
+  DBGrid.Columns[0].Width := 70;
+
+  DBGrid.Columns[1].Title.Caption := 'Fecha';
+  DBGrid.Columns[1].Width := 90;
+
+  DBGrid.Columns[2].Title.Caption := 'Observaciones';
+  DBGrid.Columns[2].Width := 80;
+
+  DBGrid.Columns[3].Title.Caption := 'Código del cliente';
+
+  // Llenar los ComboBox con los datos de la consulta
+  ComboBoxCodigo.Items.Clear;
+  ComboBoxCliente.Items.Clear;
+  while not FDQuerySelec.Eof do
+  begin
+    ComboBoxCodigo.Items.Add(FDQuerySelec.FieldByName('NCODIGO').AsString);
+    ComboBoxCliente.Items.Add(FDQuerySelec.FieldByName('NCOD_CLIENTE')
+      .AsString);
+    FDQuerySelec.Next;
+  end;
+end;
+
+procedure TFormAlbaran.DBNavigatorInsert(Sender: TObject);
+begin
+  ShowMessage('Se ha hecho clic en el botón "Añadir"');
+  // Aquí puedes agregar la lógica adicional para insertar un nuevo registro
+end;
+
+procedure TFormAlbaran.ComboBoxCodigoOnSelect(Sender: TObject);
+begin
+  // Verifica si el ComboBox tiene un valor seleccionado
+  if ComboBoxCodigo.ItemIndex <> -1 then
+  begin
+    // Asegurarse de que se usa un código exacto y no el valor anterior
+    FDQueryDetalle.Close;
+    FDQueryDetalle.SQL.Text := 'SELECT * FROM ALBARAN WHERE NCODIGO = :Codigo';
+    FDQueryDetalle.ParamByName('Codigo').AsString := ComboBoxCodigo.Text;
+    FDQueryDetalle.Open;
+
+    // Si la consulta no tiene resultados, restablecer valores predeterminados
+    if FDQueryDetalle.IsEmpty then
+    begin
+      // Mostrar valores predeterminados si no se encuentra el código
+      FechaDateTime.Date := Now;
+      Memo.Clear;
+      Memo.Lines.Add('Observaciones');
+      ComboBoxCliente.ItemIndex := -1; // Desmarcar el cliente
+    end
+    else
+    begin
+      // Si hay datos, actualiza los componentes con la información
+      FechaDateTime.Date := FDQueryDetalle.FieldByName('DFECHA').AsDateTime;
+      Memo.Lines.Text := FDQueryDetalle.FieldByName('COBSERVACIONES').AsString;
+
+      // Seleccionar el cliente correspondiente en ComboBoxCliente
+      ComboBoxCliente.ItemIndex := ComboBoxCliente.Items.IndexOf
+        (FDQueryDetalle.FieldByName('NCOD_CLIENTE').AsString);
+
+      // Si no se encuentra el cliente en el ComboBox, puede agregarlo si lo deseas
+      if ComboBoxCliente.ItemIndex = -1 then
+      begin
+        ComboBoxCliente.Items.Add(FDQueryDetalle.FieldByName('NCOD_CLIENTE')
+          .AsString);
+        ComboBoxCliente.ItemIndex := ComboBoxCliente.Items.Count - 1;
+        // Seleccionar el nuevo cliente agregado
+      end;
+    end;
+  end;
+end;
+
+procedure TFormAlbaran.ComboBoxCodigoOnExit(Sender: TObject);
+begin
+  // Verifica si el ComboBox tiene un valor seleccionado
+  if ComboBoxCodigo.ItemIndex = -1 then
+  begin
+    // Si no se ha seleccionado un código válido, restablecer los valores predeterminados
+    FechaDateTime.Date := Now;
+    Memo.Clear;
+    Memo.Lines.Add('Observaciones');
+  end
+  else
+  begin
+    // Si hay un código seleccionado, intenta obtener los detalles del albarán
+    FDQueryDetalle.Close;
+    FDQueryDetalle.SQL.Text := 'SELECT * FROM ALBARAN WHERE NCODIGO = :Codigo';
+    FDQueryDetalle.ParamByName('Codigo').AsString := ComboBoxCodigo.Text;
+    FDQueryDetalle.Open;
+
+    // Si no se encuentra el código, mostrar valores predeterminados
+    if FDQueryDetalle.IsEmpty then
+    begin
+      FechaDateTime.Date := Now;
+      Memo.Clear;
+      Memo.Lines.Add('Observaciones');
+    end
+    else
+    begin
+      // Si hay datos, actualiza los componentes con la información
+      FechaDateTime.Date := FDQueryDetalle.FieldByName('DFECHA').AsDateTime;
+      Memo.Lines.Text := FDQueryDetalle.FieldByName('COBSERVACIONES').AsString;
+    end;
+  end;
+end;
+
+procedure TFormAlbaran.ComboBoxClienteOnSelect(Sender: TObject);
+begin
+  // Verifica si el ComboBox tiene un valor seleccionado
+  if ComboBoxCliente.ItemIndex <> -1 then
+  begin
+    // Asegurarse de que se usa un código exacto y no el valor anterior
+    FDQueryDetalle.Close;
+    FDQueryDetalle.SQL.Text :=
+      'SELECT * FROM ALBARAN WHERE NCOD_CLIENTE = :Cliente';
+    FDQueryDetalle.ParamByName('Cliente').AsString := ComboBoxCliente.Text;
+    FDQueryDetalle.Open;
+
+    begin
+      // Si hay datos, actualiza los componentes con la información
+      FechaDateTime.Date := FDQueryDetalle.FieldByName('DFECHA').AsDateTime;
+      Memo.Lines.Text := FDQueryDetalle.FieldByName('COBSERVACIONES').AsString;
+      ComboBoxCliente.Text := 'Codigo del cliente';
+    end;
+  end;
+end;
+
+procedure TFormAlbaran.ComboBoxClienteOnExit(Sender: TObject);
+begin
+  // Verifica si el ComboBox tiene un valor seleccionado
+  if ComboBoxCliente.ItemIndex = -1 then
+  begin
+    // Si no se ha seleccionado un cliente válido, restablecer los valores predeterminados
+    FechaDateTime.Date := Now;
+    Memo.Clear;
+    Memo.Lines.Add('Observaciones');
+  end
+  else
+  begin
+    // Si hay un cliente seleccionado, intenta obtener los detalles del albarán
+    FDQueryDetalle.Close;
+    FDQueryDetalle.SQL.Text :=
+      'SELECT * FROM ALBARAN WHERE NCOD_CLIENTE = :Cliente';
+    FDQueryDetalle.ParamByName('Cliente').AsString := ComboBoxCliente.Text;
+    FDQueryDetalle.Open;
+
+    // Si no se encuentra el cliente, mostrar valores predeterminados
+    if FDQueryDetalle.IsEmpty then
+    begin
+      FechaDateTime.Date := Now;
+      Memo.Clear;
+      Memo.Lines.Add('Observaciones');
+      ComboBoxCliente.Items.SetText('Cod cliente');
+    end
+    else
+    begin
+      // Si hay datos, actualiza los componentes con la información
+      FechaDateTime.Date := FDQueryDetalle.FieldByName('DFECHA').AsDateTime;
+      Memo.Lines.Text := FDQueryDetalle.FieldByName('COBSERVACIONES').AsString;
+      ComboBoxCliente.Clear;
+      ComboBoxCliente.Items.Add(FDQueryDetalle.FieldByName('NCOD_CLIENTE')
+        .AsString);
+    end;
+  end;
+end;
+
+procedure TFormAlbaran.ButtonAgregarClick(Sender: TObject);
+begin
+  //ShowMessage('hola');
+end;
+
+procedure TFormAlbaran.ButtonVolverClick(Sender: TObject);
+begin
+  // Cerrar el formulario actual
+  Self.Close;
+end;
+
+
+
+end.
