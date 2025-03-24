@@ -1,0 +1,23 @@
+program PROYECTO_CRUD;
+
+uses
+  Vcl.Forms,
+  AddAlbaran in 'Albaran\AddAlbaran.pas' {FormAddAlbaran},
+  UpdateAlbaran in 'Albaran\UpdateAlbaran.pas' {FormUpdateAlbaran},
+  MenuAlbaran in 'Albaran\MenuAlbaran.pas' {FormAlbaran},
+  Main in 'Main.pas' {FormMain},
+  FichaBase in 'Bases\FichaBase.pas' {FormAddAlbaranHeredado},
+  ModuloDatos in 'Bases\ModuloDatos.pas' {DataModuleBDD: TDataModule},
+  MenuBase in 'Bases\MenuBase.pas' {FormMenuBase},
+  FormMenuAlbaranHeredado in 'Albaran\FormMenuAlbaranHeredado.pas' {FormMenuAlbaran},
+  HeredadoAlbaran in 'Albaran\HeredadoAlbaran.pas' {FormAddHeredado};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TDataModuleBDD, DataModuleBDD);
+  Application.CreateForm(TFormMenuAlbaran, FormMenuAlbaran);
+  Application.Run;
+end.

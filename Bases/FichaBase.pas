@@ -3,29 +3,35 @@ unit FichaBase;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
+  FireDAC.Phys.Intf, FireDAC.Stan.Option, FireDAC.Stan.Intf, FireDAC.Comp.Client;
 
 type
   TFormFichaBase = class(TForm)
-    Panel1: TPanel;
-    Button1: TButton;
-    btnCancel: TButton;
-    Shape1: TShape;
+    PanelLbl: TPanel;
+    PanelBtn: TPanel;
+    Label1: TLabel;
+    btnCancelar: TButton;
+    btnAceptar: TButton;
     EditCodigo: TEdit;
-    LabelCodigo: TLabel;
     Panel2: TPanel;
   private
     { Private declarations }
   public
     { Public declarations }
+    Code: Integer;
+    constructor Create(AOwner: TComponent; Codigo: Integer); reintroduce;
   end;
-
-var
-  FormFichaBase: TFormFichaBase;
 
 implementation
 
-{$R *.dfm}
+constructor TFormFichaBase.Create(AOwner: TComponent; Codigo: Integer);
+begin
+  inherited Create(AOwner);
+  Code := Codigo;
+  EditCodigo.Text := IntToStr(Code);
+end;
 
 end.

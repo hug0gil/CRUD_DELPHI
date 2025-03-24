@@ -127,16 +127,12 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Albaran\AddAlbaran.pas">
-            <Form>FormAddAlbaran</Form>
+        <DCCReference Include="Albaran\AddAlbaranAntiguo.pas">
+            <Form>FormAddAlbaranAntiguo</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Albaran\UpdateAlbaran.pas">
             <Form>FormUpdateAlbaran</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Albaran\MenuAlbaran.pas">
-            <Form>FormAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Main.pas">
@@ -148,12 +144,20 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Bases\ModuloDatos.pas">
-            <Form>DataModule2</Form>
+            <Form>DataModuleBDD</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Bases\MenuBase.pas">
             <Form>FormMenuBase</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Albaran\FormMenuAlbaranHeredado.pas">
+            <Form>FormMenuAlbaran</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Albaran\AddAlbaran.pas">
+            <Form>FormAddAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

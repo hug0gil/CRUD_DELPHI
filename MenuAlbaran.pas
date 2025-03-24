@@ -140,13 +140,12 @@ begin
 end;
 
 procedure TFormAlbaran.ButtonAgregarClick(Sender: TObject);
-var
-  FormAddAlbaran: TFormAddAlbaran;
+
 begin
   // Obtener el último código de albarán directamente desde la base de datos
   Self.ObtenerLastCode(Self);
 
-  // Crear una nueva instancia de FormAddAlbaran
+ { // Crear una nueva instancia de FormAddAlbaran
   FormAddAlbaran := TFormAddAlbaran.Create(Self);
   try
     // Asignar el último código disponible al campo de código
@@ -156,7 +155,7 @@ begin
   finally
     // Liberar la instancia de FormAddAlbaran después de que se cierre
     FormAddAlbaran.Free;
-  end;
+  end;}
 end;
 
 procedure TFormAlbaran.ButtonEliminarClick(Sender: TObject);

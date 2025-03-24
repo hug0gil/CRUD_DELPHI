@@ -9,8 +9,8 @@ uses
   FireDAC.Comp.Client, Data.DB, FireDAC.Phys.FB, FireDAC.Phys.FBDef;
 
 type
-  TDataModule2 = class(TDataModule)
-    FDTransaction1: TFDTransaction;
+  TDataModuleBDD = class(TDataModule)
+    FDTransaction: TFDTransaction;
     DataBaseFDConnection: TFDConnection;
     procedure DataModuleCreate(Sender: TObject);
   private
@@ -20,7 +20,7 @@ type
   end;
 
 var
-  DataModule2: TDataModule2;
+  DataModuleBDD: TDataModuleBDD;
 
 implementation
 
@@ -28,7 +28,7 @@ implementation
 
 {$R *.dfm}
 
-procedure TDataModule2.DataModuleCreate(Sender: TObject);
+procedure TDataModuleBDD.DataModuleCreate(Sender: TObject);
 begin
   //aqui va la conexion con la bdd
 end;

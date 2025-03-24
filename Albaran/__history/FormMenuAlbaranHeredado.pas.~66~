@@ -1,0 +1,42 @@
+unit FormMenuAlbaranHeredado;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, MenuBase, Data.DB, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Buttons, Vcl.DBCtrls,
+  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ExtCtrls, ModuloDatos,
+  HeredadoAlbaran,FichaBase;
+
+type
+  TFormMenuAlbaran = class(TFormMenuBase)
+    FDTableNCODIGO: TIntegerField;
+    FDTableDFECHA: TDateField;
+    FDTableCOBSERVACIONES: TStringField;
+    FDTableNCOD_CLIENTE: TIntegerField;
+    procedure btnAgregarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormMenuAlbaran.btnAgregarClick(Sender: TObject);
+var FormFichaAlbaran:TFormFichaBase;
+
+begin
+  FormFichaAlbaran := TFormFichaBase.Create(Self);
+
+  FormFichaAlbaran.ShowModal;
+  FormFichaAlbaran.Free;
+end;
+
+end.

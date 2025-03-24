@@ -82,7 +82,6 @@ object FormAlbaran: TFormAlbaran
     OnClick = ButtonActualizarClick
   end
   object FDQuerySelec: TFDQuery
-    Connection = DataModule2.DataBaseFDConnection
     SQL.Strings = (
       'SELECT * FROM ALBARAN;')
     Left = 464

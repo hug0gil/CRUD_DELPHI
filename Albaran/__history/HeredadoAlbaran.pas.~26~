@@ -1,0 +1,29 @@
+unit HeredadoAlbaran;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FichaBase, Vcl.StdCtrls, Vcl.ExtCtrls;
+
+type
+  TFormAddHeredado = class(TFormFichaBase)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    Code: Integer;
+    constructor Create(AOwner: TComponent; Codigo: Integer); reintroduce;
+  end;
+
+implementation
+
+constructor TFormAddHeredado.Create(AOwner: TComponent; Codigo: Integer);
+begin
+  inherited Create(AOwner);
+  Code := Codigo; // Asignar el código al objeto
+  EditCodigo.Text := IntToStr(Code);
+end;
+
+end.

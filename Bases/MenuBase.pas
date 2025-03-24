@@ -6,7 +6,10 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.ExtCtrls, Vcl.Buttons,
-  Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls;
+  Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, ModuloDatos;
 
 type
   TFormMenuBase = class(TForm)
@@ -19,12 +22,16 @@ type
     DBNavigator: TDBNavigator;
     btnEliminar: TButton;
     btnVer: TButton;
+    FDTable: TFDTable;
+    DataSource: TDataSource;
     procedure btnActualizarClick(Sender: TObject);
     procedure btnEliminarClick(Sender: TObject);
     procedure btnAgregarClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
+    procedure DBNavigatorClick(Sender: TObject; Button: TNavigateBtn);
+    function GetLastCodigo: Integer;
   private
     { Private declarations }
+    LastCodigo: Integer;
   public
     { Public declarations }
   end;
@@ -43,7 +50,7 @@ end;
 
 procedure TFormMenuBase.btnAgregarClick(Sender: TObject);
 begin
-  //Añadir
+  // Añadir
 end;
 
 procedure TFormMenuBase.btnEliminarClick(Sender: TObject);
@@ -51,9 +58,46 @@ begin
   // Eliminar
 end;
 
-procedure TFormMenuBase.FormCreate(Sender: TObject);
+function TFormMenuBase.GetLastCodigo: Integer;
 begin
-//OnCreate
+  FDTable.Last;
+  Result := FDTable.FieldByName('NCODIGO').AsInteger + 1;
+end;
+
+procedure TFormMenuBase.DBNavigatorClick(Sender: TObject; Button: TNavigateBtn);
+
+begin
+  case Button of
+    nbPost:
+      begin
+        if not ModuloDatos.DataModuleBDD.FDTransaction.Active then
+          ModuloDatos.DataModuleBDD.FDTransaction.StartTransaction;
+
+        // Guardar cambios en el dataset (FDTable está en el formulario)
+        if FDTable.State in [dsEdit, dsInsert] then
+          FDTable.Post; // Guardar cambios en el dataset
+
+        // Confirmar la transacción desde el DataModule si está activa
+        if ModuloDatos.DataModuleBDD.FDTransaction.Active then
+          ModuloDatos.DataModuleBDD.FDTransaction.Commit;
+        // Confirmar cambios en la BD
+      end;
+
+    nbCancel:
+      begin
+        if not ModuloDatos.DataModuleBDD.FDTransaction.Active then
+          ModuloDatos.DataModuleBDD.FDTransaction.StartTransaction;
+
+        // Cancelar cambios en el dataset (FDTable está en el formulario)
+        if FDTable.State in [dsEdit, dsInsert] then
+          FDTable.Cancel; // Cancelar cambios en el dataset
+
+        // Revertir la transacción desde el DataModule si está activa
+        if ModuloDatos.DataModuleBDD.FDTransaction.Active then
+          ModuloDatos.DataModuleBDD.FDTransaction.Rollback;
+        // Revertir cambios en la BD
+      end;
+  end;
 end;
 
 end.

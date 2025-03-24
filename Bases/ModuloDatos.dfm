@@ -1,8 +1,10 @@
-object DataModule2: TDataModule2
+object DataModuleBDD: TDataModuleBDD
   OnCreate = DataModuleCreate
   Height = 480
   Width = 640
-  object FDTransaction1: TFDTransaction
+  object FDTransaction: TFDTransaction
+    Options.AutoStop = False
+    Options.DisconnectAction = xdRollback
     Connection = DataBaseFDConnection
     Left = 408
     Top = 176

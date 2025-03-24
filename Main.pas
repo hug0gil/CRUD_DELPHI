@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,FormMenuAlbaranHeredado;
 
 type
   TFormMain = class(TForm)
@@ -28,13 +28,13 @@ uses MenuAlbaran;
 
 procedure TFormMain.ButtonAlbaranClick(Sender: TObject);
 
-var FormAlbaran:TFormAlbaran;
+var FormMenuAlbaran:TFormMenuAlbaran;
 
 begin
-  FormAlbaran := TFormAlbaran.Create(Self);
+  FormMenuAlbaran := TFormMenuAlbaran.Create(Self);
 
-  FormAlbaran.ShowModal;
-  FormAlbaran.Free;
+  FormMenuAlbaran.ShowModal;
+  FormMenuAlbaran.Free;
 end;
 
 

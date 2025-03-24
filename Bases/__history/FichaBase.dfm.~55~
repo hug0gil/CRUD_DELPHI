@@ -1,0 +1,93 @@
+object FormFichaBase: TFormFichaBase
+  Left = 0
+  Top = 0
+  Caption = 'FormFichaBase'
+  ClientHeight = 422
+  ClientWidth = 624
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  TextHeight = 15
+  object Panel1: TPanel
+    Left = 256
+    Top = 184
+    Width = 185
+    Height = 41
+    Caption = 'pa'
+    TabOrder = 0
+  end
+  object PanelLbl: TPanel
+    Left = 0
+    Top = 0
+    Width = 624
+    Height = 41
+    Align = alTop
+    TabOrder = 1
+    ExplicitLeft = 136
+    ExplicitTop = 24
+    ExplicitWidth = 185
+    object Label1: TLabel
+      Left = 296
+      Top = 16
+      Width = 34
+      Height = 15
+      Caption = 'Label1'
+    end
+    object EditCodigo: TEdit
+      Left = 256
+      Top = 8
+      Width = 121
+      Height = 23
+      TabOrder = 0
+      Text = 'EditCodigo'
+    end
+  end
+  object PanelBtn: TPanel
+    Left = 0
+    Top = 381
+    Width = 624
+    Height = 41
+    Align = alBottom
+    TabOrder = 2
+    ExplicitLeft = 1
+    ExplicitTop = 1
+    ExplicitWidth = 622
+    object btnCancelar: TButton
+      AlignWithMargins = True
+      Left = 533
+      Top = 6
+      Width = 75
+      Height = 29
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 15
+      Margins.Bottom = 5
+      Align = alRight
+      Caption = 'btnCancelar'
+      TabOrder = 0
+      ExplicitLeft = 272
+      ExplicitTop = 8
+      ExplicitHeight = 25
+    end
+    object btnAceptar: TButton
+      AlignWithMargins = True
+      Left = 443
+      Top = 6
+      Width = 75
+      Height = 29
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 10
+      Margins.Bottom = 5
+      Align = alRight
+      Caption = 'btnAceptar'
+      TabOrder = 1
+      ExplicitLeft = 366
+      ExplicitTop = 8
+      ExplicitHeight = 25
+    end
+  end
+end
