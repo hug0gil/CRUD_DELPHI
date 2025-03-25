@@ -131,16 +131,8 @@
             <Form>FormAddAlbaranAntiguo</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Albaran\UpdateAlbaran.pas">
-            <Form>FormUpdateAlbaran</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="Main.pas">
             <Form>FormMain</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Bases\FichaBase.pas">
-            <Form>FormFichaBase</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Bases\ModuloDatos.pas">
@@ -156,8 +148,24 @@
             <Form>FormMenuAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Bases\FichaBase.pas">
+            <Form>FormFichaBase</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Bases\FichaAlbaran.pas">
+            <Form>FormFichaAlbaran</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <DCCReference Include="Albaran\AddAlbaran.pas">
             <Form>FormAddAlbaran</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Albaran\UpdateAlbaran.pas">
+            <Form>FormUpdateAlbaran</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Albaran\ReadAlbaran.pas">
+            <Form>FormReadAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

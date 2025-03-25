@@ -59,10 +59,25 @@ begin
 end;
 
 function TFormMenuBase.GetLastCodigo: Integer;
+var
+  FDQuery: TFDQuery;
 begin
-  FDTable.Last;
-  Result := FDTable.FieldByName('NCODIGO').AsInteger + 1;
+  FDQuery := TFDQuery.Create(nil);
+  try
+    FDQuery.Connection := ModuloDatos.DataModuleBDD.DataBaseFDConnection;
+    FDQuery.SQL.Text := 'SELECT MAX(NCODIGO) FROM ALBARAN'; // Seleccionar el último código
+    FDQuery.Open;
+
+    if FDQuery.Fields[0].AsInteger = 0 then
+      Result := 1  // Si no hay registros, empieza con 1
+    else
+      Result := FDQuery.Fields[0].AsInteger+1;  // Devuelve el último código insertado
+  finally
+    FDQuery.Free;
+  end;
 end;
+
+
 
 procedure TFormMenuBase.DBNavigatorClick(Sender: TObject; Button: TNavigateBtn);
 

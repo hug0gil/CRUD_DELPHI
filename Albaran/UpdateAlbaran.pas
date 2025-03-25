@@ -4,84 +4,75 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
-  Vcl.ComCtrls,
-  FireDAC.Comp.Client, FireDAC.Stan.Intf, FireDAC.Stan.Option,
-  FireDAC.Stan.Error,
-  FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool,
-  FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.FB, FireDAC.Phys.FBDef,
-  FireDAC.VCLUI.Wait, Data.DB, FireDAC.Stan.Param, FireDAC.DatS,
-  FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, MenuAlbaran;
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FichaAlbaran, Vcl.StdCtrls,
+  Vcl.ComCtrls, Vcl.ExtCtrls,MenuBase, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client,ModuloDatos;
 
 type
-  TFormUpdateAlbaran = class(TForm)
-    ButtonAdd: TButton;
-    ButtonCancelar: TButton;
-    ComboBoxCliente: TComboBox;
-    FechaDate: TDateTimePicker;
-    LabelCliente: TLabel;
-    LabelCodigo: TLabel;
-    LabelFecha: TLabel;
-    LabelObservaciones: TLabel;
-    MemoObservaciones: TMemo;
-    Connection: TFDConnection;
-    EditCodigo: TEdit;
-
-    procedure ButtonCancelarClick(Sender: TObject);
-    procedure ButtonAddClick(Sender: TObject);
+  TFormUpdateAlbaran = class(TFormFichaAlbaran)
+    FDQueryActualizar: TFDQuery;
+    procedure btnAceptarClick(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
-    CodigoAlbaran: Integer;
   end;
 
 var
   FormUpdateAlbaran: TFormUpdateAlbaran;
-  QueryActualizar: TFDQuery;
 
 implementation
 
 {$R *.dfm}
 
-procedure TFormUpdateAlbaran.ButtonAddClick(Sender: TObject);
-
+procedure TFormUpdateAlbaran.btnAceptarClick(Sender: TObject);
+var
+  FechaFormateada: string;
 begin
+  // Comprobar que todos los campos necesarios están completos
+  if (ComboBoxCodCliente.Text = '') or (MemoObservaciones.Lines.Text = '') then
+  begin
+    MessageDlgPosHelp('Por favor, rellene todos los campos',
+      TMsgDlgType.mtError, [mbOK], 0, -1, -1, 'Error de actualización');
+    Exit;
+  end;
 
-  if ComboBoxCliente.ItemIndex = -1 then
+  // Comprobar que el código de cliente seleccionado está en la lista del ComboBox
+  if ComboBoxCodCliente.ItemIndex = -1 then
   begin
     MessageDlg('Por favor, seleccione un código de cliente válido de la lista.',
       mtError, [mbOK], 0);
     Exit;
   end;
 
-  QueryActualizar := TFDQuery.Create(nil);
+  // Obtener la fecha seleccionada y formatearla a formato MM/DD/YYYY
+  FechaFormateada := FormatDateTime('MM/DD/YYYY', DateTimePickerFecha.Date);
 
-  QueryActualizar.Connection := Connection;
+  FDQueryActualizar := TFDQuery.Create(nil);
+  try
+    FDQueryActualizar.Connection := ModuloDatos.DataModuleBDD.DataBaseFDConnection;
 
-  QueryActualizar.SQL.Text :=
-    'UPDATE ALBARAN SET DFECHA=:Fecha, COBSERVACIONES=:Observaciones, NCOD_CLIENTE=:Cod_Cliente WHERE NCODIGO=:Cod;';
+    // SQL de actualización con parámetros
+    FDQueryActualizar.SQL.Text :=
+      'UPDATE ALBARAN SET DFECHA = :Fecha, COBSERVACIONES = :Observaciones, NCOD_CLIENTE = :Cliente WHERE NCODIGO = :Codigo';
 
-  QueryActualizar.ParamByName('Fecha').AsDate := FechaDate.Date;
-  QueryActualizar.ParamByName('Observaciones').AsString :=
-    MemoObservaciones.Text;
-  QueryActualizar.ParamByName('Cod_Cliente').AsInteger :=
-    StrToInt(ComboBoxCliente.Items[ComboBoxCliente.ItemIndex]);
-  QueryActualizar.ParamByName('Cod').AsInteger := CodigoAlbaran;
-  QueryActualizar.ExecSQL;
+    // Asignar valores a los parámetros
+    FDQueryActualizar.ParamByName('Codigo').AsInteger := StrToInt(EditCodigo.Text); // El código del albarán que se va a actualizar
+    FDQueryActualizar.ParamByName('Fecha').AsString := FechaFormateada;
+    FDQueryActualizar.ParamByName('Observaciones').AsString := MemoObservaciones.Lines.Text;
+    FDQueryActualizar.ParamByName('Cliente').AsInteger := StrToInt(ComboBoxCodCliente.Text); // El nuevo cliente seleccionado
 
-  ShowMessage('Albarán actualizado correctamente.');
+    // Ejecutar la consulta de actualización
+    FDQueryActualizar.ExecSQL;
 
-  QueryActualizar.Free;
-
-  //FormAlbaran.FDQuerySelec.Refresh;
-  Self.Close;
+  finally
+    FDQueryActualizar.Free;
+    Self.Close; // Cerrar el formulario después de la actualización
+  end;
 end;
 
-procedure TFormUpdateAlbaran.ButtonCancelarClick(Sender: TObject);
-begin
-  Self.Close;
-end;
 
 end.

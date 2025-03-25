@@ -90,7 +90,7 @@ var
   QueryClientes: TFDQuery;
   ClienteCodigo: Integer;
   ClienteCodigoStr: string;
-begin
+begin {
   FormUpdateAlbaran.CodigoAlbaran := CodigoSeleccionado;
 
   QueryClientes := TFDQuery.Create(nil);
@@ -136,7 +136,7 @@ begin
     [2].AsString;
   FormUpdateAlbaran.EditCodigo.Text := IntToStr(CodigoSeleccionado);
 
-  FormUpdateAlbaran.ShowModal;
+  FormUpdateAlbaran.ShowModal; }
 end;
 
 procedure TFormAlbaran.ButtonAgregarClick(Sender: TObject);

@@ -1,0 +1,32 @@
+unit FichaBase;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls;
+
+type
+  TFormFichaBase = class(TForm)
+    PanelTitle: TPanel;
+    PanelBtns: TPanel;
+    Shape1: TShape;
+    Shape2: TShape;
+    btnCancelar: TButton;
+    btnAceptar: TButton;
+    lblTitulo: TLabel;
+    Panel1: TPanel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormFichaBase: TFormFichaBase;
+
+implementation
+
+{$R *.dfm}
+
+end.

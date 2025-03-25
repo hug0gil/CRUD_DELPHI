@@ -8,10 +8,14 @@ uses
 
 type
   TFormFichaBase = class(TForm)
-    Panel1: TPanel;
-    Button1: TButton;
-    btnCancel: TButton;
+    PanelTitle: TPanel;
+    PanelBtns: TPanel;
     Shape1: TShape;
+    Shape2: TShape;
+    btnCancelar: TButton;
+    btnAceptar: TButton;
+    lblTitulo: TLabel;
+    PanelObjects: TPanel;
   private
     { Private declarations }
   public

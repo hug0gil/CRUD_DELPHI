@@ -1,0 +1,49 @@
+inherited FormMenuAlbaran: TFormMenuAlbaran
+  Caption = 'Men'#250' albaran'
+  StyleElements = [seFont, seClient, seBorder]
+  TextHeight = 15
+  inherited Panel1: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited Panel2: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited DBNavigator: TDBNavigator
+      Hints.Strings = ()
+    end
+  end
+  inherited FDTable: TFDTable
+    Active = True
+    IndexName = 'ALBARAN_CLIENTES_FK'
+    Transaction = DataModuleBDD.FDTransaction
+    UpdateOptions.AssignedValues = [uvAutoCommitUpdates]
+    UpdateOptions.AutoCommitUpdates = True
+    TableName = 'ALBARAN'
+    object FDTableNCODIGO: TIntegerField
+      DisplayLabel = 'C'#243'digo'
+      FieldName = 'NCODIGO'
+      Origin = 'NCODIGO'
+      Required = True
+    end
+    object FDTableDFECHA: TDateField
+      DisplayLabel = 'Fecha'
+      FieldName = 'DFECHA'
+      Origin = 'DFECHA'
+      Required = True
+    end
+    object FDTableCOBSERVACIONES: TStringField
+      DisplayLabel = 'Observaciones'
+      FieldName = 'COBSERVACIONES'
+      Origin = 'COBSERVACIONES'
+      Size = 255
+    end
+    object FDTableNCOD_CLIENTE: TIntegerField
+      DisplayLabel = 'C'#243'digo_Cliente'
+      FieldName = 'NCOD_CLIENTE'
+      Origin = 'NCOD_CLIENTE'
+      Required = True
+    end
+  end
+  inherited DataSource: TDataSource
+    OnDataChange = DataSourceDataChange
+  end
+end

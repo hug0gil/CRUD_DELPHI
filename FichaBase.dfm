@@ -10,60 +10,113 @@ object FormFichaBase: TFormFichaBase
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Position = poScreenCenter
   TextHeight = 15
   object Shape1: TShape
+    Left = 0
+    Top = 47
+    Width = 624
+    Height = 2
+    Align = alTop
+    ExplicitLeft = -24
+    ExplicitWidth = 640
+  end
+  object Shape2: TShape
     Left = 0
     Top = 398
     Width = 624
     Height = 2
     Align = alBottom
-    ExplicitTop = 399
+    ExplicitLeft = -16
+    ExplicitTop = 392
+    ExplicitWidth = 640
   end
-  object Panel1: TPanel
+  object PanelTitle: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 618
+    Height = 41
+    Align = alTop
+    BevelOuter = bvNone
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Courier New'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+    ExplicitLeft = 0
+    ExplicitTop = 0
+    ExplicitWidth = 624
+    object lblTitulo: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 10
+      Width = 612
+      Height = 28
+      Margins.Top = 10
+      Align = alClient
+      Alignment = taCenter
+      Caption = 'T'#237'tulo'
+      ExplicitLeft = -1
+      ExplicitTop = 12
+    end
+  end
+  object PanelBtns: TPanel
     Left = 0
     Top = 400
     Width = 624
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
-    Caption = 'Panel1'
-    ShowCaption = False
-    TabOrder = 0
-    ExplicitLeft = 232
-    ExplicitTop = 224
-    ExplicitWidth = 185
-    object Button1: TButton
-      AlignWithMargins = True
-      Left = 457
-      Top = 5
-      Width = 75
-      Height = 31
-      Margins.Top = 5
-      Margins.Right = 7
-      Margins.Bottom = 5
-      Align = alRight
-      Caption = 'Aceptar'
-      TabOrder = 0
-      ExplicitLeft = 104
-      ExplicitTop = 8
-      ExplicitHeight = 25
-    end
-    object btnCancel: TButton
+    TabOrder = 1
+    ExplicitLeft = 1
+    ExplicitTop = 1
+    ExplicitWidth = 622
+    object btnCancelar: TButton
       AlignWithMargins = True
       Left = 539
-      Top = 5
+      Top = 10
       Width = 75
-      Height = 31
-      Margins.Left = 0
-      Margins.Top = 5
+      Height = 26
+      Margins.Left = 5
+      Margins.Top = 10
       Margins.Right = 10
       Margins.Bottom = 5
       Align = alRight
       Caption = 'Cancelar'
-      TabOrder = 1
-      ExplicitLeft = 408
+      TabOrder = 0
+      ExplicitLeft = 272
       ExplicitTop = 8
       ExplicitHeight = 25
     end
+    object btnAceptar: TButton
+      AlignWithMargins = True
+      Left = 454
+      Top = 10
+      Width = 75
+      Height = 26
+      Margins.Left = 10
+      Margins.Top = 10
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Align = alRight
+      Caption = 'Aceptar'
+      TabOrder = 1
+      ExplicitLeft = 394
+      ExplicitTop = 0
+      ExplicitHeight = 35
+    end
+  end
+  object PanelObjects: TPanel
+    Left = 0
+    Top = 49
+    Width = 624
+    Height = 349
+    Align = alClient
+    TabOrder = 2
+    ExplicitTop = 47
+    ExplicitHeight = 339
   end
 end

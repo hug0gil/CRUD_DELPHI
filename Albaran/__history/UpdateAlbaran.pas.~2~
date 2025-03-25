@@ -1,0 +1,25 @@
+unit UpdateAlbaran;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FichaAlbaran, Vcl.StdCtrls,
+  Vcl.ComCtrls, Vcl.ExtCtrls;
+
+type
+  TFormFichaAlbaran1 = class(TFormFichaAlbaran)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FormFichaAlbaran1: TFormFichaAlbaran1;
+
+implementation
+
+{$R *.dfm}
+
+end.
