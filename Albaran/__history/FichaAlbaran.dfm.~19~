@@ -1,0 +1,193 @@
+inherited FormFichaAlbaran: TFormFichaAlbaran
+  Caption = 'Default'
+  StyleElements = [seFont, seClient, seBorder]
+  TextHeight = 15
+  inherited PanelTitle: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited lblTitulo: TLabel
+      Caption = 'texto Albar'#225'n'
+      StyleElements = [seFont, seClient, seBorder]
+      ExplicitWidth = 208
+    end
+  end
+  inherited PanelBtns: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited btnAceptar: TButton
+      OnClick = btnAceptarClick
+    end
+  end
+  inherited PanelObjects: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited PanelFila: TPanel
+      StyleElements = [seFont, seClient, seBorder]
+      inherited PanelCode: TPanel
+        StyleElements = [seFont, seClient, seBorder]
+        inherited LabelCodigo: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited EditCodigo: TEdit
+          StyleElements = [seFont, seClient, seBorder]
+        end
+      end
+      object PanelFecha: TPanel
+        AlignWithMargins = True
+        Left = 155
+        Top = 100
+        Width = 129
+        Height = 148
+        Margins.Top = 100
+        Margins.Right = 12
+        Margins.Bottom = 100
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 1
+        object LabelFecha: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 119
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Fecha'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 40
+        end
+        object DateTimePickerFecha: TDateTimePicker
+          AlignWithMargins = True
+          Left = 15
+          Top = 85
+          Width = 99
+          Height = 23
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Date = 45741.000000000000000000
+          Time = 0.362916481484717200
+          TabOrder = 0
+          ExplicitTop = 81
+        end
+      end
+      object PanelObservaciones: TPanel
+        AlignWithMargins = True
+        Left = 443
+        Top = 100
+        Width = 129
+        Height = 148
+        Margins.Top = 100
+        Margins.Right = 12
+        Margins.Bottom = 100
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 2
+        ExplicitLeft = 536
+        ExplicitTop = 103
+        object LabelObservaciones: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 119
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Observaciones'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 102
+        end
+        object MemoObservaciones: TMemo
+          Left = 0
+          Top = 43
+          Width = 129
+          Height = 105
+          Margins.Top = 10
+          Margins.Bottom = 10
+          Align = alBottom
+          Lines.Strings = (
+            'MemoObservaciones')
+          TabOrder = 0
+        end
+      end
+      object PanelCodCliente: TPanel
+        AlignWithMargins = True
+        Left = 299
+        Top = 100
+        Width = 129
+        Height = 148
+        Margins.Top = 100
+        Margins.Right = 12
+        Margins.Bottom = 100
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 3
+        ExplicitLeft = 443
+        object LabelCodCliente: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 119
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'C'#243'digo cliente'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 99
+        end
+        object ComboBoxCodCliente: TComboBox
+          AlignWithMargins = True
+          Left = 15
+          Top = 85
+          Width = 99
+          Height = 23
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Style = csDropDownList
+          TabOrder = 0
+        end
+      end
+    end
+  end
+  object FDTransactionAlbaran: TFDTransaction
+    Connection = DataModuleBDD.DataBaseFDConnection
+    Left = 424
+    Top = 72
+  end
+  object FDQueryAlbaran: TFDQuery
+    Connection = DataModuleBDD.DataBaseFDConnection
+    Transaction = FDTransactionAlbaran
+    UpdateTransaction = FDTransactionAlbaran
+    Left = 505
+    Top = 74
+  end
+end

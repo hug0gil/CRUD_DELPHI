@@ -1,0 +1,49 @@
+unit FichaBase;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls;
+
+type
+  TFormFichaBase = class(TForm)
+    PanelTitle: TPanel;
+    PanelBtns: TPanel;
+    Shape1: TShape;
+    Shape2: TShape;
+    btnCancelar: TButton;
+    btnAceptar: TButton;
+    lblTitulo: TLabel;
+    PanelObjects: TPanel;
+    PanelFila1: TPanel;
+    PanelCode: TPanel;
+    LabelCodigo: TLabel;
+    EditCodigo: TEdit;
+    procedure btnCancelarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    constructor Create(AOwner: TComponent; LastCode: Integer; mode: Integer); reintroduce; overload;
+
+  end;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormFichaBase.btnCancelarClick(Sender: TObject);
+begin
+  Self.Close;
+
+end;
+constructor TFormFichaBase.Create(AOwner: TObject; LastCode: Integer; mode: Integer);
+begin
+  inherited Create(AOwner);
+  EditCodigo.Text := IntToStr(LastCode);
+end;
+
+
+end.

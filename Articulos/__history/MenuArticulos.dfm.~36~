@@ -1,0 +1,86 @@
+inherited FormMenuArticulos: TFormMenuArticulos
+  Caption = 'Menu art'#237'culos'
+  StyleElements = [seFont, seClient, seBorder]
+  OnCreate = OnCreate
+  TextHeight = 15
+  inherited Panel1: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited Panel2: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited DBGrid: TDBGrid
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'CCODIGO'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CNOMBRE'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NSTOCK'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NCOD_IVA'
+          Visible = False
+        end
+        item
+          Expanded = False
+          FieldName = 'TIPOIVA'
+          Visible = True
+        end>
+    end
+    inherited DBNavigator: TDBNavigator
+      Hints.Strings = ()
+    end
+  end
+  inherited FDTable: TFDTable
+    OnCalcFields = FDTableCalcFields
+    IndexName = 'ARTICULOS_PK'
+    TableName = 'ARTICULOS'
+    object FDTableCCODIGO: TStringField
+      DisplayLabel = 'C'#243'digo'
+      FieldName = 'CCODIGO'
+      Origin = 'CCODIGO'
+      Required = True
+      Size = 5
+    end
+    object FDTableCNOMBRE: TStringField
+      DisplayLabel = 'Nombre '
+      FieldName = 'CNOMBRE'
+      Origin = 'CNOMBRE'
+      Required = True
+    end
+    object FDTableNSTOCK: TFMTBCDField
+      Alignment = taLeftJustify
+      DisplayLabel = 'N'#186' de stock'
+      FieldName = 'NSTOCK'
+      Origin = 'NSTOCK'
+      Required = True
+      Precision = 18
+      Size = 3
+    end
+    object FDTableNCOD_IVA: TSmallintField
+      Alignment = taLeftJustify
+      DisplayLabel = 'C'#243'digo IVA'
+      FieldName = 'NCOD_IVA'
+      Origin = 'NCOD_IVA'
+      Required = True
+    end
+    object FDTableTIPOIVA: TStringField
+      DisplayLabel = 'Tipo IVA'
+      FieldKind = fkCalculated
+      FieldName = 'TIPOIVA'
+      Calculated = True
+    end
+  end
+  inherited DataSource: TDataSource
+    OnDataChange = DataSourceDataChange
+  end
+end

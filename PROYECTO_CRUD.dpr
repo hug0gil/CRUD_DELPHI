@@ -2,16 +2,20 @@ program PROYECTO_CRUD;
 
 uses
   Vcl.Forms,
-  AddAlbaranAntiguo in 'Albaran\AddAlbaranAntiguo.pas' {FormAddAlbaranAntiguo},
   Main in 'Main.pas' {FormMain},
   ModuloDatos in 'Bases\ModuloDatos.pas' {DataModuleBDD: TDataModule},
   MenuBase in 'Bases\MenuBase.pas' {FormMenuBase},
-  FormMenuAlbaranHeredado in 'Albaran\FormMenuAlbaranHeredado.pas' {FormMenuAlbaran},
+  MenuAlbaran in 'Albaran\MenuAlbaran.pas' {FormMenuAlbaran},
   FichaBase in 'Bases\FichaBase.pas' {FormFichaBase},
-  FichaAlbaran in 'Bases\FichaAlbaran.pas' {FormFichaAlbaran},
-  AddAlbaran in 'Albaran\AddAlbaran.pas' {FormAddAlbaran},
-  UpdateAlbaran in 'Albaran\UpdateAlbaran.pas' {FormUpdateAlbaran},
-  ReadAlbaran in 'Albaran\ReadAlbaran.pas' {FormReadAlbaran};
+  FichaAlbaran in 'Albaran\FichaAlbaran.pas' {FormFichaAlbaran},
+  MenuArticulos in 'Articulos\MenuArticulos.pas' {FormMenuArticulos},
+  FichaArticulos in 'Articulos\FichaArticulos.pas' {FormFichaArticulos},
+  MenuClientes in 'Clientes\MenuClientes.pas' {FormMenuClientes},
+  FichaClientes in 'Clientes\FichaClientes.pas' {FormFichaClientes},
+  MenuLineasAlbaran in 'LineasAlbaran\MenuLineasAlbaran.pas' {FormMenuLineasAlbaran},
+  FichaLineasAlbaran in 'LineasAlbaran\FichaLineasAlbaran.pas' {FormFichaLineasAlbaran},
+  FichaGridBase in 'Bases\FichaGridBase.pas' {FormFichaGridBase},
+  FichaGridAlbaran in 'Albaran\FichaGridAlbaran.pas' {FormFichaGridAlbaran};
 
 {$R *.res}
 
@@ -21,4 +25,5 @@ begin
   Application.CreateForm(TDataModuleBDD, DataModuleBDD);
   Application.CreateForm(TFormMain, FormMain);
   Application.Run;
+
 end.

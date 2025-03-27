@@ -1,0 +1,77 @@
+inherited FormMenuLineasAlbaran: TFormMenuLineasAlbaran
+  Caption = 'Men'#250' l'#237'neas albar'#225'n'
+  StyleElements = [seFont, seClient, seBorder]
+  TextHeight = 15
+  inherited Panel1: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited Panel2: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited DBNavigator: TDBNavigator
+      Hints.Strings = ()
+    end
+  end
+  inherited FDTable: TFDTable
+    Active = True
+    IndexFieldNames = 'NORDEN;NCOD_ALBARAN'
+    TableName = 'LINEAS_ALB'
+    object FDTableNCOD_ALBARAN: TIntegerField
+      Alignment = taLeftJustify
+      DisplayLabel = 'C'#243'digo albar'#225'n'
+      DisplayWidth = 13
+      FieldName = 'NCOD_ALBARAN'
+      Origin = 'NCOD_ALBARAN'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDTableCCOD_ARTICULO: TStringField
+      DisplayLabel = 'C'#243'digo art'#237'culo'
+      DisplayWidth = 13
+      FieldName = 'CCOD_ARTICULO'
+      Origin = 'CCOD_ARTICULO'
+      Required = True
+      Size = 5
+    end
+    object FDTableNCANTIDAD: TFMTBCDField
+      Alignment = taLeftJustify
+      DisplayLabel = 'Cantidad'
+      DisplayWidth = 9
+      FieldName = 'NCANTIDAD'
+      Origin = 'NCANTIDAD'
+      Required = True
+      Precision = 18
+      Size = 3
+    end
+    object FDTableNPRECIO: TFMTBCDField
+      Alignment = taLeftJustify
+      DisplayLabel = 'Precio'
+      DisplayWidth = 9
+      FieldName = 'NPRECIO'
+      Origin = 'NPRECIO'
+      Required = True
+      Precision = 18
+      Size = 3
+    end
+    object FDTableNORDEN: TSmallintField
+      Alignment = taLeftJustify
+      DisplayLabel = 'Orden de l'#237'neas'
+      DisplayWidth = 13
+      FieldName = 'NORDEN'
+      Origin = 'NORDEN'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDTableCBTOTAL: TFMTBCDField
+      Alignment = taLeftJustify
+      DisplayLabel = 'Total'
+      DisplayWidth = 19
+      FieldName = 'CBTOTAL'
+      Origin = 'CBTOTAL'
+      Precision = 18
+      Size = 6
+    end
+  end
+  inherited DataSource: TDataSource
+    OnDataChange = DataSourceDataChange
+  end
+end

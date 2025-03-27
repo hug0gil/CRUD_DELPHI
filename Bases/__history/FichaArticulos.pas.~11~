@@ -1,0 +1,45 @@
+unit FichaArticulos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FichaBase, Vcl.StdCtrls, Vcl.ExtCtrls;
+
+type
+  TFormFichaBase1 = class(TFormFichaBase)
+    PanelStock: TPanel;
+    LabelStock: TLabel;
+    EditStock: TEdit;
+    PanelNombre: TPanel;
+    LabelNombre: TLabel;
+    EditNombre: TEdit;
+    PanelIVA: TPanel;
+    LabelIVA: TLabel;
+    ComboBoxIVA: TComboBox;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    codAccion:Integer;
+  end;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormFichaBase1.FormCreate(Sender: TObject);
+begin
+  if codAccion = 1 then
+  begin
+
+  end
+  else if codAccion = 2 then
+       begin
+
+       end;
+
+end;
+
+end.

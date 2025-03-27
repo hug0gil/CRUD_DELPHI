@@ -19,6 +19,8 @@ object DataModuleBDD: TDataModuleBDD
       'DriverID=FB')
     Connected = True
     LoginPrompt = False
+    Transaction = FDTransaction
+    UpdateTransaction = FDTransaction
     Left = 272
     Top = 168
   end

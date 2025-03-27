@@ -1,0 +1,53 @@
+unit FichaArticulos;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FichaBase, Vcl.StdCtrls, Vcl.ExtCtrls;
+
+type
+  TFormDefaultArticulo = class(TFormFichaBase)
+    PanelStock: TPanel;
+    LabelStock: TLabel;
+    EditStock: TEdit;
+    PanelNombre: TPanel;
+    LabelNombre: TLabel;
+    EditNombre: TEdit;
+    PanelIVA: TPanel;
+    LabelIVA: TLabel;
+    ComboBoxIVA: TComboBox;
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    codAccion: Integer;
+  end;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormDefaultArticulo.FormCreate(Sender: TObject);
+begin
+  if codAccion = 1 then
+  begin
+       lblTitulo.Caption := 'Agregar nuevo artículo';
+  end
+  else if codAccion = 2 then
+  begin
+
+  end
+  else if codAccion = 3 then
+  begin
+
+  end
+  else if codAccion = 4 then
+  begin
+
+  end;
+end;
+
+end.

@@ -5,12 +5,19 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,FormMenuAlbaranHeredado;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, MenuAlbaran,
+  MenuArticulos, MenuClientes,MenuLineasAlbaran;
 
 type
   TFormMain = class(TForm)
-    ButtonAlbaran: TButton;
-    procedure ButtonAlbaranClick(Sender: TObject);
+    btnAlbaran: TButton;
+    btnLineas: TButton;
+    btnClientes: TButton;
+    btnArticulos: TButton;
+    procedure btnAlbaranClick(Sender: TObject);
+    procedure btnLineasAlbaranClick(Sender: TObject);
+    procedure btnArticuloClick(Sender: TObject);
+    procedure btnClientesClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -24,11 +31,10 @@ implementation
 
 {$R *.dfm}
 
-uses MenuAlbaran;
+procedure TFormMain.btnAlbaranClick(Sender: TObject);
 
-procedure TFormMain.ButtonAlbaranClick(Sender: TObject);
-
-var FormMenuAlbaran:TFormMenuAlbaran;
+var
+  FormMenuAlbaran: TFormMenuAlbaran;
 
 begin
   FormMenuAlbaran := TFormMenuAlbaran.Create(Self);
@@ -37,6 +43,35 @@ begin
   FormMenuAlbaran.Free;
 end;
 
+procedure TFormMain.btnArticuloClick(Sender: TObject);
+var
+  FormMenuArticulos: TFormMenuArticulos;
 
+begin
+  FormMenuArticulos := TFormMenuArticulos.Create(Self);
+
+  FormMenuArticulos.ShowModal;
+  FormMenuArticulos.Free;
+
+end;
+
+procedure TFormMain.btnClientesClick(Sender: TObject);
+var
+  FormMenuClientes: TFormMenuClientes;
+begin
+  FormMenuClientes := TFormMenuClientes.Create(Self);
+
+  FormMenuClientes.ShowModal;
+  FormMenuClientes.Free;
+
+end;
+
+procedure TFormMain.btnLineasAlbaranClick(Sender: TObject);
+begin
+  FormMenuLineasAlbaran := TFormMenuLineasAlbaran.Create(Self);
+
+  FormMenuLineasAlbaran.ShowModal;
+  FormMenuLineasAlbaran.Free;
+end;
 
 end.

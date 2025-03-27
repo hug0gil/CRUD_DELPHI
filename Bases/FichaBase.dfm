@@ -105,32 +105,29 @@ object FormFichaBase: TFormFichaBase
     Height = 350
     Align = alClient
     TabOrder = 2
-    object PanelFila1: TPanel
+    object PanelFila: TPanel
       Left = 1
       Top = 1
       Width = 622
-      Height = 175
+      Height = 348
       Align = alTop
-      Caption = 'PanelFila1'
+      BevelOuter = bvNone
+      Caption = 'PanelFila'
       ShowCaption = False
       TabOrder = 0
       object PanelCode: TPanel
         AlignWithMargins = True
-        Left = 16
-        Top = 41
+        Left = 3
+        Top = 100
         Width = 137
-        Height = 93
-        Margins.Left = 15
-        Margins.Top = 40
-        Margins.Right = 13
-        Margins.Bottom = 40
+        Height = 148
+        Margins.Top = 100
+        Margins.Right = 12
+        Margins.Bottom = 100
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
         TabOrder = 0
-        ExplicitLeft = 48
-        ExplicitTop = -24
-        ExplicitHeight = 65
         object LabelCodigo: TLabel
           AlignWithMargins = True
           Left = 5
@@ -153,19 +150,19 @@ object FormFichaBase: TFormFichaBase
         end
         object EditCodigo: TEdit
           AlignWithMargins = True
-          Left = 5
-          Top = 58
-          Width = 127
-          Height = 30
-          Margins.Left = 5
-          Margins.Top = 5
-          Margins.Right = 5
-          Margins.Bottom = 5
+          Left = 15
+          Top = 85
+          Width = 107
+          Height = 23
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
           Align = alBottom
           Alignment = taCenter
           ReadOnly = True
           TabOrder = 0
-          ExplicitTop = 56
+          ExplicitTop = 78
         end
       end
     end

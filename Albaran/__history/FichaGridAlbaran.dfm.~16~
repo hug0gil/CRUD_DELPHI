@@ -1,0 +1,119 @@
+inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
+  Caption = 'FormFichaGridAlbaran'
+  Position = poScreenCenter
+  StyleElements = [seFont, seClient, seBorder]
+  TextHeight = 15
+  inherited PanelAlbaranes: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited LabelObservaciones: TLabel
+      StyleElements = [seFont, seClient, seBorder]
+    end
+    inherited LabelCodCliente: TLabel
+      StyleElements = [seFont, seClient, seBorder]
+    end
+    inherited LabelFecha: TLabel
+      StyleElements = [seFont, seClient, seBorder]
+    end
+    inherited Label1: TLabel
+      StyleElements = [seFont, seClient, seBorder]
+    end
+    inherited EditCodigo: TEdit
+      StyleElements = [seFont, seClient, seBorder]
+    end
+    inherited Edit1: TEdit
+      StyleElements = [seFont, seClient, seBorder]
+    end
+    inherited MemoObservaciones: TMemo
+      StyleElements = [seFont, seClient, seBorder]
+    end
+  end
+  inherited PanelLineas: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited DBGrid: TDBGrid
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NCOD_ALBARAN'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CCOD_ARTICULO'
+          Width = 64
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NCANTIDAD'
+          Width = 64
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NPRECIO'
+          Width = 64
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NORDEN'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'CBTOTAL'
+          Width = 64
+          Visible = True
+        end>
+    end
+  end
+  inherited PanelBtns: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited FDTable: TFDTable
+    IndexFieldNames = 'NORDEN;NCOD_ALBARAN'
+    TableName = 'LINEAS_ALB'
+    object FDTableNCOD_ALBARAN: TIntegerField
+      FieldName = 'NCOD_ALBARAN'
+      Origin = 'NCOD_ALBARAN'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDTableCCOD_ARTICULO: TStringField
+      FieldName = 'CCOD_ARTICULO'
+      Origin = 'CCOD_ARTICULO'
+      Required = True
+      Size = 5
+    end
+    object FDTableNCANTIDAD: TFMTBCDField
+      FieldName = 'NCANTIDAD'
+      Origin = 'NCANTIDAD'
+      Required = True
+      Precision = 18
+      Size = 3
+    end
+    object FDTableNPRECIO: TFMTBCDField
+      FieldName = 'NPRECIO'
+      Origin = 'NPRECIO'
+      Required = True
+      Precision = 18
+      Size = 3
+    end
+    object FDTableNORDEN: TSmallintField
+      FieldName = 'NORDEN'
+      Origin = 'NORDEN'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDTableCBTOTAL: TFMTBCDField
+      FieldName = 'CBTOTAL'
+      Origin = 'CBTOTAL'
+      Precision = 18
+      Size = 6
+    end
+  end
+  inherited FDTransactionTable: TFDTransaction
+    Left = 560
+    Top = 192
+  end
+end

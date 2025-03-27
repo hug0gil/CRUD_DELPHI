@@ -1,0 +1,135 @@
+unit MenuLineasAlbaran;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, MenuBase, Data.DB, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Buttons, Vcl.DBCtrls,
+  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ExtCtrls, ModuloDatos,
+  FichaLineasAlbaran;
+
+type
+  TFormMenuLineasAlbaran = class(TFormMenuBase)
+    FDTableNCOD_ALBARAN: TIntegerField;
+    FDTableCCOD_ARTICULO: TStringField;
+    FDTableNCANTIDAD: TFMTBCDField;
+    FDTableNPRECIO: TFMTBCDField;
+    FDTableNORDEN: TSmallintField;
+    FDTableCBTOTAL: TFMTBCDField;
+    procedure DBNavigatorClick(Sender: TObject; Button: TNavigateBtn);
+    procedure Actualizar(Sender: TObject);
+    procedure DataSourceDataChange(Sender: TObject; Field: TField);
+    procedure btnAgregarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+    OrdenLinea: Integer;
+    UltimoCodigo: Integer;
+        Codigo: Integer;
+  public
+    { Public declarations }
+  end;
+
+var
+  FormMenuLineasAlbaran: TFormMenuLineasAlbaran;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormMenuLineasAlbaran.DBNavigatorClick(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+  case Button of
+    nbPost:
+      begin
+        try
+          if not ModuloDatos.DataModuleBDD.FDTransaction.Active then
+            ModuloDatos.DataModuleBDD.FDTransaction.StartTransaction;
+
+          if DataSource.DataSet.State in [dsEdit, dsInsert] then
+            DataSource.DataSet.Post;
+
+          ModuloDatos.DataModuleBDD.FDTransaction.Commit;
+          ShowMessage('Cambios guardados correctamente.');
+        except
+          on E: Exception do
+          begin
+            if ModuloDatos.DataModuleBDD.FDTransaction.Active then
+              ModuloDatos.DataModuleBDD.FDTransaction.Rollback;
+            ShowMessage('Error al guardar: ' + E.Message);
+          end;
+        end;
+      end;
+
+    nbCancel:
+      begin
+        if ModuloDatos.DataModuleBDD.FDTransaction.Active then
+          ModuloDatos.DataModuleBDD.FDTransaction.Rollback;
+
+        if DataSource.DataSet.State in [dsEdit, dsInsert] then
+          DataSource.DataSet.Cancel;
+
+        ShowMessage('Cambios cancelados.');
+      end;
+  end;
+  Self.Actualizar(Self);
+end;
+
+procedure TFormMenuLineasAlbaran.FormCreate(Sender: TObject);
+begin
+  UltimoCodigo := GetLastCodigo('NCOD_ALBARAN', 'LINEAS_ALB');
+  if not ModuloDatos.DataModuleBDD.FDTransaction.Active then
+    ModuloDatos.DataModuleBDD.FDTransaction.StartTransaction;
+  // Iniciar transacción
+
+  if not DataSource.DataSet.Active then
+    DataSource.DataSet.Open;
+
+  if not(DataSource.DataSet.State in [dsEdit, dsInsert]) then
+    DataSource.DataSet.Edit;
+
+  DBNavigator.Enabled := True;
+end;
+
+procedure TFormMenuLineasAlbaran.btnAgregarClick(Sender: TObject);
+var
+  FormAddLineasAlbaran: TFormFichaLineasAlbaran;
+
+begin
+  FormAddLineasAlbaran := TFormFichaLineasAlbaran.Create(Self, UltimoCodigo,
+    DataSource.DataSet.FieldByName('NORDEN').AsInteger, 1);
+
+  FormAddLineasAlbaran.ShowModal;
+  FormAddLineasAlbaran.Free;
+end;
+
+procedure TFormMenuLineasAlbaran.DataSourceDataChange(Sender: TObject;
+  Field: TField);
+begin
+  DataSource.DataSet.Edit;
+
+  CodigoSeleccionado := -1;
+  if (DataSource <> nil) and (DataSource.DataSet <> nil) and
+    (DataSource.DataSet.Active) and (not DataSource.DataSet.IsEmpty) then
+  begin
+    CodigoSeleccionado := DataSource.DataSet.Fields[0].AsInteger;
+    OrdenLinea := DataSource.DataSet.FieldByName('NORDEN').AsInteger;
+  end
+  else
+    ShowMessage('No hay datos en el DataSet o el DataSource está vacío.');
+end;
+
+procedure TFormMenuLineasAlbaran.Actualizar(Sender: TObject);
+begin
+  FDTable.Refresh;
+  DataSource.DataSet.Refresh;
+  DBGrid.Refresh;
+end;
+
+end.

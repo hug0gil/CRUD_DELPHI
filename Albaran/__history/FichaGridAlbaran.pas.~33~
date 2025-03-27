@@ -1,0 +1,121 @@
+unit FichaGridAlbaran;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FichaGridBase, Data.DB,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.StdCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls, Vcl.ExtCtrls;
+
+type
+  TFormFichaGridAlbaran = class(TFormFichaGridBase)
+    FDTableNCOD_ALBARAN: TIntegerField;
+    FDTableCCOD_ARTICULO: TStringField;
+    FDTableNCANTIDAD: TFMTBCDField;
+    FDTableNPRECIO: TFMTBCDField;
+    FDTableNORDEN: TSmallintField;
+    FDTableCBTOTAL: TFMTBCDField;
+    procedure btnAceptarClick(Sender: TObject);
+    function TodoCorrectoAlbaran: Boolean;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    opcion: Integer;
+  end;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormFichaGridAlbaran.btnAceptarClick(Sender: TObject);
+var
+  FechaFormateada: string;
+  cont: Integer;
+begin
+  cont := 1;
+  opcion := 1;
+
+  case cont of
+    1:
+
+      if TodoCorrectoAlbaran() then
+        try
+
+          FechaFormateada := FormatDateTime('YYYY-MM-DD',
+            DateTimePickerFecha.Date);
+
+          if not FDTransactionTable.Active then
+            FDTransactionTable.StartTransaction;
+
+          // Preparar la consulta según la operación
+          FDQuery.Close; // Cerrar la consulta antes de asignar nueva SQL
+          case opcion of
+            1: // Agregar nuevo albarán
+              begin
+                FDQuery.SQL.Text :=
+                  'INSERT INTO ALBARAN (NCODIGO, DFECHA, COBSERVACIONES, NCOD_CLIENTE) '
+                  + 'VALUES (:Codigo, :Fecha, :Observaciones, :Cliente)';
+                FDQuery.ParamByName('Codigo').AsInteger := 100;
+              end;
+
+            2: // Actualizar albarán
+              begin
+                FDQuery.SQL.Text :=
+                  'UPDATE ALBARAN SET DFECHA = :Fecha, COBSERVACIONES = :Observaciones, '
+                  + 'NCOD_CLIENTE = :Cliente WHERE NCODIGO = :Codigo';
+                FDQuery.ParamByName('Codigo').AsInteger :=
+                  StrToInt(EditCodigo.Text);
+              end;
+          end;
+
+          // Asignar parámetros comunes
+          FDQuery.ParamByName('Fecha').AsString := FechaFormateada;
+          FDQuery.ParamByName('Observaciones').AsString :=
+            MemoObservaciones.Lines.Text;
+          FDQuery.ParamByName('Cliente').AsInteger :=
+            StrToInt(EditCodCliente.Text);
+
+          // Ejecutar consulta
+          FDQuery.ExecSQL;
+
+          // Confirmar cambios en la base de datos
+          FDTransactionAlbaran.Commit;
+
+          cont := cont + 1;
+
+        except
+          on E: Exception do
+          begin
+            FDTransactionAlbaran.Rollback; // Revertir cambios en caso de error
+            MessageDlg('Error en la operación: ' + E.Message, mtError,
+              [mbOK], 0);
+          end;
+        end;
+  end;
+
+2:
+
+end;
+
+function TFormFichaGridAlbaran.TodoCorrectoAlbaran: Boolean;
+var
+  correcto: Boolean;
+begin
+  correcto := True;
+
+  // Verificar que los campos requeridos no estén vacíos
+  if (EditCodCliente.Text = '') or (MemoObservaciones.Lines.Text = '') then
+  begin
+    MessageDlg('Por favor, rellene todos los campos.', mtError, [mbOK], 0);
+    correcto := False;
+    Exit;
+  end;
+
+end;
+
+end.

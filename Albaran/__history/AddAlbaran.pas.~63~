@@ -1,0 +1,86 @@
+unit AddAlbaran;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FichaAlbaran, Vcl.StdCtrls,
+  Vcl.ComCtrls, Vcl.ExtCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, ModuloDatos,MenuBase;
+
+type
+  TFormAddAlbaran = class(TFormFichaAlbaran)
+    FDQueryInsertar: TFDQuery;
+    FDTransactionInsertar: TFDTransaction;
+    procedure btnAceptarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFormAddAlbaran.btnAceptarClick(Sender: TObject);
+var
+  FechaFormateada: string;
+  CodigoNuevo: Integer;
+begin
+
+  FDTransactionInsertar.StartTransaction;
+
+  // Comprobar que todos los campos necesarios están completos
+  if (ComboBoxCodCliente.Text = '') or (MemoObservaciones.Lines.Text = '') then
+  begin
+    MessageDlgPosHelp('Por favor, rellene todos los campos',
+      TMsgDlgType.mtError, [mbOK], 0, -1, -1, 'Error de inserción');
+    Exit;
+  end;
+
+  // Comprobar que el código de cliente seleccionado está en la lista del ComboBox
+  if ComboBoxCodCliente.ItemIndex = -1 then
+  begin
+    MessageDlg
+      ('Por favor, seleccione un código de cliente válido de la lista.',
+      mtError, [mbOK], 0);
+    Exit;
+  end;
+
+  // Obtener el último código del generador
+  CodigoNuevo := FormMenuBase.GetLastCodigo;
+
+  // Comprobar que el código nuevo no esté ya en uso (si es necesario)
+  // Esto es opcional dependiendo de tu lógica. Si el generador es fiable y siempre genera un código único, puedes omitirlo.
+
+  // Obtener la fecha seleccionada y formatearla a formato MM/DD/YYYY
+  FechaFormateada := FormatDateTime('MM/DD/YYYY', DateTimePickerFecha.Date);
+
+  FDQueryInsertar := TFDQuery.Create(nil);
+  try
+    FDQueryInsertar.SQL.Text :=
+      'INSERT INTO ALBARAN (NCODIGO, DFECHA, COBSERVACIONES, NCOD_CLIENTE) VALUES (:Codigo, :Fecha, :Observaciones, :Cliente)';
+
+    // Asignar valores a los parámetros
+    FDQueryInsertar.ParamByName('Codigo').AsInteger := CodigoNuevo; // Usamos el código obtenido
+    FDQueryInsertar.ParamByName('Fecha').AsString := FechaFormateada;
+    FDQueryInsertar.ParamByName('Observaciones').AsString := MemoObservaciones.Lines.Text;
+    FDQueryInsertar.ParamByName('Cliente').AsInteger := StrToInt(ComboBoxCodCliente.Text);
+
+    // Ejecutar la consulta
+    FDQueryInsertar.ExecSQL;
+    FDTransactionInsertar.Commit;
+
+  finally
+    FDQueryInsertar.Free;
+    Self.Close;
+  end;
+end;
+
+
+
+end.

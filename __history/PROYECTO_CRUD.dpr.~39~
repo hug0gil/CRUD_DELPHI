@@ -1,0 +1,23 @@
+program PROYECTO_CRUD;
+
+uses
+  Vcl.Forms,
+  Main in 'Main.pas' {FormMain},
+  ModuloDatos in 'Bases\ModuloDatos.pas' {DataModuleBDD: TDataModule},
+  MenuBase in 'Bases\MenuBase.pas' {FormMenuBase},
+  MenuAlbaran in 'Albaran\MenuAlbaran.pas' {FormMenuAlbaran},
+  FichaBase in 'Bases\FichaBase.pas' {FormFichaBase},
+  FichaAlbaran in 'Albaran\FichaAlbaran.pas' {FormFichaAlbaran},
+  MenuArticulos in 'Articulos\MenuArticulos.pas' {FormMenuArticulos},
+  FichaArticulos in 'Articulos\FichaArticulos.pas' {FormFichaArticulos};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TDataModuleBDD, DataModuleBDD);
+  Application.CreateForm(TFormMain, FormMain);
+  Application.Run;
+
+end.

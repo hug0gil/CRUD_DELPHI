@@ -127,10 +127,6 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Albaran\AddAlbaranAntiguo.pas">
-            <Form>FormAddAlbaranAntiguo</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="Main.pas">
             <Form>FormMain</Form>
             <FormType>dfm</FormType>
@@ -144,7 +140,7 @@
             <Form>FormMenuBase</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Albaran\FormMenuAlbaranHeredado.pas">
+        <DCCReference Include="Albaran\MenuAlbaran.pas">
             <Form>FormMenuAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>
@@ -152,20 +148,40 @@
             <Form>FormFichaBase</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Bases\FichaAlbaran.pas">
+        <DCCReference Include="Albaran\FichaAlbaran.pas">
             <Form>FormFichaAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Albaran\AddAlbaran.pas">
-            <Form>FormAddAlbaran</Form>
+        <DCCReference Include="Articulos\MenuArticulos.pas">
+            <Form>FormMenuArticulos</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Albaran\UpdateAlbaran.pas">
-            <Form>FormUpdateAlbaran</Form>
+        <DCCReference Include="Articulos\FichaArticulos.pas">
+            <Form>FormFichaArticulos</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Albaran\ReadAlbaran.pas">
-            <Form>FormReadAlbaran</Form>
+        <DCCReference Include="Clientes\MenuClientes.pas">
+            <Form>FormMenuClientes</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Clientes\FichaClientes.pas">
+            <Form>FormFichaClientes</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="LineasAlbaran\MenuLineasAlbaran.pas">
+            <Form>FormMenuLineasAlbaran</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="LineasAlbaran\FichaLineasAlbaran.pas">
+            <Form>FormFichaLineasAlbaran</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Bases\FichaGridBase.pas">
+            <Form>FormFichaGridBase</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Albaran\FichaGridAlbaran.pas">
+            <Form>FormFichaGridAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

@@ -1,0 +1,214 @@
+inherited FormFichaBase1: TFormFichaBase1
+  Caption = 'FormFichaBase1'
+  StyleElements = [seFont, seClient, seBorder]
+  TextHeight = 15
+  inherited PanelTitle: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited lblTitulo: TLabel
+      Width = 612
+      Height = 28
+      StyleElements = [seFont, seClient, seBorder]
+    end
+  end
+  inherited PanelBtns: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited PanelObjects: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited PanelFila1: TPanel
+      Height = 348
+      Align = alClient
+      Alignment = taLeftJustify
+      StyleElements = [seFont, seClient, seBorder]
+      ExplicitHeight = 348
+      inherited PanelCode: TPanel
+        Top = 101
+        Height = 146
+        Margins.Top = 100
+        Margins.Right = 12
+        Margins.Bottom = 100
+        StyleElements = [seFont, seClient, seBorder]
+        ExplicitLeft = -49
+        ExplicitTop = 42
+        ExplicitHeight = 266
+        inherited LabelCodigo: TLabel
+          Width = 127
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited EditCodigo: TEdit
+          Left = 15
+          Top = 76
+          Width = 107
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitLeft = 15
+          ExplicitTop = 83
+          ExplicitWidth = 107
+        end
+      end
+      object PanelStock: TPanel
+        AlignWithMargins = True
+        Left = 320
+        Top = 101
+        Width = 137
+        Height = 146
+        Margins.Top = 100
+        Margins.Right = 12
+        Margins.Bottom = 100
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 1
+        ExplicitLeft = 15
+        ExplicitTop = 69
+        ExplicitHeight = 124
+        object LabelStock: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 127
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'N'#186' de stock'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 80
+        end
+        object EditStock: TEdit
+          AlignWithMargins = True
+          Left = 15
+          Top = 76
+          Width = 107
+          Height = 30
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Alignment = taCenter
+          ReadOnly = True
+          TabOrder = 0
+          ExplicitTop = 83
+        end
+      end
+      object PanelNombre: TPanel
+        AlignWithMargins = True
+        Left = 168
+        Top = 101
+        Width = 137
+        Height = 146
+        Margins.Top = 100
+        Margins.Right = 12
+        Margins.Bottom = 100
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 2
+        ExplicitLeft = 15
+        ExplicitTop = 69
+        ExplicitHeight = 124
+        object LabelNombre: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 127
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Nombre'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 58
+        end
+        object EditNombre: TEdit
+          AlignWithMargins = True
+          Left = 15
+          Top = 76
+          Width = 107
+          Height = 30
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Alignment = taCenter
+          ReadOnly = True
+          TabOrder = 0
+          ExplicitTop = 83
+        end
+      end
+      object PanelIVA: TPanel
+        AlignWithMargins = True
+        Left = 472
+        Top = 101
+        Width = 137
+        Height = 146
+        Margins.Top = 100
+        Margins.Right = 12
+        Margins.Bottom = 100
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 3
+        ExplicitLeft = 549
+        ExplicitTop = 37
+        ExplicitHeight = 266
+        object LabelIVA: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 127
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'C'#243'digo IVA'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 77
+        end
+        object ComboBox1: TComboBox
+          AlignWithMargins = True
+          Left = 15
+          Top = 83
+          Width = 107
+          Height = 23
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          TabOrder = 0
+          Text = 'ComboBox1'
+          ExplicitLeft = 0
+          ExplicitTop = 120
+          ExplicitWidth = 145
+        end
+      end
+    end
+  end
+end

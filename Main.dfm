@@ -13,13 +13,85 @@ object FormMain: TFormMain
   Font.Style = []
   Position = poScreenCenter
   TextHeight = 15
-  object ButtonAlbaran: TButton
-    Left = 232
-    Top = 56
-    Width = 177
+  object btnAlbaran: TButton
+    AlignWithMargins = True
+    Left = 15
+    Top = 15
+    Width = 594
     Height = 89
-    Caption = 'Albaran'
+    Margins.Left = 15
+    Margins.Top = 15
+    Margins.Right = 15
+    Margins.Bottom = 12
+    Align = alTop
+    Caption = 'Albar'#225'n'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -24
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
-    OnClick = ButtonAlbaranClick
+    OnClick = btnAlbaranClick
+  end
+  object btnLineas: TButton
+    AlignWithMargins = True
+    Left = 15
+    Top = 327
+    Width = 594
+    Height = 89
+    Margins.Left = 15
+    Margins.Right = 15
+    Margins.Bottom = 12
+    Align = alTop
+    Caption = 'L'#237'neas Albar'#225'n'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -24
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    OnClick = btnLineasAlbaranClick
+  end
+  object btnClientes: TButton
+    AlignWithMargins = True
+    Left = 15
+    Top = 223
+    Width = 594
+    Height = 89
+    Margins.Left = 15
+    Margins.Right = 15
+    Margins.Bottom = 12
+    Align = alTop
+    Caption = 'Clientes'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -24
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    OnClick = btnClientesClick
+  end
+  object btnArticulos: TButton
+    AlignWithMargins = True
+    Left = 15
+    Top = 119
+    Width = 594
+    Height = 89
+    Margins.Left = 15
+    Margins.Right = 15
+    Margins.Bottom = 12
+    Align = alTop
+    Caption = 'Articulos'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -24
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+    OnClick = btnArticuloClick
   end
 end
