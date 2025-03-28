@@ -5,6 +5,8 @@ inherited FormFichaClientes: TFormFichaClientes
   inherited PanelTitle: TPanel
     StyleElements = [seFont, seClient, seBorder]
     inherited lblTitulo: TLabel
+      Width = 612
+      Height = 28
       StyleElements = [seFont, seClient, seBorder]
     end
   end
@@ -21,6 +23,7 @@ inherited FormFichaClientes: TFormFichaClientes
       inherited PanelCode: TPanel
         StyleElements = [seFont, seClient, seBorder]
         inherited LabelCodigo: TLabel
+          Width = 127
           StyleElements = [seFont, seClient, seBorder]
         end
         inherited EditCodigo: TEdit

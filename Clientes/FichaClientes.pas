@@ -141,7 +141,7 @@ begin
     ComboBoxRegimen.Items.Add('Internacional');
     ComboBoxRegimen.Items.Add('Extranjero');
     ComboBoxRegimen.Items.Add('Canarias');
-    ComboBoxRegimen.ItemIndex := 0;
+    ComboBoxRegimen.ItemIndex := 1;
   end;
 end;
 

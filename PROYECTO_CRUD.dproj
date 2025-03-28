@@ -172,7 +172,7 @@
             <Form>FormMenuLineasAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="LineasAlbaran\FichaLineasAlbaran.pas">
+        <DCCReference Include="Albaran\FichaLineasAlbaran.pas">
             <Form>FormFichaLineasAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>

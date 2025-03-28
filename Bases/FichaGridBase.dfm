@@ -117,14 +117,8 @@ object FormFichaGridBase: TFormFichaGridBase
       Top = 13
       Width = 121
       Height = 23
+      ReadOnly = True
       TabOrder = 0
-    end
-    object EditCodCliente: TEdit
-      Left = 148
-      Top = 62
-      Width = 121
-      Height = 23
-      TabOrder = 1
     end
     object DateTimePickerFecha: TDateTimePicker
       Left = 101
@@ -133,7 +127,7 @@ object FormFichaGridBase: TFormFichaGridBase
       Height = 23
       Date = 45743.000000000000000000
       Time = 0.741379814811807600
-      TabOrder = 2
+      TabOrder = 1
     end
     object MemoObservaciones: TMemo
       Left = 434
@@ -142,7 +136,7 @@ object FormFichaGridBase: TFormFichaGridBase
       Height = 122
       Lines.Strings = (
         'MemoObservaciones')
-      TabOrder = 3
+      TabOrder = 2
     end
   end
   object PanelLineas: TPanel
@@ -265,6 +259,15 @@ object FormFichaGridBase: TFormFichaGridBase
       Enabled = False
       TabOrder = 5
     end
+  end
+  object ComboBoxCodCliente: TComboBox
+    Left = 148
+    Top = 62
+    Width = 121
+    Height = 23
+    BevelInner = bvNone
+    Style = csDropDownList
+    TabOrder = 3
   end
   object DataSource: TDataSource
     DataSet = FDTable

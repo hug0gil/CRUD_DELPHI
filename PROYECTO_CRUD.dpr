@@ -13,7 +13,7 @@ uses
   MenuClientes in 'Clientes\MenuClientes.pas' {FormMenuClientes},
   FichaClientes in 'Clientes\FichaClientes.pas' {FormFichaClientes},
   MenuLineasAlbaran in 'LineasAlbaran\MenuLineasAlbaran.pas' {FormMenuLineasAlbaran},
-  FichaLineasAlbaran in 'LineasAlbaran\FichaLineasAlbaran.pas' {FormFichaLineasAlbaran},
+  FichaLineasAlbaran in 'Albaran\FichaLineasAlbaran.pas' {FormFichaLineasAlbaran},
   FichaGridBase in 'Bases\FichaGridBase.pas' {FormFichaGridBase},
   FichaGridAlbaran in 'Albaran\FichaGridAlbaran.pas' {FormFichaGridAlbaran};
 

@@ -1,0 +1,280 @@
+unit MenuAlbaran;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, MenuBase, Data.DB, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Buttons, Vcl.DBCtrls,
+  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ExtCtrls, ModuloDatos, FichaAlbaran,
+  FichaGridAlbaran;
+
+type
+  TFormMenuAlbaran = class(TFormMenuBase)
+    FDTableNCODIGO: TIntegerField;
+    FDTableDFECHA: TDateField;
+    FDTableCOBSERVACIONES: TStringField;
+    FDTableNCOD_CLIENTE: TIntegerField;
+    procedure btnEliminarClick(Sender: TObject);
+    procedure OnCreate(Sender: TObject);
+    procedure btnAgregarClick(Sender: TObject);
+    function getCodClientes: TArray<Integer>;
+    procedure btnActualizarClick(Sender: TObject);
+    procedure btnVerClick(Sender: TObject);
+    procedure DBNavigatorClick(Sender: TObject; Button: TNavigateBtn);
+    procedure Actualizar(Sender: TObject);
+    procedure DataSourceDataChange(Sender: TObject; Field: TField);
+  private
+    { Private declarations }
+    CodigoSeleccionado: Integer;
+  public
+    { Public declarations }
+  end;
+
+implementation
+
+{$R *.dfm}
+
+function TFormMenuAlbaran.getCodClientes: TArray<Integer>;
+var
+  QueryClientes: TFDQuery;
+  CodigosClientes: TArray<Integer>;
+  i: Integer;
+begin
+  QueryClientes := TFDQuery.Create(nil);
+  try
+    QueryClientes.Connection := ModuloDatos.DataModuleBDD.DataBaseFDConnection;
+    QueryClientes.SQL.Text := 'SELECT NCODIGO FROM CLIENTES';
+    QueryClientes.Open;
+
+    // Reservar espacio para los códigos
+    SetLength(CodigosClientes, QueryClientes.RecordCount);
+
+    // Usar un bucle FOR para llenar el array
+    for i := 0 to QueryClientes.RecordCount - 1 do
+    begin
+      CodigosClientes[i] := QueryClientes.FieldByName('NCODIGO').AsInteger;
+      QueryClientes.Next;
+    end;
+
+    Result := CodigosClientes;
+  finally
+    QueryClientes.Free;
+  end;
+end;
+
+procedure TFormMenuAlbaran.OnCreate(Sender: TObject);
+begin
+  UltimoCodigo := GetLastCodigo('NCODIGO', 'ALBARAN');
+  if not ModuloDatos.DataModuleBDD.FDTransaction.Active then
+    ModuloDatos.DataModuleBDD.FDTransaction.StartTransaction;
+
+  if not DataSource.DataSet.Active then
+    DataSource.DataSet.Open;
+
+  if not(DataSource.DataSet.State in [dsEdit, dsInsert]) then
+    DataSource.DataSet.Edit;
+
+  DBNavigator.Enabled := True;
+end;
+
+procedure TFormMenuAlbaran.Actualizar(Sender: TObject);
+begin
+  FDTable.Refresh;
+  DataSource.DataSet.Refresh;
+  DBGrid.Refresh;
+end;
+
+procedure TFormMenuAlbaran.btnActualizarClick(Sender: TObject);
+var
+  FormUpdateAlbaran: TFormFichaGridAlbaran;
+  CodClientes: TArray<Integer>;
+  i: Integer;
+begin
+  FormUpdateAlbaran.Caption := 'Actualizar';
+  // Supongo que getCodClientes devuelve un arreglo de códigos de clientes
+  CodClientes := getCodClientes;
+  FormUpdateAlbaran := TFormFichaGridAlbaran.Create(Self,
+    CodigoSeleccionado, 2);
+  FormUpdateAlbaran.EditCodigo.Text := IntToStr(CodigoSeleccionado);
+  FormUpdateAlbaran.MemoObservaciones.Lines.Clear;
+  FormUpdateAlbaran.MemoObservaciones.Lines.Add
+    (DataSource.DataSet.Fields[2].AsString);
+  FormUpdateAlbaran.DateTimePickerFecha.DateTime := DataSource.DataSet.Fields[1]
+    .AsDateTime;
+
+  // Añadir los códigos de clientes al ComboBox
+  for i := 0 to High(CodClientes) do
+  begin
+    FormUpdateAlbaran.ComboBoxCodCliente.Items.Add(IntToStr(CodClientes[i]));
+  end;
+  FormUpdateAlbaran.ComboBoxCodCliente.ItemIndex :=
+    FormUpdateAlbaran.ComboBoxCodCliente.Items.IndexOf
+    (IntToStr(DataSource.DataSet.Fields[3].AsInteger));
+
+  FormUpdateAlbaran.ShowModal;
+  FormUpdateAlbaran.Free;
+  Self.Actualizar(Self);
+end;
+
+procedure TFormMenuAlbaran.btnAgregarClick(Sender: TObject);
+var
+
+  FormFichaGridAlbaran: TFormFichaGridAlbaran;
+  CodClientes: TArray<Integer>;
+  i: Integer;
+begin
+
+  CodClientes := getCodClientes;
+  FormFichaGridAlbaran := TFormFichaGridAlbaran.Create(Self,
+    GetLastCodigo('NCODIGO', 'ALBARAN'), 1);
+  FormFichaGridAlbaran.Caption := 'Añadir';
+  for i := 0 to High(CodClientes) do
+  begin
+    FormFichaGridAlbaran.ComboBoxCodCliente.Items.Add(IntToStr(CodClientes[i]));
+  end;
+
+  FormFichaGridAlbaran.ComboBoxCodCliente.ItemIndex := 0;
+
+  Actualizar(Self);
+
+  FormFichaGridAlbaran.ShowModal;
+  FormFichaGridAlbaran.Free;
+end;
+
+procedure TFormMenuAlbaran.btnEliminarClick(Sender: TObject);
+var
+  Confirmacion: Integer;
+  DeleteQuery: TFDQuery;
+begin
+  // Verificar si se ha seleccionado un albarán
+  if CodigoSeleccionado = -1 then
+  begin
+    ShowMessage('Por favor, seleccione un albarán para eliminar.');
+    Exit;
+  end;
+
+  // Preguntar si estamos seguros de eliminar el albarán
+  Confirmacion := MessageDlg('¿Está seguro de que desea eliminar este albarán?',
+    mtConfirmation, [mbYes, mbNo], 0);
+
+  // Si el usuario selecciona "Sí", proceder con la eliminación
+  if Confirmacion = mrYes then
+  begin
+    DeleteQuery := TFDQuery.Create(nil);
+    try
+      DeleteQuery.Connection := ModuloDatos.DataModuleBDD.DataBaseFDConnection;
+      // Asignar conexión
+      ModuloDatos.DataModuleBDD.DataBaseFDConnection.StartTransaction;
+      try
+        DeleteQuery.SQL.Text := 'DELETE FROM ALBARAN WHERE NCODIGO = :Codigo';
+        DeleteQuery.ParamByName('Codigo').AsInteger := CodigoSeleccionado;
+        DeleteQuery.ExecSQL;
+
+        ModuloDatos.DataModuleBDD.DataBaseFDConnection.Commit;
+        ShowMessage('El albarán ha sido eliminado con éxito.');
+      except
+        on E: Exception do
+        begin
+          ModuloDatos.DataModuleBDD.DataBaseFDConnection.Rollback;
+          ShowMessage('Error al eliminar el albarán: ' + E.Message);
+        end;
+      end;
+    finally
+      DeleteQuery.Free;
+    end;
+  end;
+  Self.Actualizar(Self);
+end;
+
+procedure TFormMenuAlbaran.btnVerClick(Sender: TObject);
+var
+  FormReadAlbaran: TFormFichaGridAlbaran;
+  CodClientes: TArray<Integer>;
+  i: Integer;
+begin
+
+  CodClientes := getCodClientes;
+
+  FormReadAlbaran := TFormFichaGridAlbaran.Create(Self, CodigoSeleccionado, 3);
+   FormReadAlbaran.Caption := 'Información';
+  FormReadAlbaran.MemoObservaciones.Lines.Clear;
+  FormReadAlbaran.MemoObservaciones.Lines.Add
+    (DataSource.DataSet.Fields[2].AsString);
+  FormReadAlbaran.DateTimePickerFecha.DateTime := DataSource.DataSet.Fields[1]
+    .AsDateTime;
+  FormReadAlbaran.ComboBoxCodCliente.Items.Add
+    (IntToStr(DataSource.DataSet.Fields[3].AsInteger));
+
+  // Seleccionar el código de cliente del registro actual (última columna)
+  FormReadAlbaran.ComboBoxCodCliente.ItemIndex :=
+    FormReadAlbaran.ComboBoxCodCliente.Items.IndexOf
+    (IntToStr(DataSource.DataSet.Fields[3].AsInteger));
+
+  // Mostrar el formulario
+  FormReadAlbaran.ShowModal;
+  FormReadAlbaran.Free;
+
+end;
+
+procedure TFormMenuAlbaran.DataSourceDataChange(Sender: TObject; Field: TField);
+begin
+  DataSource.DataSet.Edit;
+
+  CodigoSeleccionado := -1;
+  if (DataSource <> nil) and (DataSource.DataSet <> nil) and
+    (DataSource.DataSet.Active) and (not DataSource.DataSet.IsEmpty) then
+  begin
+    CodigoSeleccionado := DataSource.DataSet.Fields[0].AsInteger;
+
+  end
+  else
+    ShowMessage('No hay datos en el DataSet o el DataSource está vacío.');
+
+end;
+
+procedure TFormMenuAlbaran.DBNavigatorClick(Sender: TObject;
+  Button: TNavigateBtn);
+begin
+  inherited;
+
+  case Button of
+    nbPost:
+      begin
+        try
+          if not ModuloDatos.DataModuleBDD.FDTransaction.Active then
+            ModuloDatos.DataModuleBDD.FDTransaction.StartTransaction;
+
+          if DataSource.DataSet.State in [dsEdit, dsInsert] then
+            DataSource.DataSet.Post;
+
+          ModuloDatos.DataModuleBDD.FDTransaction.Commit;
+          ShowMessage('Cambios guardados correctamente.');
+        except
+          on E: Exception do
+          begin
+            if ModuloDatos.DataModuleBDD.FDTransaction.Active then
+              ModuloDatos.DataModuleBDD.FDTransaction.Rollback;
+            ShowMessage('Error al guardar: ' + E.Message);
+          end;
+        end;
+      end;
+
+    nbCancel:
+      begin
+        if ModuloDatos.DataModuleBDD.FDTransaction.Active then
+          ModuloDatos.DataModuleBDD.FDTransaction.Rollback;
+
+        if DataSource.DataSet.State in [dsEdit, dsInsert] then
+          DataSource.DataSet.Cancel;
+
+        ShowMessage('Cambios cancelados.');
+      end;
+  end;
+  Self.Actualizar(Self);
+end;
+
+end.

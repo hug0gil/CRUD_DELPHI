@@ -9,7 +9,8 @@ uses
   FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Buttons, Vcl.DBCtrls,
-  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ExtCtrls, ModuloDatos, FichaAlbaran,FichaGridAlbaran;
+  Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ExtCtrls, ModuloDatos, FichaAlbaran,
+  FichaGridAlbaran;
 
 type
   TFormMenuAlbaran = class(TFormMenuBase)
@@ -93,10 +94,12 @@ var
   CodClientes: TArray<Integer>;
   i: Integer;
 begin
-{
+
   // Supongo que getCodClientes devuelve un arreglo de códigos de clientes
   CodClientes := getCodClientes;
-  FormUpdateAlbaran := TFormFichaGridAlbaran.Create(Self, CodigoSeleccionado, 2);
+  FormUpdateAlbaran := TFormFichaGridAlbaran.Create(Self,
+    CodigoSeleccionado, 2);
+  FormUpdateAlbaran.Caption := 'Actualizar';
   FormUpdateAlbaran.EditCodigo.Text := IntToStr(CodigoSeleccionado);
   FormUpdateAlbaran.MemoObservaciones.Lines.Clear;
   FormUpdateAlbaran.MemoObservaciones.Lines.Add
@@ -115,33 +118,32 @@ begin
 
   FormUpdateAlbaran.ShowModal;
   FormUpdateAlbaran.Free;
-  Self.Actualizar(Self);   }
+  Self.Actualizar(Self);
 end;
 
 procedure TFormMenuAlbaran.btnAgregarClick(Sender: TObject);
 var
 
-  FormFichaGridAlbaran : TFormFichaGridAlbaran;
+  FormFichaGridAlbaran: TFormFichaGridAlbaran;
   CodClientes: TArray<Integer>;
   i: Integer;
 begin
-  {
+
   CodClientes := getCodClientes;
-  FormAddAlbaran := TFormFichaAlbaran.Create(Self, UltimoCodigo, 1);
+  FormFichaGridAlbaran := TFormFichaGridAlbaran.Create(Self,
+    GetLastCodigo('NCODIGO', 'ALBARAN'), 1);
+  FormFichaGridAlbaran.Caption := 'Añadir';
   for i := 0 to High(CodClientes) do
   begin
-    FormAddAlbaran.ComboBoxCodCliente.Items.Add(IntToStr(CodClientes[i]));
+    FormFichaGridAlbaran.ComboBoxCodCliente.Items.Add(IntToStr(CodClientes[i]));
   end;
 
-  FormAddAlbaran.ComboBoxCodCliente.ItemIndex := 0;
-  FormAddAlbaran.ShowModal;
-  FormAddAlbaran.Free;
+  FormFichaGridAlbaran.ComboBoxCodCliente.ItemIndex := 0;
 
   Actualizar(Self);
-   }
-   FormFichaGridAlbaran := TFormFichaGridAlbaran.Create(Self);
-   FormFichaGridAlbaran.ShowModal;
-   FormFichaGridAlbaran.Free;
+
+  FormFichaGridAlbaran.ShowModal;
+  FormFichaGridAlbaran.Free;
 end;
 
 procedure TFormMenuAlbaran.btnEliminarClick(Sender: TObject);
@@ -195,21 +197,22 @@ var
   CodClientes: TArray<Integer>;
   i: Integer;
 begin
-{  // Supongo que getCodClientes devuelve un arreglo de códigos de clientes
+
   CodClientes := getCodClientes;
 
-  FormReadAlbaran := TFormFichaGridAlbaran.Create(Self,
-   UltimoCodigo, 3);
-
+  FormReadAlbaran := TFormFichaGridAlbaran.Create(Self, CodigoSeleccionado, 3);
+  FormReadAlbaran.Caption := 'Información';
   FormReadAlbaran.MemoObservaciones.Lines.Clear;
+   FormReadAlbaran.MemoObservaciones.ReadOnly := True;
   FormReadAlbaran.MemoObservaciones.Lines.Add
     (DataSource.DataSet.Fields[2].AsString);
   FormReadAlbaran.DateTimePickerFecha.DateTime := DataSource.DataSet.Fields[1]
     .AsDateTime;
+    FormReadAlbaran.DateTimePickerFecha.Enabled := False;
   FormReadAlbaran.ComboBoxCodCliente.Items.Add
     (IntToStr(DataSource.DataSet.Fields[3].AsInteger));
+  
 
-  // Seleccionar el código de cliente del registro actual (última columna)
   FormReadAlbaran.ComboBoxCodCliente.ItemIndex :=
     FormReadAlbaran.ComboBoxCodCliente.Items.IndexOf
     (IntToStr(DataSource.DataSet.Fields[3].AsInteger));
@@ -217,7 +220,7 @@ begin
   // Mostrar el formulario
   FormReadAlbaran.ShowModal;
   FormReadAlbaran.Free;
-  }
+
 end;
 
 procedure TFormMenuAlbaran.DataSourceDataChange(Sender: TObject; Field: TField);
@@ -235,8 +238,6 @@ begin
     ShowMessage('No hay datos en el DataSet o el DataSource está vacío.');
 
 end;
-
-
 
 procedure TFormMenuAlbaran.DBNavigatorClick(Sender: TObject;
   Button: TNavigateBtn);

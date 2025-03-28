@@ -20,9 +20,6 @@ inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
     inherited EditCodigo: TEdit
       StyleElements = [seFont, seClient, seBorder]
     end
-    inherited EditCodCliente: TEdit
-      StyleElements = [seFont, seClient, seBorder]
-    end
     inherited MemoObservaciones: TMemo
       StyleElements = [seFont, seClient, seBorder]
     end
@@ -71,6 +68,27 @@ inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
     inherited btnAceptar: TButton
       OnClick = btnAceptarClick
     end
+    inherited btnCancelar: TButton
+      OnClick = btnCancelarClick
+    end
+    inherited ButtonBorrar: TButton
+      OnClick = ButtonBorrarClick
+    end
+    inherited ButtonInsertar: TButton
+      OnClick = ButtonInsertarClick
+    end
+    inherited ButtonActualizar: TButton
+      OnClick = ButtonActualizarClick
+    end
+    inherited ButtonVer: TButton
+      OnClick = ButtonVerClick
+    end
+  end
+  inherited ComboBoxCodCliente: TComboBox
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited DataSource: TDataSource
+    OnDataChange = DataSourceDataChange
   end
   inherited FDTable: TFDTable
     IndexFieldNames = 'NORDEN;NCOD_ALBARAN'

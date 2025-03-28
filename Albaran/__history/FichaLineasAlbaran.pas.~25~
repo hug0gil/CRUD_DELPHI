@@ -1,0 +1,148 @@
+﻿unit FichaLineasAlbaran;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, FichaBase, Vcl.StdCtrls, Vcl.ExtCtrls,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.Client, Data.DB,
+  FireDAC.Comp.DataSet;
+
+type
+  TFormFichaLineasAlbaran = class(TFormFichaBase)
+    PanelOrden: TPanel;
+    LabelOrden: TLabel;
+    EditOrden: TEdit;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Panel2: TPanel;
+    Label2: TLabel;
+    EditPrecio: TEdit;
+    Panel3: TPanel;
+    Label3: TLabel;
+    EditCantidad: TEdit;
+    Panel4: TPanel;
+    Label4: TLabel;
+    EditTotal: TEdit;
+    ComboBoxCodArticulo: TComboBox;
+    FDQueryLineasAlb: TFDQuery;
+    FDTransactionLineasAlb: TFDTransaction;
+    procedure EditCantidadChange(Sender: TObject);
+    procedure EditPrecioChange(Sender: TObject);
+    procedure btnAceptarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    Opcion: Integer;
+    constructor Create(AOwner: TComponent; CodigoAlbaran: Integer;
+      PosLinea: Integer; Modo: Integer); reintroduce; overload;
+
+  end;
+
+var
+  FormFichaLineasAlbaran: TFormFichaLineasAlbaran;
+
+implementation
+
+{$R *.dfm}
+{ TFormFichaLineasAlbaran }
+
+procedure TFormFichaLineasAlbaran.btnAceptarClick(Sender: TObject);
+begin
+  if Opcion = 3 then
+  begin
+    Self.Close;
+  end
+  else if True = True then // TodoCorrecto
+
+    try
+      case Opcion of
+        1: // Agregar nuevo albarán
+          begin
+
+            if not FDTransactionLineasAlb.Active then
+              FDTransactionAlbaran.StartTransaction;
+            FDQueryAlbaran.SQL.Text :=
+              'INSERT INTO ALBARAN (NCODIGO, DFECHA, COBSERVACIONES, NCOD_CLIENTE) '
+              + 'VALUES (:Codigo, :Fecha, :Observaciones, :Cliente)';
+            FDQueryAlbaran.ParamByName('Codigo').AsInteger := CodigoNuevo;
+          end;
+
+        2: // Actualizar albarán
+          begin
+            FDQueryAlbaran.SQL.Text :=
+              'UPDATE ALBARAN SET DFECHA = :Fecha, COBSERVACIONES = :Observaciones, '
+              + 'NCOD_CLIENTE = :Cliente WHERE NCODIGO = :Codigo';
+            FDQueryAlbaran.ParamByName('Codigo').AsInteger :=
+              StrToInt(EditCodigo.Text);
+          end;
+      end;
+
+      // Asignar parámetros comunes
+      FDQueryAlbaran.ParamByName('Fecha').AsString := FechaFormateada;
+      FDQueryAlbaran.ParamByName('Observaciones').AsString :=
+        MemoObservaciones.Lines.Text;
+      FDQueryAlbaran.ParamByName('Cliente').AsInteger := ClienteID;
+
+      // Ejecutar consulta
+      FDQueryAlbaran.ExecSQL;
+
+      // Confirmar cambios en la base de datos
+      FDTransactionAlbaran.Commit;
+
+      // Cerrar formulario después de completar la acción
+      Self.Close;
+
+    except
+      on E: Exception do
+      begin
+        FDTransactionAlbaran.Rollback; // Revertir cambios en caso de error
+        MessageDlg('Error en la operación: ' + E.Message, mtError, [mbOK], 0);
+      end;
+    end;
+end;
+
+end;
+
+constructor TFormFichaLineasAlbaran.Create(AOwner: TComponent;
+  CodigoAlbaran, PosLinea, Modo: Integer);
+begin
+  inherited Create(AOwner);
+  EditCodigo.Text := IntToStr(CodigoAlbaran);
+  if PosLinea = 0 then
+    Inc(PosLinea);
+
+  EditOrden.Text := IntToStr(PosLinea);
+  Opcion := Modo;
+
+  case Modo of
+    1:
+      lblTitulo.Caption := 'Añadir nueva línea de albarán';
+    2:
+      lblTitulo.Caption := 'Actualizar línea de albarán';
+    3:
+      lblTitulo.Caption := 'Información línea de albarán';
+  end;
+
+end;
+
+procedure TFormFichaLineasAlbaran.EditPrecioChange(Sender: TObject);
+begin
+
+  EditTotal.Text := FloatToStr(StrToFloat((EditCantidad.Text)) *
+    StrToFloat((EditPrecio.Text)))
+end;
+
+procedure TFormFichaLineasAlbaran.EditCantidadChange(Sender: TObject);
+begin
+
+  EditTotal.Text := FloatToStr(StrToFloat((EditCantidad.Text)) *
+    StrToFloat((EditPrecio.Text)))
+
+end;
+
+end.
