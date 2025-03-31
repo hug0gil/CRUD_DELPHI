@@ -7,12 +7,10 @@ uses
   MenuBase in 'Bases\MenuBase.pas' {FormMenuBase},
   MenuAlbaran in 'Albaran\MenuAlbaran.pas' {FormMenuAlbaran},
   FichaBase in 'Bases\FichaBase.pas' {FormFichaBase},
-  FichaAlbaran in 'Albaran\FichaAlbaran.pas' {FormFichaAlbaran},
   MenuArticulos in 'Articulos\MenuArticulos.pas' {FormMenuArticulos},
   FichaArticulos in 'Articulos\FichaArticulos.pas' {FormFichaArticulos},
   MenuClientes in 'Clientes\MenuClientes.pas' {FormMenuClientes},
   FichaClientes in 'Clientes\FichaClientes.pas' {FormFichaClientes},
-  MenuLineasAlbaran in 'LineasAlbaran\MenuLineasAlbaran.pas' {FormMenuLineasAlbaran},
   FichaLineasAlbaran in 'Albaran\FichaLineasAlbaran.pas' {FormFichaLineasAlbaran},
   FichaGridBase in 'Bases\FichaGridBase.pas' {FormFichaGridBase},
   FichaGridAlbaran in 'Albaran\FichaGridAlbaran.pas' {FormFichaGridAlbaran};

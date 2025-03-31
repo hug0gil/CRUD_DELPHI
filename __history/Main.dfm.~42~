@@ -1,0 +1,82 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Men'#250' principal'
+  ClientHeight = 441
+  ClientWidth = 624
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poScreenCenter
+  TextHeight = 15
+  object btnAlbaran: TButton
+    AlignWithMargins = True
+    Left = 15
+    Top = 30
+    Width = 594
+    Height = 89
+    Margins.Left = 15
+    Margins.Top = 30
+    Margins.Right = 15
+    Margins.Bottom = 10
+    Align = alTop
+    Caption = 'Albar'#225'n'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -24
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    OnClick = btnAlbaranClick
+    ExplicitTop = 15
+  end
+  object btnClientes: TButton
+    AlignWithMargins = True
+    Left = 15
+    Top = 268
+    Width = 594
+    Height = 89
+    Margins.Left = 15
+    Margins.Top = 20
+    Margins.Right = 15
+    Margins.Bottom = 10
+    Align = alTop
+    Caption = 'Clientes'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -24
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    OnClick = btnClientesClick
+    ExplicitTop = 223
+  end
+  object btnArticulos: TButton
+    AlignWithMargins = True
+    Left = 15
+    Top = 149
+    Width = 594
+    Height = 89
+    Margins.Left = 15
+    Margins.Top = 20
+    Margins.Right = 15
+    Margins.Bottom = 10
+    Align = alTop
+    Caption = 'Articulos'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -24
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    OnClick = btnArticuloClick
+    ExplicitTop = 119
+  end
+end

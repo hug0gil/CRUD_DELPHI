@@ -148,10 +148,6 @@
             <Form>FormFichaBase</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Albaran\FichaAlbaran.pas">
-            <Form>FormFichaAlbaran</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="Articulos\MenuArticulos.pas">
             <Form>FormMenuArticulos</Form>
             <FormType>dfm</FormType>
@@ -166,10 +162,6 @@
         </DCCReference>
         <DCCReference Include="Clientes\FichaClientes.pas">
             <Form>FormFichaClientes</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="LineasAlbaran\MenuLineasAlbaran.pas">
-            <Form>FormMenuLineasAlbaran</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Albaran\FichaLineasAlbaran.pas">

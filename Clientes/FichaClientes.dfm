@@ -173,6 +173,7 @@ inherited FormFichaClientes: TFormFichaClientes
           Align = alBottom
           Date = 45743.000000000000000000
           Time = 0.430008495372021600
+          Enabled = False
           TabOrder = 0
         end
       end
@@ -186,6 +187,7 @@ inherited FormFichaClientes: TFormFichaClientes
     Top = 74
   end
   object FDTransactionCliente: TFDTransaction
+    Options.AutoStop = False
     Connection = DataModuleBDD.DataBaseFDConnection
     Left = 424
     Top = 72

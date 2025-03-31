@@ -55,11 +55,6 @@ inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
           Expanded = False
           FieldName = 'NORDEN'
           Visible = True
-        end
-        item
-          Expanded = False
-          FieldName = 'CBTOTAL'
-          Visible = True
         end>
     end
   end
@@ -133,14 +128,6 @@ inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
       Origin = 'NORDEN'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
-    end
-    object FDTableCBTOTAL: TFMTBCDField
-      Alignment = taLeftJustify
-      DisplayLabel = 'Total'
-      FieldName = 'CBTOTAL'
-      Origin = 'CBTOTAL'
-      Precision = 18
-      Size = 6
     end
   end
   inherited FDTransactionTable: TFDTransaction

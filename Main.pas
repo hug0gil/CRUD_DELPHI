@@ -6,16 +6,14 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, MenuAlbaran,
-  MenuArticulos, MenuClientes,MenuLineasAlbaran;
+  MenuArticulos, MenuClientes;
 
 type
   TFormMain = class(TForm)
     btnAlbaran: TButton;
-    btnLineas: TButton;
     btnClientes: TButton;
     btnArticulos: TButton;
     procedure btnAlbaranClick(Sender: TObject);
-    procedure btnLineasAlbaranClick(Sender: TObject);
     procedure btnArticuloClick(Sender: TObject);
     procedure btnClientesClick(Sender: TObject);
   private
@@ -64,14 +62,6 @@ begin
   FormMenuClientes.ShowModal;
   FormMenuClientes.Free;
 
-end;
-
-procedure TFormMain.btnLineasAlbaranClick(Sender: TObject);
-begin
-  FormMenuLineasAlbaran := TFormMenuLineasAlbaran.Create(Self);
-
-  FormMenuLineasAlbaran.ShowModal;
-  FormMenuLineasAlbaran.Free;
 end;
 
 end.

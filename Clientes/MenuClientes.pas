@@ -25,7 +25,6 @@ type
     procedure btnActualizarClick(Sender: TObject);
     procedure btnVerClick(Sender: TObject);
     procedure DBNavigatorClick(Sender: TObject; Button: TNavigateBtn);
-    procedure Actualizar(Sender: TObject);
     procedure DataSourceDataChange(Sender: TObject; Field: TField);
     procedure btnEliminarClick(Sender: TObject);
 
@@ -48,13 +47,13 @@ var
   FormUpdateClientes: TFormFichaClientes;
 begin
   FormUpdateClientes := TFormFichaClientes.Create(Self, UltimoCodigo, 2);
-  FormUpdateClientes.Caption := 'Actualizar';
-  FormUpdateClientes.lblTitulo.Caption := 'Actualizar cliente';
   FormUpdateClientes.EditCodigo.Text := DataSource.DataSet.FieldByName
     ('NCODIGO').AsString;
   FormUpdateClientes.EditNombre.Text := DataSource.DataSet.FieldByName
     ('CNOMBRE').AsString;
+  FDTransactionTable.StartTransaction;
   FormUpdateClientes.ShowModal;
+  actualizarVista();
   FormUpdateClientes.Free;
 end;
 
@@ -63,8 +62,9 @@ var
   FormAddClientes: TFormFichaClientes;
 begin
   FormAddClientes := TFormFichaClientes.Create(Self, UltimoCodigo, 1);
-
+  FDTransactionTable.StartTransaction;
   FormAddClientes.ShowModal;
+  actualizarVista();
   FormAddClientes.Free;
 end;
 
@@ -74,6 +74,7 @@ var
 begin
   FormVerClientes := TFormFichaClientes.Create(Self, UltimoCodigo, 3);
   try
+    FormVerClientes.DateTimePickerFecha.Enabled := False;
     FormVerClientes.EditNombre.Text := DataSource.DataSet.FieldByName
       ('CNOMBRE').AsString;
     FormVerClientes.DateTimePickerFecha.DateTime :=
@@ -86,8 +87,10 @@ begin
       (DataSource.DataSet.FieldByName('NOMBRE_REGIMEN').AsString);
     FormVerClientes.ComboBoxRegimen.ItemIndex := 0;
 
+    FDTransactionTable.StartTransaction;
     FormVerClientes.ShowModal;
   finally
+    actualizarVista();
     FormVerClientes.Free;
   end;
 end;
@@ -131,9 +134,6 @@ end;
 procedure TFormMenuClientes.OnCreate(Sender: TObject);
 begin
   UltimoCodigo := GetLastCodigo('NCODIGO', 'CLIENTES');
-  if not ModuloDatos.DataModuleBDD.FDTransaction.Active then
-    ModuloDatos.DataModuleBDD.FDTransaction.StartTransaction;
-  // Iniciar transacción
 
   if not DataSource.DataSet.Active then
     DataSource.DataSet.Open;
@@ -167,7 +167,7 @@ begin
     try
       DeleteQuery.Connection := ModuloDatos.DataModuleBDD.DataBaseFDConnection;
       ModuloDatos.DataModuleBDD.DataBaseFDConnection.StartTransaction;
-      // Iniciar transacción
+      FDTransactionTable.StartTransaction;
       try
         DeleteQuery.SQL.Text := 'DELETE FROM CLIENTES WHERE NCODIGO = :Codigo';
         DeleteQuery.ParamByName('Codigo').AsInteger := CodigoSeleccionado;
@@ -188,7 +188,7 @@ begin
       DeleteQuery.Free;
     end;
   end;
-  Self.Actualizar(Self);
+  actualizarVista();
 end;
 
 procedure TFormMenuClientes.DBNavigatorClick(Sender: TObject;
@@ -231,14 +231,7 @@ begin
         ShowMessage('Cambios cancelados.');
       end;
   end;
-  Self.Actualizar(Self);
-end;
-
-procedure TFormMenuClientes.Actualizar(Sender: TObject);
-begin
-  FDTable.Refresh;
-  DataSource.DataSet.Refresh;
-  DBGrid.Refresh;
+  actualizarVista();
 end;
 
 end.

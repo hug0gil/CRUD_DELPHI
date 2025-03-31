@@ -20,7 +20,6 @@ type
     FDTableNCANTIDAD: TFMTBCDField;
     FDTableNPRECIO: TFMTBCDField;
     FDTableNORDEN: TSmallintField;
-    FDTableCBTOTAL: TFMTBCDField;
     procedure btnAceptarClick(Sender: TObject);
     function TodoCorrectoAlbaran: Boolean;
     procedure btnCancelarClick(Sender: TObject);
@@ -241,6 +240,8 @@ begin
   FormAddLineasAlbaran.ComboBoxCodArticulo.Items.Add
     (DataSource.DataSet.FieldByName('CCOD_ARTICULO').AsString);
   FormAddLineasAlbaran.ComboBoxCodArticulo.ItemIndex := 0;
+  FormAddLineasAlbaran.EditPrecio.ReadOnly := True;
+  FormAddLineasAlbaran.EditCantidad.ReadOnly := True;
   FormAddLineasAlbaran.ShowModal;
   FormAddLineasAlbaran.Free;
 end;

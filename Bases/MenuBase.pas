@@ -33,6 +33,7 @@ type
     procedure btnVerClick(Sender: TObject);
     procedure btnEliminarClick(Sender: TObject);
     procedure btnAgregarClick(Sender: TObject);
+    procedure actualizarVista();
   private
     { Private declarations }
   public
@@ -64,24 +65,34 @@ begin
   end;
 end;
 
+procedure TFormMenuBase.actualizarVista;
+begin
+FDTransactionTable.Commit;
+  FDTable.Close;
+  FDTable.Open;
+  DataSource.DataSet.Refresh;
+  DBGrid.Refresh;
+  ShowMessage('entra');
+end;
+
 procedure TFormMenuBase.btnActualizarClick(Sender: TObject);
 begin
-    // Actualizar
+  // Actualizar
 end;
 
 procedure TFormMenuBase.btnAgregarClick(Sender: TObject);
 begin
-     // Agregar
+  // Agregar
 end;
 
 procedure TFormMenuBase.btnEliminarClick(Sender: TObject);
 begin
-    // Eliminar
+  // Eliminar
 end;
 
 procedure TFormMenuBase.btnVerClick(Sender: TObject);
 begin
-     // Ver
+  // Ver
 end;
 
 procedure TFormMenuBase.DBNavigatorClick(Sender: TObject; Button: TNavigateBtn);

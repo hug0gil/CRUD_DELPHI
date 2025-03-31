@@ -1,0 +1,172 @@
+object FormMenuBase: TFormMenuBase
+  Left = 0
+  Top = 0
+  Caption = 'FormMenu'
+  ClientHeight = 484
+  ClientWidth = 682
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -12
+  Font.Name = 'Segoe UI'
+  Font.Style = []
+  Position = poScreenCenter
+  OnActivate = FormActivate
+  TextHeight = 15
+  object Shape1: TShape
+    Left = 498
+    Top = 0
+    Width = 2
+    Height = 484
+    Align = alRight
+    ExplicitLeft = 496
+    ExplicitHeight = 460
+  end
+  object Panel1: TPanel
+    Left = 500
+    Top = 0
+    Width = 182
+    Height = 484
+    Align = alRight
+    BevelOuter = bvNone
+    TabOrder = 0
+    object btnActualizar: TButton
+      AlignWithMargins = True
+      Left = 25
+      Top = 145
+      Width = 132
+      Height = 80
+      Margins.Left = 25
+      Margins.Top = 15
+      Margins.Right = 25
+      Margins.Bottom = 25
+      Align = alTop
+      Caption = 'Actualizar'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnClick = btnActualizarClick
+    end
+    object btnAgregar: TButton
+      AlignWithMargins = True
+      Left = 25
+      Top = 25
+      Width = 132
+      Height = 80
+      Margins.Left = 25
+      Margins.Top = 25
+      Margins.Right = 25
+      Margins.Bottom = 25
+      Align = alTop
+      Caption = 'A'#241'adir nuevo'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      OnClick = btnAgregarClick
+    end
+    object btnEliminar: TButton
+      AlignWithMargins = True
+      Left = 25
+      Top = 385
+      Width = 132
+      Height = 80
+      Margins.Left = 25
+      Margins.Top = 15
+      Margins.Right = 25
+      Margins.Bottom = 25
+      Align = alTop
+      Caption = 'Eliminar'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      OnClick = btnEliminarClick
+    end
+    object btnVer: TButton
+      AlignWithMargins = True
+      Left = 25
+      Top = 265
+      Width = 132
+      Height = 80
+      Margins.Left = 25
+      Margins.Top = 15
+      Margins.Right = 25
+      Margins.Bottom = 25
+      Align = alTop
+      Caption = 'Ver'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      OnClick = btnVerClick
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Top = 0
+    Width = 498
+    Height = 484
+    Margins.Top = 100
+    Align = alClient
+    TabOrder = 1
+    object DBGrid: TDBGrid
+      Left = 1
+      Top = 64
+      Width = 496
+      Height = 419
+      Align = alBottom
+      DataSource = DataSource
+      ReadOnly = True
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -12
+      TitleFont.Name = 'Segoe UI'
+      TitleFont.Style = []
+    end
+    object DBNavigator: TDBNavigator
+      Left = 1
+      Top = 1
+      Width = 496
+      Height = 63
+      Margins.Bottom = 300
+      DataSource = DataSource
+      VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbPost, nbCancel, nbRefresh]
+      Align = alBottom
+      TabOrder = 1
+      OnClick = DBNavigatorClick
+    end
+  end
+  object FDTable: TFDTable
+    Connection = DataModuleBDD.DataBaseFDConnection
+    Transaction = FDTransactionTable
+    UpdateTransaction = FDTransactionTable
+    ResourceOptions.AssignedValues = [rvEscapeExpand]
+    Left = 360
+    Top = 88
+  end
+  object DataSource: TDataSource
+    DataSet = FDTable
+    Left = 432
+    Top = 88
+  end
+  object FDTransactionTable: TFDTransaction
+    Connection = DataModuleBDD.DataBaseFDConnection
+    Left = 272
+    Top = 88
+  end
+end
