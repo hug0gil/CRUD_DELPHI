@@ -67,12 +67,13 @@ end;
 
 procedure TFormMenuBase.actualizarVista;
 begin
-FDTransactionTable.Commit;
+
   FDTable.Close;
+  FDTransactionTable.Commit;
   FDTable.Open;
   DataSource.DataSet.Refresh;
   DBGrid.Refresh;
-  ShowMessage('entra');
+
 end;
 
 procedure TFormMenuBase.btnActualizarClick(Sender: TObject);

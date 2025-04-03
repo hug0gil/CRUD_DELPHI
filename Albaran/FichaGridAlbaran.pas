@@ -20,6 +20,9 @@ type
     FDTableNCANTIDAD: TFMTBCDField;
     FDTableNPRECIO: TFMTBCDField;
     FDTableNORDEN: TSmallintField;
+    FDTableCBSUBTOTAL: TFMTBCDField;
+    FDTableNIVA: TCurrencyField;
+    FDTableNRECARGO: TCurrencyField;
     procedure btnAceptarClick(Sender: TObject);
     function TodoCorrectoAlbaran: Boolean;
     procedure btnCancelarClick(Sender: TObject);
@@ -115,6 +118,10 @@ procedure TFormFichaGridAlbaran.ButtonBorrarClick(Sender: TObject);
 var
   Confirmacion: Integer;
   DeleteQuery: TFDQuery;
+  RetryCount: Integer;
+  Success: Boolean;
+const
+  MAX_RETRIES = 3;
 begin
   // Verificar si se ha seleccionado un albarán
   if CodigoAlbLinea = -1 then
@@ -133,21 +140,55 @@ begin
     DeleteQuery := TFDQuery.Create(nil);
     try
       DeleteQuery.Connection := ModuloDatos.DataModuleBDD.DataBaseFDConnection;
-      // Asignar conexión
-      ModuloDatos.DataModuleBDD.DataBaseFDConnection.StartTransaction;
-      try
-        DeleteQuery.SQL.Text :=
-          'DELETE FROM LINEAS_ALB WHERE NCOD_ALBARAN = :Codigo';
-        DeleteQuery.ParamByName('Codigo').AsInteger := CodigoAlbLinea;
-        DeleteQuery.ExecSQL;
 
-        ModuloDatos.DataModuleBDD.DataBaseFDConnection.Commit;
-        ShowMessage('La línea ha sido eliminado con éxito.');
-      except
-        on E: Exception do
-        begin
-          ModuloDatos.DataModuleBDD.DataBaseFDConnection.Rollback;
-          ShowMessage('Error al eliminar la línea: ' + E.Message);
+      // Añadir lógica de reintento para manejar deadlocks
+      RetryCount := 0;
+      Success := False;
+
+      while (not Success) and (RetryCount < MAX_RETRIES) do
+      begin
+        try
+          // Iniciar una nueva transacción
+          ModuloDatos.DataModuleBDD.DataBaseFDConnection.StartTransaction;
+
+          // Corregir la sintaxis SQL añadiendo AND entre condiciones
+          DeleteQuery.SQL.Text :=
+            'DELETE FROM LINEAS_ALB WHERE NCOD_ALBARAN = :Codigo AND NORDEN = :Orden';
+          DeleteQuery.ParamByName('Codigo').AsInteger := CodigoAlbLinea;
+          DeleteQuery.ParamByName('Orden').AsInteger := DataSource.DataSet.FieldByName('NORDEN').AsInteger;
+          DeleteQuery.ExecSQL;
+
+          // Confirmar si tiene éxito
+          ModuloDatos.DataModuleBDD.DataBaseFDConnection.Commit;
+          Success := True;
+          ShowMessage('La línea ha sido eliminada con éxito.');
+
+          // Refrescar los datos
+          FDTable.Refresh;
+        except
+          on E: Exception do
+          begin
+            // Rollback en caso de error
+            if ModuloDatos.DataModuleBDD.DataBaseFDConnection.InTransaction then
+              ModuloDatos.DataModuleBDD.DataBaseFDConnection.Rollback;
+
+            // Si es un deadlock, reintentar
+            if (Pos('deadlock', LowerCase(E.Message)) > 0) or
+               (Pos('update conflicts', LowerCase(E.Message)) > 0) then
+            begin
+              Inc(RetryCount);
+              if RetryCount >= MAX_RETRIES then
+                ShowMessage('Error al eliminar la línea después de varios intentos: ' + E.Message);
+              // Pequeña pausa antes de reintentar
+              Sleep(100 * RetryCount);
+            end
+            else
+            begin
+              // Para otros errores, mostrar mensaje y salir del bucle de reintentos
+              ShowMessage('Error al eliminar la línea: ' + E.Message);
+              Break;
+            end;
+          end;
         end;
       end;
     finally

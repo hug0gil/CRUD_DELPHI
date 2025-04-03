@@ -8,6 +8,37 @@ inherited FormMenuAlbaran: TFormMenuAlbaran
   end
   inherited Panel2: TPanel
     StyleElements = [seFont, seClient, seBorder]
+    inherited DBGrid: TDBGrid
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NCODIGO'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DFECHA'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COBSERVACIONES'
+          Width = 160
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NCOD_CLIENTE'
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NTOTAL'
+          Width = 50
+          Visible = True
+        end>
+    end
     inherited DBNavigator: TDBNavigator
       Hints.Strings = ()
     end
@@ -34,7 +65,7 @@ inherited FormMenuAlbaran: TFormMenuAlbaran
       DisplayLabel = 'Observaciones'
       FieldName = 'COBSERVACIONES'
       Origin = 'COBSERVACIONES'
-      Size = 30
+      Size = 70
     end
     object FDTableNCOD_CLIENTE: TIntegerField
       Alignment = taLeftJustify
@@ -42,6 +73,15 @@ inherited FormMenuAlbaran: TFormMenuAlbaran
       FieldName = 'NCOD_CLIENTE'
       Origin = 'NCOD_CLIENTE'
       Required = True
+    end
+    object FDTableNTOTAL: TFMTBCDField
+      Alignment = taLeftJustify
+      DisplayLabel = 'Total'
+      FieldName = 'NTOTAL'
+      Origin = 'NTOTAL'
+      Required = True
+      Precision = 18
+      Size = 3
     end
   end
   inherited DataSource: TDataSource

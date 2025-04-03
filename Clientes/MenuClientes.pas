@@ -35,8 +35,6 @@ type
     { Public declarations }
   end;
 
-var
-  FormMenuClientes: TFormMenuClientes;
 
 implementation
 
@@ -51,7 +49,7 @@ begin
     ('NCODIGO').AsString;
   FormUpdateClientes.EditNombre.Text := DataSource.DataSet.FieldByName
     ('CNOMBRE').AsString;
-  FDTransactionTable.StartTransaction;
+
   FormUpdateClientes.ShowModal;
   actualizarVista();
   FormUpdateClientes.Free;
@@ -62,7 +60,7 @@ var
   FormAddClientes: TFormFichaClientes;
 begin
   FormAddClientes := TFormFichaClientes.Create(Self, UltimoCodigo, 1);
-  FDTransactionTable.StartTransaction;
+
   FormAddClientes.ShowModal;
   actualizarVista();
   FormAddClientes.Free;
@@ -86,8 +84,6 @@ begin
     FormVerClientes.ComboBoxRegimen.Items.Add
       (DataSource.DataSet.FieldByName('NOMBRE_REGIMEN').AsString);
     FormVerClientes.ComboBoxRegimen.ItemIndex := 0;
-
-    FDTransactionTable.StartTransaction;
     FormVerClientes.ShowModal;
   finally
     actualizarVista();
@@ -166,12 +162,13 @@ begin
     DeleteQuery := TFDQuery.Create(nil);
     try
       DeleteQuery.Connection := ModuloDatos.DataModuleBDD.DataBaseFDConnection;
-      ModuloDatos.DataModuleBDD.DataBaseFDConnection.StartTransaction;
+
       FDTransactionTable.StartTransaction;
       try
         DeleteQuery.SQL.Text := 'DELETE FROM CLIENTES WHERE NCODIGO = :Codigo';
         DeleteQuery.ParamByName('Codigo').AsInteger := CodigoSeleccionado;
         DeleteQuery.ExecSQL;
+        actualizarVista();
 
         ModuloDatos.DataModuleBDD.DataBaseFDConnection.Commit;
         // Confirmar transacción
@@ -188,7 +185,7 @@ begin
       DeleteQuery.Free;
     end;
   end;
-  actualizarVista();
+
 end;
 
 procedure TFormMenuClientes.DBNavigatorClick(Sender: TObject;

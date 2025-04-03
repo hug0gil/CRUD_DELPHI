@@ -1,0 +1,90 @@
+inherited FormMenuAlbaran: TFormMenuAlbaran
+  Caption = 'Men'#250' albaran'
+  StyleElements = [seFont, seClient, seBorder]
+  OnCreate = OnCreate
+  TextHeight = 15
+  inherited Panel1: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited Panel2: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited DBGrid: TDBGrid
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NCODIGO'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'DFECHA'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'COBSERVACIONES'
+          Width = 150
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NCOD_CLIENTE'
+          Width = 100
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'NTOTAL'
+          Width = 50
+          Visible = True
+        end>
+    end
+    inherited DBNavigator: TDBNavigator
+      Hints.Strings = ()
+    end
+  end
+  inherited FDTable: TFDTable
+    IndexName = 'ALBARAN_CLIENTES_FK'
+    UpdateOptions.AssignedValues = [uvAutoCommitUpdates]
+    UpdateOptions.AutoCommitUpdates = True
+    TableName = 'ALBARAN'
+    object FDTableNCODIGO: TIntegerField
+      Alignment = taLeftJustify
+      DisplayLabel = 'C'#243'digo'
+      FieldName = 'NCODIGO'
+      Origin = 'NCODIGO'
+      Required = True
+    end
+    object FDTableDFECHA: TDateField
+      DisplayLabel = 'Fecha'
+      FieldName = 'DFECHA'
+      Origin = 'DFECHA'
+      Required = True
+    end
+    object FDTableCOBSERVACIONES: TStringField
+      DisplayLabel = 'Observaciones'
+      FieldName = 'COBSERVACIONES'
+      Origin = 'COBSERVACIONES'
+      Size = 50
+    end
+    object FDTableNCOD_CLIENTE: TIntegerField
+      Alignment = taLeftJustify
+      DisplayLabel = 'C'#243'digo_Cliente'
+      FieldName = 'NCOD_CLIENTE'
+      Origin = 'NCOD_CLIENTE'
+      Required = True
+    end
+    object FDTableNTOTAL: TFMTBCDField
+      Alignment = taLeftJustify
+      DisplayLabel = 'Total'
+      FieldName = 'NTOTAL'
+      Origin = 'NTOTAL'
+      Required = True
+      Precision = 18
+      Size = 3
+    end
+  end
+  inherited DataSource: TDataSource
+    OnDataChange = DataSourceDataChange
+  end
+end

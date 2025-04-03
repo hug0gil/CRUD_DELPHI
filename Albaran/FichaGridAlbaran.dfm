@@ -129,6 +129,23 @@ inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
     end
+    object FDTableCBSUBTOTAL: TFMTBCDField
+      DisplayLabel = 'Subtotal'
+      FieldName = 'CBSUBTOTAL'
+      Origin = 'CBSUBTOTAL'
+      Precision = 18
+      Size = 6
+    end
+    object FDTableNIVA: TCurrencyField
+      FieldName = 'NIVA'
+      Origin = 'NIVA'
+      Required = True
+    end
+    object FDTableNRECARGO: TCurrencyField
+      FieldName = 'NRECARGO'
+      Origin = 'NRECARGO'
+      Required = True
+    end
   end
   inherited FDTransactionTable: TFDTransaction
     Left = 560

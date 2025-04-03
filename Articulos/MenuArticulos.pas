@@ -20,7 +20,6 @@ type
     FDTableNCOD_IVA: TSmallintField;
     FDTableTIPOIVA: TStringField;
     procedure OnCreate(Sender: TObject);
-    procedure Actualizar(Sender: TObject);
     procedure DataSourceDataChange(Sender: TObject; Field: TField);
     procedure DBNavigatorClick(Sender: TObject; Button: TNavigateBtn);
     function getCodArticulos: TArray<String>;
@@ -76,11 +75,10 @@ begin
   FormAddArticulos.EditCodigo.ReadOnly := False;
   FormAddArticulos.EditNombre.ReadOnly := False;
   FormAddArticulos.EditStock.ReadOnly := False;
-  FormAddArticulos.EditIVA.ReadOnly := False;
   FormAddArticulos.ShowModal;
   FormAddArticulos.Free;
 
-  Actualizar(Self);
+  actualizarVista();
 end;
 
 procedure TFormMenuArticulos.btnEliminarClick(Sender: TObject);
@@ -123,7 +121,7 @@ begin
       DeleteQuery.Free;
     end;
   end;
-  Self.Actualizar(Self);
+  actualizarVista();
 end;
 
 procedure TFormMenuArticulos.btnActualizarClick(Sender: TObject);
@@ -133,15 +131,13 @@ begin
   FormUpdateticulos := TFormFichaArticulos.Create(Self, CodigoSeleccionado, 2);
   FormUpdateticulos.EditNombre.ReadOnly := False;
   FormUpdateticulos.EditStock.ReadOnly := False;
-  FormUpdateticulos.EditIVA.ReadOnly := False;
   FormUpdateticulos.EditNombre.Text := DataSource.DataSet.Fields[1].AsString;
   FormUpdateticulos.EditStock.Text := DataSource.DataSet.Fields[2].AsString;
-  FormUpdateticulos.EditIVA.Text := DataSource.DataSet.Fields[3].AsString;
-
+  FormUpdateticulos.ComboBoxIVA.Text := DataSource.DataSet.Fields[3].AsString;
   FormUpdateticulos.ShowModal;
   FormUpdateticulos.Free;
 
-  Actualizar(Self);
+  actualizarVista();
 
 end;
 
@@ -152,12 +148,13 @@ begin
   FormVerArticulos := TFormFichaArticulos.Create(Self, CodigoSeleccionado, 3);
   FormVerArticulos.EditNombre.Text := DataSource.DataSet.Fields[1].AsString;
   FormVerArticulos.EditStock.Text := DataSource.DataSet.Fields[2].AsString;
-  FormVerArticulos.EditIVA.Text := DataSource.DataSet.Fields[3].AsString;
+  FormVerArticulos.ComboBoxIVA.Clear;
+   FormVerArticulos.ComboBoxIVA.Text := DataSource.DataSet.Fields[3].AsString;
 
   FormVerArticulos.ShowModal;
   FormVerArticulos.Free;
 
-  Actualizar(Self);
+  actualizarVista();
 
 end;
 
@@ -217,8 +214,7 @@ begin
         ShowMessage('Cambios cancelados.');
       end;
   end;
-  Self.Actualizar(Self);
-
+  actualizarVista();
 end;
 
 procedure TFormMenuArticulos.FDTableCalcFields(DataSet: TDataSet);
@@ -247,7 +243,6 @@ begin
   end;
 end;
 
-
 procedure TFormMenuArticulos.OnCreate(Sender: TObject);
 begin
   CodigoSeleccionado := '';
@@ -261,13 +256,6 @@ begin
     DataSource.DataSet.Edit;
 
   DBNavigator.Enabled := True;
-end;
-
-procedure TFormMenuArticulos.Actualizar(Sender: TObject);
-begin
-  FDTable.Refresh;
-  DataSource.DataSet.Refresh;
-  DBGrid.Refresh;
 end;
 
 end.

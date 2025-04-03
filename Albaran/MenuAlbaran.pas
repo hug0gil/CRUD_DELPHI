@@ -18,6 +18,7 @@ type
     FDTableDFECHA: TDateField;
     FDTableCOBSERVACIONES: TStringField;
     FDTableNCOD_CLIENTE: TIntegerField;
+    FDTableNTOTAL: TFMTBCDField;
     procedure btnEliminarClick(Sender: TObject);
     procedure OnCreate(Sender: TObject);
     procedure btnAgregarClick(Sender: TObject);
@@ -25,7 +26,6 @@ type
     procedure btnActualizarClick(Sender: TObject);
     procedure btnVerClick(Sender: TObject);
     procedure DBNavigatorClick(Sender: TObject; Button: TNavigateBtn);
-    procedure Actualizar(Sender: TObject);
     procedure DataSourceDataChange(Sender: TObject; Field: TField);
   private
     { Private declarations }
@@ -81,13 +81,6 @@ begin
   DBNavigator.Enabled := True;
 end;
 
-procedure TFormMenuAlbaran.Actualizar(Sender: TObject);
-begin
-  FDTable.Refresh;
-  DataSource.DataSet.Refresh;
-  DBGrid.Refresh;
-end;
-
 procedure TFormMenuAlbaran.btnActualizarClick(Sender: TObject);
 var
   FormUpdateAlbaran: TFormFichaGridAlbaran;
@@ -118,7 +111,7 @@ begin
 
   FormUpdateAlbaran.ShowModal;
   FormUpdateAlbaran.Free;
-  Self.Actualizar(Self);
+  actualizarVista();
 end;
 
 procedure TFormMenuAlbaran.btnAgregarClick(Sender: TObject);
@@ -140,7 +133,7 @@ begin
 
   FormFichaGridAlbaran.ComboBoxCodCliente.ItemIndex := 0;
 
-  Actualizar(Self);
+  actualizarVista();
 
   FormFichaGridAlbaran.ShowModal;
   FormFichaGridAlbaran.Free;
@@ -169,7 +162,7 @@ begin
     try
       DeleteQuery.Connection := ModuloDatos.DataModuleBDD.DataBaseFDConnection;
       // Asignar conexión
-      ModuloDatos.DataModuleBDD.DataBaseFDConnection.StartTransaction;
+      FDTransactionTable.StartTransaction;
       try
         DeleteQuery.SQL.Text := 'DELETE FROM ALBARAN WHERE NCODIGO = :Codigo';
         DeleteQuery.ParamByName('Codigo').AsInteger := CodigoSeleccionado;
@@ -188,7 +181,7 @@ begin
       DeleteQuery.Free;
     end;
   end;
-  Self.Actualizar(Self);
+  actualizarVista();
 end;
 
 procedure TFormMenuAlbaran.btnVerClick(Sender: TObject);
@@ -277,7 +270,7 @@ begin
         ShowMessage('Cambios cancelados.');
       end;
   end;
-  Self.Actualizar(Self);
+  actualizarVista();
 end;
 
 end.

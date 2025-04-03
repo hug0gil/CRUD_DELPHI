@@ -6,8 +6,8 @@ object DataModuleBDD: TDataModuleBDD
     Options.AutoStop = False
     Options.DisconnectAction = xdRollback
     Connection = DataBaseFDConnection
-    Left = 408
-    Top = 176
+    Left = 400
+    Top = 168
   end
   object DataBaseFDConnection: TFDConnection
     Params.Strings = (
