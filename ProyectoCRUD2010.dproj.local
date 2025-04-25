@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2025/04/03 11:29:27.593.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\Main.pas</Transaction>
+    <Transaction>2025/04/03 11:29:27.593.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\Main.dfm</Transaction>
+    <Transaction>2025/04/03 11:44:36.414.dproj,C:\Users\Pr1\Documents\RAD Studio\Projects\Project1.dproj=C:\Users\Pr1\Documents\RAD Studio\Projects\ProyectoCRUD2010.dproj</Transaction>
+    <Transaction>2025/04/03 12:07:13.028.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.pas=</Transaction>
+    <Transaction>2025/04/03 12:07:13.028.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.dfm=</Transaction>
+    <Transaction>2025/04/03 12:24:24.226.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.pas</Transaction>
+    <Transaction>2025/04/03 12:24:24.226.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.dfm</Transaction>
+    <Transaction>2025/04/03 13:40:42.143.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\ModuloDatos.pas=</Transaction>
+    <Transaction>2025/04/03 13:40:42.143.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\ModuloDatos.dfm=</Transaction>
+    <Transaction>2025/04/03 13:40:43.172.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\MenuBase.pas=</Transaction>
+    <Transaction>2025/04/03 13:40:43.172.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\MenuBase.dfm=</Transaction>
+    <Transaction>2025/04/03 13:40:45.154.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Main.pas=</Transaction>
+    <Transaction>2025/04/03 13:40:45.154.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Main.dfm=</Transaction>
+    <Transaction>2025/04/03 13:42:01.610.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuBase.pas</Transaction>
+    <Transaction>2025/04/03 13:42:01.610.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuBase.dfm</Transaction>
+    <Transaction>2025/04/03 13:43:27.296.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.pas</Transaction>
+    <Transaction>2025/04/03 13:43:27.296.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.dfm</Transaction>
+    <Transaction>2025/04/03 13:44:18.800.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Main.pas=</Transaction>
+    <Transaction>2025/04/03 13:44:18.800.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Main.dfm=</Transaction>
+    <Transaction>2025/04/03 13:44:45.594.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\Main.pas</Transaction>
+    <Transaction>2025/04/03 13:44:45.594.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\Main.dfm</Transaction>
+    <Transaction>2025/04/03 13:50:52.378.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\ModuloDatos.pas</Transaction>
+    <Transaction>2025/04/03 13:50:52.378.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\ModuloDatos.dfm</Transaction>
+    <Transaction>2025/04/03 17:10:34.894.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridBase.pas</Transaction>
+    <Transaction>2025/04/03 17:10:34.894.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridBase.dfm</Transaction>
+    <Transaction>2025/04/03 17:11:21.670.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaran.pas</Transaction>
+    <Transaction>2025/04/03 17:11:21.670.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaran.dfm</Transaction>
+    <Transaction>2025/04/03 17:30:45.441.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuClientes.pas</Transaction>
+    <Transaction>2025/04/03 17:30:45.441.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuClientes.dfm</Transaction>
+    <Transaction>2025/04/04 08:35:39.519.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\prueba.pas</Transaction>
+    <Transaction>2025/04/04 08:35:39.519.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\prueba.dfm</Transaction>
+    <Transaction>2025/04/04 08:37:07.069.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\prueba.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\Prueba.pas</Transaction>
+    <Transaction>2025/04/04 08:37:07.069.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\prueba.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\Prueba.dfm</Transaction>
+    <Transaction>2025/04/04 09:11:36.627.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.pas=</Transaction>
+    <Transaction>2025/04/04 09:11:36.627.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.dfm=</Transaction>
+    <Transaction>2025/04/04 11:49:37.111.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuArticulos.pas</Transaction>
+    <Transaction>2025/04/04 11:49:37.111.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuArticulos.dfm</Transaction>
+    <Transaction>2025/04/04 12:40:50.808.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.pas</Transaction>
+    <Transaction>2025/04/04 12:40:50.808.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\MenuAlbaran.dfm</Transaction>
+    <Transaction>2025/04/04 13:44:41.065.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaBase.pas</Transaction>
+    <Transaction>2025/04/04 13:44:41.065.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaBase.dfm</Transaction>
+    <Transaction>2025/04/04 13:51:28.660.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaCliente.pas</Transaction>
+    <Transaction>2025/04/04 13:51:28.660.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaCliente.dfm</Transaction>
+    <Transaction>2025/04/07 17:58:00.586.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaArticulos.pas</Transaction>
+    <Transaction>2025/04/07 17:58:00.586.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaArticulos.dfm</Transaction>
+    <Transaction>2025/04/08 09:17:20.859.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaran.pas=</Transaction>
+    <Transaction>2025/04/08 09:17:20.859.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaran.dfm=</Transaction>
+    <Transaction>2025/04/08 09:42:30.978.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaran.pas</Transaction>
+    <Transaction>2025/04/08 09:42:30.978.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaran.dfm</Transaction>
+    <Transaction>2025/04/09 10:17:01.483.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaLineasAlbaran.pas</Transaction>
+    <Transaction>2025/04/09 10:17:01.483.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaLineasAlbaran.dfm</Transaction>
+    <Transaction>2025/04/25 10:18:25.899.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaranNueva.pas</Transaction>
+    <Transaction>2025/04/25 10:18:25.899.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaranNueva.dfm</Transaction>
+    <Transaction>2025/04/25 12:11:53.272.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaranNueva.pas=</Transaction>
+    <Transaction>2025/04/25 12:11:53.272.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\FichaGridAlbaranNueva.dfm=</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="FichaLineasAlbaran.pas"/>
+    <File Path="FichaLineasAlbaran.dfm"/>
+    <File Path="FichaArticulos.pas"/>
+    <File Path="FichaArticulos.dfm"/>
+    <File Path="FichaBase.pas"/>
+    <File Path="FichaBase.dfm"/>
+    <File Path="FichaCliente.pas"/>
+    <File Path="FichaCliente.dfm"/>
+    <File Path="FichaGridAlbaran.pas"/>
+    <File Path="FichaGridAlbaran.dfm"/>
+    <File Path="FichaGridBase.pas"/>
+    <File Path="FichaGridBase.dfm"/>
+    <File Path="Main.pas"/>
+    <File Path="Main.dfm"/>
+    <File Path="MenuAlbaran.pas"/>
+    <File Path="MenuAlbaran.dfm"/>
+    <File Path="MenuArticulos.pas"/>
+    <File Path="MenuArticulos.dfm"/>
+    <File Path="MenuBase.pas"/>
+    <File Path="MenuBase.dfm"/>
+    <File Path="MenuClientes.pas"/>
+    <File Path="MenuClientes.dfm"/>
+    <File Path="ModuloDatos.pas"/>
+    <File Path="ModuloDatos.dfm"/>
+  </ProjectSortOrder>
+</BorlandProject>

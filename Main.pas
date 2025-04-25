@@ -3,19 +3,17 @@ unit Main;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, MenuAlbaran,
-  MenuArticulos, MenuClientes;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls,MenuClientes,MenuArticulos,MenuAlbaran;
 
 type
   TFormMain = class(TForm)
-    btnAlbaran: TButton;
-    btnClientes: TButton;
-    btnArticulos: TButton;
-    procedure btnAlbaranClick(Sender: TObject);
-    procedure btnArticuloClick(Sender: TObject);
-    procedure btnClientesClick(Sender: TObject);
+    ButtonAlbaran: TButton;
+    ButtonArticulos: TButton;
+    ButtonClientes: TButton;
+    procedure ButtonClientesClick(Sender: TObject);
+    procedure ButtonArticulosClick(Sender: TObject);
+    procedure ButtonAlbaranClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -29,38 +27,29 @@ implementation
 
 {$R *.dfm}
 
-procedure TFormMain.btnAlbaranClick(Sender: TObject);
-
-var
-  FormMenuAlbaran: TFormMenuAlbaran;
-
+procedure TFormMain.ButtonAlbaranClick(Sender: TObject);
+var FormMenuAlbaran : TFormMenuAlbaran;
 begin
-  FormMenuAlbaran := TFormMenuAlbaran.Create(Self);
-
-  FormMenuAlbaran.ShowModal;
-  FormMenuAlbaran.Free;
-end;
-
-procedure TFormMain.btnArticuloClick(Sender: TObject);
-var
-  FormMenuArticulos: TFormMenuArticulos;
-
-begin
-  FormMenuArticulos := TFormMenuArticulos.Create(Self);
-
-  FormMenuArticulos.ShowModal;
-  FormMenuArticulos.Free;
+FormMenuAlbaran := TFormMenuAlbaran.Create(nil);
+FormMenuAlbaran.ShowModal;
+FormMenuAlbaran.Free;
 
 end;
 
-procedure TFormMain.btnClientesClick(Sender: TObject);
-var
-  FormMenuClientes: TFormMenuClientes;
+procedure TFormMain.ButtonArticulosClick(Sender: TObject);
+var FormMenuArticulos : TFormMenuArticulos;
 begin
-  FormMenuClientes := TFormMenuClientes.Create(Self);
+FormMenuArticulos := TFormMenuArticulos.Create(nil);
+FormMenuArticulos.ShowModal;
+FormMenuArticulos.Free;
+end;
 
-  FormMenuClientes.ShowModal;
-  FormMenuClientes.Free;
+procedure TFormMain.ButtonClientesClick(Sender: TObject);
+var FormMenuClientes : TFormMenuClientes;
+begin
+FormMenuClientes := TFormMenuClientes.Create(nil);
+FormMenuClientes.ShowModal;
+FormMenuClientes.Free;
 
 end;
 
