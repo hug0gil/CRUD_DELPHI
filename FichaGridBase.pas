@@ -32,7 +32,7 @@ type
     pFIBTransactionTable: TpFIBTransaction;
     Shape1: TShape;
     Shape2: TShape;
-    cbbCodCliente: TComboBox;
+    cbbCod: TComboBox;
     procedure btnCancelarClick(Sender: TObject);
     // procedure FormActivate(Sender: TObject);
     // function GetLastCodigo(const PrimaryKey: String;

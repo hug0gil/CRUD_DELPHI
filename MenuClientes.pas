@@ -134,7 +134,7 @@ begin
     except
       on E: Exception do
       begin
-        ShowMessage('Error al eliminar el registro: ' + E.Message);
+        ShowMessage('Error, no puedes eliminar un cliente asociado en un albarán');
       end;
     end;
 

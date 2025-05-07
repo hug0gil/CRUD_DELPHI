@@ -7,21 +7,31 @@ uses
   ModuloDatos in 'ModuloDatos.pas' {DataModuleBDD: TDataModule},
   MenuClientes in 'MenuClientes.pas' { FormMenuClientes },
   MenuArticulos in 'MenuArticulos.pas' { FormMenuArticulos },
-  MenuAlbaran in 'MenuAlbaran.pas' { FormMenuAlbaran },
   FichaCliente in 'FichaCliente.pas' { FormFichaCliente },
   FichaArticulos in 'FichaArticulos.pas' { FormFichaArticulos },
   FichaBase in 'FichaBase.pas' {FormFichaBase},
-  FichaGridAlbaran in 'FichaGridAlbaran.pas' {FormFichaGridAlbaran},
   FichaGridBase in 'FichaGridBase.pas' {FormFichaGridBase0},
-  FichaLineasAlbaran in 'FichaLineasAlbaran.pas' {FormFichaLineasAlbaran};
+  MenuVentas in 'MenuVentas.pas' {FormMenuVentas},
+  MenuCompras in 'MenuCompras.pas' {FormMenuCompras},
+  MenuAlbaranVentas in 'MenuAlbaranVentas.pas' {FormMenuAlbaranVentas},
+  FichaGridAlbaranVentas in 'FichaGridAlbaranVentas.pas' {FormFichaGridAlbaranVentas},
+  FichaLineasAlbaranVentas in 'FichaLineasAlbaranVentas.pas' {FormFichaLineasAlbaranVentas},
+  MenuAlbaranCompras in 'MenuAlbaranCompras.pas' {FormMenuAlbaranCompras},
+  FichaGridAlbaranCompras in 'FichaGridAlbaranCompras.pas' {FormFichaGridAlbaran},
+  FichaLineasAlbaranCompras in 'FichaLineasAlbaranCompras.pas' {FormFichaLineasAlbaranCompras},
+  MenuProveedores in 'MenuProveedores.pas' {FormMenuProveedores},
+  FichaProveedor in 'FichaProveedor.pas' {FormFichaProveedor},
+  FichaAlmacen in 'FichaAlmacen.pas' {FormFichaAlmacen},
+  FichaUbicacion in 'FichaUbicacion.pas' {FormFichaUbicacion},
+  MenuAlmacen in 'MenuAlmacen.pas' {FormMenuAlmacen};
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TDataModuleBDD, DataModuleBDD);
   Application.CreateForm(TFormMain, FormMain);
+  Application.CreateForm(TDataModuleBDD, DataModuleBDD);
   Application.Run;
 
 end.

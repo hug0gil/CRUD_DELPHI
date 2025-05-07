@@ -61,13 +61,13 @@ object FormFichaGridBase0: TFormFichaGridBase0
       AlignWithMargins = True
       Left = 31
       Top = 63
-      Width = 84
+      Width = 43
       Height = 17
       Margins.Left = 25
       Margins.Top = 15
       Margins.Right = 30
       Margins.Bottom = 10
-      Caption = 'C'#243'digo cliente'
+      Caption = 'C'#243'digo'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -137,7 +137,7 @@ object FormFichaGridBase0: TFormFichaGridBase0
         'MemoObservaciones')
       TabOrder = 2
     end
-    object cbbCodCliente: TComboBox
+    object cbbCod: TComboBox
       Left = 148
       Top = 62
       Width = 121

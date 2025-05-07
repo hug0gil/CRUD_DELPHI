@@ -4,7 +4,7 @@ object DataModuleBDD: TDataModuleBDD
   Height = 150
   Width = 215
   object pFIBDatabase: TpFIBDatabase
-    DBName = 'C:\Users\Pr1\DataBases\BDDCRUD.FDB'
+    DBName = 'C:\Users\Pr1\DataBases\BDDVENTASCOMPRAS.FDB'
     DBParams.Strings = (
       'user_name=SYSDBA'
       'password=hugoAstec'

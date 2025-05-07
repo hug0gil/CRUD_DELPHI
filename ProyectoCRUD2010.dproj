@@ -60,9 +60,6 @@
 			<DCCReference Include="MenuArticulos.pas">
 				<Form> FormMenuArticulos </Form>
 			</DCCReference>
-			<DCCReference Include="MenuAlbaran.pas">
-				<Form> FormMenuAlbaran </Form>
-			</DCCReference>
 			<DCCReference Include="FichaCliente.pas">
 				<Form> FormFichaCliente </Form>
 			</DCCReference>
@@ -72,14 +69,47 @@
 			<DCCReference Include="FichaBase.pas">
 				<Form>FormFichaBase</Form>
 			</DCCReference>
-			<DCCReference Include="FichaGridAlbaran.pas">
-				<Form>FormFichaGridAlbaran</Form>
-			</DCCReference>
 			<DCCReference Include="FichaGridBase.pas">
 				<Form>FormFichaGridBase0</Form>
 			</DCCReference>
-			<DCCReference Include="FichaLineasAlbaran.pas">
-				<Form>FormFichaLineasAlbaran</Form>
+			<DCCReference Include="MenuVentas.pas">
+				<Form>FormMenuVentas</Form>
+			</DCCReference>
+			<DCCReference Include="MenuCompras.pas">
+				<Form>FormMenuCompras</Form>
+			</DCCReference>
+			<DCCReference Include="MenuAlbaranVentas.pas">
+				<Form>FormMenuAlbaranVentas</Form>
+			</DCCReference>
+			<DCCReference Include="FichaGridAlbaranVentas.pas">
+				<Form>FormFichaGridAlbaranVentas</Form>
+			</DCCReference>
+			<DCCReference Include="FichaLineasAlbaranVentas.pas">
+				<Form>FormFichaLineasAlbaranVentas</Form>
+			</DCCReference>
+			<DCCReference Include="MenuAlbaranCompras.pas">
+				<Form>FormMenuAlbaranCompras</Form>
+			</DCCReference>
+			<DCCReference Include="FichaGridAlbaranCompras.pas">
+				<Form>FormFichaGridAlbaran</Form>
+			</DCCReference>
+			<DCCReference Include="FichaLineasAlbaranCompras.pas">
+				<Form>FormFichaLineasAlbaranCompras</Form>
+			</DCCReference>
+			<DCCReference Include="MenuProveedores.pas">
+				<Form>FormMenuProveedores</Form>
+			</DCCReference>
+			<DCCReference Include="FichaProveedor.pas">
+				<Form>FormFichaProveedor</Form>
+			</DCCReference>
+			<DCCReference Include="FichaAlmacen.pas">
+				<Form>FormFichaAlmacen</Form>
+			</DCCReference>
+			<DCCReference Include="FichaUbicacion.pas">
+				<Form>FormFichaUbicacion</Form>
+			</DCCReference>
+			<DCCReference Include="MenuAlmacen.pas">
+				<Form>FormMenuAlmacen</Form>
 			</DCCReference>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>

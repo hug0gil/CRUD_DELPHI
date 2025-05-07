@@ -4,16 +4,33 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls,MenuClientes,MenuArticulos,MenuAlbaran;
+  Dialogs, StdCtrls, MenuVentas, MenuArticulos, MenuCompras, Menus, AppEvnts,
+  ComCtrls,MenuAlmacen;
 
 type
   TFormMain = class(TForm)
-    ButtonAlbaran: TButton;
     ButtonArticulos: TButton;
-    ButtonClientes: TButton;
-    procedure ButtonClientesClick(Sender: TObject);
+    btnCompras: TButton;
+    btnVentas: TButton;
+    mm1: TMainMenu;
+    Archivos1: TMenuItem;
+    Articulos1: TMenuItem;
+    N1: TMenuItem;
+    Compras1: TMenuItem;
+    N2: TMenuItem;
+    Ventas1: TMenuItem;
+    pm1: TPopupMenu;
+    Artculos1: TMenuItem;
+    Compras2: TMenuItem;
+    Ventas2: TMenuItem;
+    stat1: TStatusBar;
+    aplctnvnts1: TApplicationEvents;
+    btnAlmacen: TButton;
+    procedure btnComprasClick(Sender: TObject);
     procedure ButtonArticulosClick(Sender: TObject);
-    procedure ButtonAlbaranClick(Sender: TObject);
+    procedure ButtonAlbaranventaClick(Sender: TObject);
+    procedure aplctnvnts1Hint(Sender: TObject);
+    procedure btnAlmacenClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -27,29 +44,46 @@ implementation
 
 {$R *.dfm}
 
-procedure TFormMain.ButtonAlbaranClick(Sender: TObject);
-var FormMenuAlbaran : TFormMenuAlbaran;
+procedure TFormMain.ButtonAlbaranventaClick(Sender: TObject);
+var
+  FormMenuVentas: TFormMenuVentas;
 begin
-FormMenuAlbaran := TFormMenuAlbaran.Create(nil);
-FormMenuAlbaran.ShowModal;
-FormMenuAlbaran.Free;
+  FormMenuVentas := TFormMenuVentas.Create(nil);
+  FormMenuVentas.ShowModal;
+  FormMenuVentas.Free;
 
 end;
 
 procedure TFormMain.ButtonArticulosClick(Sender: TObject);
-var FormMenuArticulos : TFormMenuArticulos;
+var
+  FormMenuArticulos: TFormMenuArticulos;
 begin
-FormMenuArticulos := TFormMenuArticulos.Create(nil);
-FormMenuArticulos.ShowModal;
-FormMenuArticulos.Free;
+  FormMenuArticulos := TFormMenuArticulos.Create(nil);
+  FormMenuArticulos.ShowModal;
+  FormMenuArticulos.Free;
 end;
 
-procedure TFormMain.ButtonClientesClick(Sender: TObject);
-var FormMenuClientes : TFormMenuClientes;
+procedure TFormMain.aplctnvnts1Hint(Sender: TObject);
 begin
-FormMenuClientes := TFormMenuClientes.Create(nil);
-FormMenuClientes.ShowModal;
-FormMenuClientes.Free;
+  stat1.Panels[1].Text := Application.Hint;
+end;
+
+procedure TFormMain.btnAlmacenClick(Sender: TObject);
+var
+  FormMenuAlmacen: TFormMenuAlmacen;
+begin
+  FormMenuAlmacen := TFormMenuAlmacen.Create(nil);
+  FormMenuAlmacen.ShowModal;
+  FormMenuAlmacen.Free;
+end;
+
+procedure TFormMain.btnComprasClick(Sender: TObject);
+var
+  FormMenuCompras: TFormMenuCompras;
+begin
+  FormMenuCompras := TFormMenuCompras.Create(nil);
+  FormMenuCompras.ShowModal;
+  FormMenuCompras.Free;
 
 end;
 
