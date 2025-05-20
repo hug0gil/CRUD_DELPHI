@@ -13,9 +13,6 @@ type
     btnAceptar: TButton;
     pnlObjects: TPanel;
     pnlFila: TPanel;
-    pnlCode: TPanel;
-    lblCodigo: TLabel;
-    edtCodigo: TEdit;
     pnlTitle: TPanel;
     shp: TShape;
     shp1: TShape;

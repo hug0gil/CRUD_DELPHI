@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, FichaBase, StdCtrls, ExtCtrls, ModuloDatos, FIBDatabase,
   pFIBDatabase,
-  FIBQuery, pFIBQuery;
+  FIBQuery, pFIBQuery, Mask;
 
 type
   TFormFichaArticulos = class(TFormFichaBase)
@@ -19,6 +19,9 @@ type
     pnlCodigoIVA: TPanel;
     lblCodigoIVA: TLabel;
     cbbCodIVA: TComboBox;
+    pnlCode: TPanel;
+    lblCodigo: TLabel;
+    edtCodigo: TMaskEdit;
 
     constructor Create(AOwner: TComponent; Modo: Integer); reintroduce;
       overload; virtual;

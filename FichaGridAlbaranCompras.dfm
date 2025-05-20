@@ -97,6 +97,22 @@ inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
       TabOrder = 1
       OnClick = ButtonClick
     end
+    object btnUbicar: TButton
+      Tag = 3
+      AlignWithMargins = True
+      Left = 365
+      Top = 10
+      Width = 75
+      Height = 28
+      Margins.Left = 5
+      Margins.Top = 10
+      Margins.Right = 10
+      Margins.Bottom = 5
+      Align = alLeft
+      Caption = 'Ubicar'
+      TabOrder = 6
+      OnClick = btnUbicarClick
+    end
   end
   inherited PanelLineas: TPanel
     Width = 847

@@ -5,32 +5,23 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, MenuVentas, MenuArticulos, MenuCompras, Menus, AppEvnts,
-  ComCtrls,MenuAlmacen;
+  ComCtrls, FichaAlmacen, MenuUbicaciones;
 
 type
   TFormMain = class(TForm)
     ButtonArticulos: TButton;
     btnCompras: TButton;
     btnVentas: TButton;
-    mm1: TMainMenu;
-    Archivos1: TMenuItem;
-    Articulos1: TMenuItem;
-    N1: TMenuItem;
-    Compras1: TMenuItem;
-    N2: TMenuItem;
-    Ventas1: TMenuItem;
-    pm1: TPopupMenu;
-    Artculos1: TMenuItem;
-    Compras2: TMenuItem;
-    Ventas2: TMenuItem;
     stat1: TStatusBar;
     aplctnvnts1: TApplicationEvents;
     btnAlmacen: TButton;
+    btnUbicaciones: TButton;
     procedure btnComprasClick(Sender: TObject);
     procedure ButtonArticulosClick(Sender: TObject);
     procedure ButtonAlbaranventaClick(Sender: TObject);
     procedure aplctnvnts1Hint(Sender: TObject);
     procedure btnAlmacenClick(Sender: TObject);
+    procedure btnUbicacionesClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -70,11 +61,11 @@ end;
 
 procedure TFormMain.btnAlmacenClick(Sender: TObject);
 var
-  FormMenuAlmacen: TFormMenuAlmacen;
+  FormFichaAlmacen: TFormFichaAlmacen;
 begin
-  FormMenuAlmacen := TFormMenuAlmacen.Create(nil);
-  FormMenuAlmacen.ShowModal;
-  FormMenuAlmacen.Free;
+  FormFichaAlmacen := TFormFichaAlmacen.Create(nil);
+  FormFichaAlmacen.ShowModal;
+  FormFichaAlmacen.Free;
 end;
 
 procedure TFormMain.btnComprasClick(Sender: TObject);
@@ -84,7 +75,15 @@ begin
   FormMenuCompras := TFormMenuCompras.Create(nil);
   FormMenuCompras.ShowModal;
   FormMenuCompras.Free;
+end;
 
+procedure TFormMain.btnUbicacionesClick(Sender: TObject);
+var
+  FormMenuUbicaciones: TFormMenuUbicaciones;
+begin
+  FormMenuUbicaciones := TFormMenuUbicaciones.Create(nil);
+  FormMenuUbicaciones.ShowModal;
+  FormMenuUbicaciones.Free;
 end;
 
 end.

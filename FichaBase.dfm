@@ -88,55 +88,6 @@ object FormFichaBase: TFormFichaBase
       Caption = 'pnlFila'
       ShowCaption = False
       TabOrder = 0
-      object pnlCode: TPanel
-        AlignWithMargins = True
-        Left = 3
-        Top = 100
-        Width = 137
-        Height = 148
-        Margins.Top = 100
-        Margins.Right = 12
-        Margins.Bottom = 100
-        Align = alLeft
-        BevelOuter = bvNone
-        ShowCaption = False
-        TabOrder = 0
-        object lblCodigo: TLabel
-          AlignWithMargins = True
-          Left = 5
-          Top = 5
-          Width = 127
-          Height = 21
-          Margins.Left = 5
-          Margins.Top = 5
-          Margins.Right = 5
-          Align = alTop
-          Alignment = taCenter
-          Caption = 'C'#243'digo'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -16
-          Font.Name = 'Segoe UI'
-          Font.Style = []
-          ParentFont = False
-          ExplicitWidth = 50
-        end
-        object edtCodigo: TEdit
-          AlignWithMargins = True
-          Left = 15
-          Top = 87
-          Width = 107
-          Height = 21
-          Margins.Left = 15
-          Margins.Top = 40
-          Margins.Right = 15
-          Margins.Bottom = 40
-          Align = alBottom
-          Alignment = taCenter
-          ReadOnly = True
-          TabOrder = 0
-        end
-      end
     end
   end
   object pnlTitle: TPanel

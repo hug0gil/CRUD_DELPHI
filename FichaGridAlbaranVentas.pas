@@ -54,6 +54,7 @@ type
     recargo: Boolean;
     falloInsert: Boolean;
     nombreCliente: string;
+    fechaAlbaran: TDateTime;
   end;
 
 implementation
@@ -66,6 +67,8 @@ var
   ultimoOrden, codAlbaran, orden: Integer;
 begin
 
+  fechaAlbaran := DateTimePickerFecha.DateTime;
+
   if TButton(Sender).Tag <> 1 then
     CalculoTotal;
 
@@ -73,6 +76,8 @@ begin
   begin
     FichaLineasAlbaranVentas := TFormFichaLineasAlbaranVentas.Create(Self,
       TButton(Sender).Tag);
+
+    FichaLineasAlbaranVentas.fechaAlbaran := fechaAlbaran;
 
     try
       if recargo then
@@ -82,9 +87,10 @@ begin
         FichaLineasAlbaranVentas.lblRecargo.Enabled := False;
       end;
       FichaLineasAlbaranVentas.edtCodigo.Text := EditCodigo.Text;
+
       if TButton(Sender).Tag <> 0 then
-        FichaLineasAlbaranVentas.cbbCodArticulo.Text := DataSource.DataSet.FieldByName
-          ('CCOD_ARTICULO').AsString;
+        FichaLineasAlbaranVentas.cbbCodArticulo.Text :=
+          DataSource.DataSet.FieldByName('CCOD_ARTICULO').AsString;
 
       if not pFIBTransactionTable.InTransaction then
         pFIBTransactionTable.StartTransaction;
@@ -118,8 +124,8 @@ begin
               'Información de la línea albarán seleccionada ' +
               EditCodigo.Text + ' - ' + nombreCliente;
             FichaLineasAlbaranVentas.edtCodigo.Text := EditCodigo.Text;
-            FichaLineasAlbaranVentas.edtOrden.Text := DataSource.DataSet.FieldByName
-              ('NORDEN').AsString;
+            FichaLineasAlbaranVentas.edtOrden.Text :=
+              DataSource.DataSet.FieldByName('NORDEN').AsString;
 
             FichaLineasAlbaranVentas.lblNombreProducto.Caption :=
               DataSource.DataSet.FieldByName('CNOMBRE_ARTICULO').AsString;
@@ -133,12 +139,12 @@ begin
               DataSource.DataSet.FieldByName('NCANTIDAD1').AsString;
             FichaLineasAlbaranVentas.medtCajasPiezas.Text :=
               DataSource.DataSet.FieldByName('NCANTIDAD2').AsString;
-            FichaLineasAlbaranVentas.medtPrecio.Text := DataSource.DataSet.FieldByName
-              ('NPRECIO').AsString;
-            FichaLineasAlbaranVentas.edtIVA.Text := DataSource.DataSet.FieldByName
-              ('NIVA').AsString;
-            FichaLineasAlbaranVentas.edtRecargo.Text := DataSource.DataSet.FieldByName
-              ('NRECARGO').AsString;
+            FichaLineasAlbaranVentas.medtPrecio.Text :=
+              DataSource.DataSet.FieldByName('NPRECIO').AsString;
+            FichaLineasAlbaranVentas.edtIVA.Text :=
+              DataSource.DataSet.FieldByName('NIVA').AsString;
+            FichaLineasAlbaranVentas.edtRecargo.Text :=
+              DataSource.DataSet.FieldByName('NRECARGO').AsString;
             FichaLineasAlbaranVentas.edtSubtotal.Text := FloatToStr
               (DataSource.DataSet.FieldByName('NSUBTOTAL').AsFloat);
 
@@ -152,8 +158,8 @@ begin
               'Actualizar línea albarán ' + EditCodigo.Text + ' - ' +
               nombreCliente;
             FichaLineasAlbaranVentas.edtCodigo.Text := EditCodigo.Text;
-            FichaLineasAlbaranVentas.edtOrden.Text := DataSource.DataSet.FieldByName
-              ('NORDEN').AsString;
+            FichaLineasAlbaranVentas.edtOrden.Text :=
+              DataSource.DataSet.FieldByName('NORDEN').AsString;
             FichaLineasAlbaranVentas.getCodArticulos;
             FichaLineasAlbaranVentas.cbbCodArticulo.ItemIndex :=
               FichaLineasAlbaranVentas.cbbCodArticulo.Items.IndexOf
@@ -166,12 +172,12 @@ begin
               DataSource.DataSet.FieldByName('NCANTIDAD1').AsString;
             FichaLineasAlbaranVentas.medtCajasPiezas.Text :=
               DataSource.DataSet.FieldByName('NCANTIDAD2').AsString;
-            FichaLineasAlbaranVentas.medtPrecio.Text := DataSource.DataSet.FieldByName
-              ('NPRECIO').AsString;
-            FichaLineasAlbaranVentas.edtIVA.Text := DataSource.DataSet.FieldByName
-              ('NIVA').AsString;
-            FichaLineasAlbaranVentas.edtRecargo.Text := DataSource.DataSet.FieldByName
-              ('NRECARGO').AsString;
+            FichaLineasAlbaranVentas.medtPrecio.Text :=
+              DataSource.DataSet.FieldByName('NPRECIO').AsString;
+            FichaLineasAlbaranVentas.edtIVA.Text :=
+              DataSource.DataSet.FieldByName('NIVA').AsString;
+            FichaLineasAlbaranVentas.edtRecargo.Text :=
+              DataSource.DataSet.FieldByName('NRECARGO').AsString;
             FichaLineasAlbaranVentas.edtSubtotal.Text :=
               DataSource.DataSet.FieldByName('NSUBTOTAL').AsString;
 
@@ -357,7 +363,8 @@ begin
   originalTotal := edtTotal.Text;
 end;
 
-function TFormFichaGridAlbaranVentas.ConvertirStringToFloat(Valor: string): Double;
+function TFormFichaGridAlbaranVentas.ConvertirStringToFloat(Valor: string)
+  : Double;
 var
   ValorFormateado: string;
 begin
@@ -371,7 +378,8 @@ begin
   Result := StrToFloat(ValorFormateado);
 end;
 
-constructor TFormFichaGridAlbaranVentas.Create(AOwner: TComponent; Modo: Integer);
+constructor TFormFichaGridAlbaranVentas.Create(AOwner: TComponent;
+  Modo: Integer);
 begin
   inherited Create(AOwner);
   mode := Modo;
@@ -459,8 +467,7 @@ begin
     pFIBQueryTable.Close;
     pFIBQueryTable.SQL.Text :=
       'SELECT CREG_FISCAL FROM CLIENTES WHERE NCODIGO = :NCODIGO';
-    pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt
-      (cbbCod.Text);
+    pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt(cbbCod.Text);
     pFIBQueryTable.ExecQuery;
 
     if not pFIBQueryTable.Eof then
@@ -494,8 +501,7 @@ begin
     pFIBQueryTable.Close;
     pFIBQueryTable.SQL.Text :=
       'SELECT CNOMBRE FROM CLIENTES WHERE NCODIGO = :NCODIGO';
-    pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt
-      (cbbCod.Text);
+    pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt(cbbCod.Text);
     pFIBQueryTable.ExecQuery;
 
     if not pFIBQueryTable.Eof then
@@ -521,7 +527,8 @@ begin
     (edtTotal.Text <> originalTotal);
 end;
 
-procedure TFormFichaGridAlbaranVentas.pFIBDataSetTableNewRecord(DataSet: TDataSet);
+procedure TFormFichaGridAlbaranVentas.pFIBDataSetTableNewRecord
+  (DataSet: TDataSet);
 begin
   inherited;
 
@@ -707,6 +714,7 @@ begin
           pFIBQueryTable.ExecQuery;
 
           pFIBTransactionTable.Commit;
+
           Self.Close;
         end
         else

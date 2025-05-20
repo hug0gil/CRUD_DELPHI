@@ -23,15 +23,16 @@ uses
   FichaProveedor in 'FichaProveedor.pas' {FormFichaProveedor},
   FichaAlmacen in 'FichaAlmacen.pas' {FormFichaAlmacen},
   FichaUbicacion in 'FichaUbicacion.pas' {FormFichaUbicacion},
-  MenuAlmacen in 'MenuAlmacen.pas' {FormMenuAlmacen};
+  MenuUbicaciones in 'MenuUbicaciones.pas' {FormMenuUbicaciones},
+  FichaUbicacionAlbaran in 'FichaUbicacionAlbaran.pas' {FormFichaUbicacionAlbaran};
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TFormMain, FormMain);
   Application.CreateForm(TDataModuleBDD, DataModuleBDD);
+  Application.CreateForm(TFormMain, FormMain);
   Application.Run;
 
 end.

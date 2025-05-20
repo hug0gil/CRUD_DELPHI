@@ -38,29 +38,9 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
       Height = 179
       ExplicitWidth = 786
       ExplicitHeight = 179
-      inherited pnlCode: TPanel
-        Top = 3
-        Height = 173
-        Margins.Top = 3
-        Margins.Right = 5
-        Margins.Bottom = 3
-        Visible = False
-        ExplicitTop = 3
-        ExplicitHeight = 173
-        inherited lblCodigo: TLabel
-          Top = 15
-          Width = 127
-          Margins.Top = 15
-          ExplicitTop = 15
-        end
-        inherited edtCodigo: TEdit
-          Top = 112
-          ExplicitTop = 112
-        end
-      end
       object pnlUnidadesPeso: TPanel
         AlignWithMargins = True
-        Left = 440
+        Left = 295
         Top = 3
         Width = 137
         Height = 173
@@ -68,7 +48,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
-        TabOrder = 3
+        TabOrder = 2
         object lblUnidadesPeso: TLabel
           AlignWithMargins = True
           Left = 5
@@ -109,7 +89,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
       end
       object pnlCodArticulo: TPanel
         AlignWithMargins = True
-        Left = 150
+        Left = 5
         Top = 3
         Width = 137
         Height = 173
@@ -117,7 +97,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
-        TabOrder = 1
+        TabOrder = 0
         object lbllCodArticulo: TLabel
           AlignWithMargins = True
           Left = 5
@@ -156,7 +136,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
       end
       object pnlCajasPiezas: TPanel
         AlignWithMargins = True
-        Left = 295
+        Left = 150
         Top = 3
         Width = 137
         Height = 173
@@ -164,7 +144,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
-        TabOrder = 2
+        TabOrder = 1
         object lblCajasPiezas: TLabel
           AlignWithMargins = True
           Left = 5
@@ -201,6 +181,56 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           TabOrder = 0
           OnExit = medtCajasPiezasExit
           OnKeyPress = medtCajasPiezasKeyPress
+        end
+      end
+      object pnlCode: TPanel
+        AlignWithMargins = True
+        Left = 440
+        Top = 3
+        Width = 137
+        Height = 173
+        Margins.Left = 5
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 3
+        Visible = False
+        object lblCodigo: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 15
+          Width = 127
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 15
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'C'#243'digo'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 50
+        end
+        object edtCodigo: TMaskEdit
+          AlignWithMargins = True
+          Left = 15
+          Top = 112
+          Width = 107
+          Height = 21
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Alignment = taCenter
+          Enabled = False
+          TabOrder = 0
+          OnExit = medtUnidadesPesoExit
+          OnKeyPress = medtUnidadesPesoKeyPress
         end
       end
     end

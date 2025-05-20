@@ -33,7 +33,6 @@ type
     N2: TMenuItem;
     MarcarComoEstanteria: TMenuItem;
     MarcarComoPasillo: TMenuItem;
-    btnReestablecer: TButton;
     lblPasillo: TLabel;
     lblSeccion: TLabel;
     lblNPasillo: TLabel;
@@ -47,16 +46,19 @@ type
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
-    MenuItem7: TMenuItem;
-    MenuItem8: TMenuItem;
+    mniEstanteria: TMenuItem;
+    mniPasillo: TMenuItem;
     pmFilas: TPopupMenu;
     mniRecogidamanual: TMenuItem;
     mniRecogidaMaquina: TMenuItem;
     mniN3: TMenuItem;
     mniN51: TMenuItem;
     mniN52: TMenuItem;
-    mniReestablecerfila1: TMenuItem;
     pmMenu: TPopupMenu;
+    N3: TMenuItem;
+    mniAadirfila1: TMenuItem;
+    mniEliminarfila2: TMenuItem;
+    btnCodigoBarras: TButton;
     procedure StringGridDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure StringGridMouseDown(Sender: TObject; Button: TMouseButton;
@@ -88,11 +90,15 @@ type
     procedure mniRecogidaMaquinaClick(Sender: TObject);
     procedure btnAceptarClick(Sender: TObject);
     procedure cargarAlmacen;
+    procedure mniAadirfila1Click(Sender: TObject);
+    procedure mniEliminarfila2Click(Sender: TObject);
+    procedure pmMenuPopup(Sender: TObject);
+    procedure btnCodigoBarrasClick(Sender: TObject);
+
   private
     FLastRow: Integer;
     FLastCol: Integer;
     FAllowEdit: Boolean;
-
     MapaUbicaciones: array of array of TUbicacion;
     CeldaSeleccionadaX, CeldaSeleccionadaY: Integer;
   public
@@ -104,7 +110,7 @@ implementation
 
 procedure TFormFichaAlmacen.FormCreate(Sender: TObject);
 begin
-  FAllowEdit := False; // Inicialmente no permitimos edición
+  FAllowEdit := False;
   cargarAlmacen;
 end;
 
@@ -158,6 +164,8 @@ begin
 
     if Length(MapaUbicaciones[col][row].lstHuecos) = 0 then
     begin
+      mniPasillo.Visible := False;
+      mniEstanteria.Visible := True;
       stat1.Panels[2].Text := 'Pasillo';
       pnlDatos.Visible := False;
       FAllowEdit := False;
@@ -165,6 +173,8 @@ begin
     end
     else
     begin
+      mniPasillo.Visible := True;
+      mniEstanteria.Visible := False;
       stat1.Panels[2].Text := 'Estantería';
       cargarPanelDatos;
       FAllowEdit := False;
@@ -351,8 +361,9 @@ begin
             end;
 
             pFIBQuery.Close;
+
             pFIBQuery.SQL.Text :=
-              'INSERT INTO UBICACIONES (NPASILLO, NSECCION, NFILA, NCAPACIDAD, NTIPORECOGIDA, NPOSX, NPOSY) VALUES (:NPASILLO, :NSECCION, :NFILA, :NCAPACIDAD, :NTIPORECOGIDA, :NPOSX, :NPOSY)';
+              'UPDATE OR INSERT INTO UBICACIONES (NPASILLO, NSECCION, NFILA, NCAPACIDAD, NTIPORECOGIDA, NPOSX, NPOSY) VALUES (:NPASILLO, :NSECCION, :NFILA, :NCAPACIDAD, :NTIPORECOGIDA, :NPOSX, :NPOSY)';
 
             pFIBQuery.ParamByName('NPASILLO').AsInteger := MapaUbicaciones[i][j]
               .NPasillo;
@@ -388,9 +399,6 @@ begin
     if contEstanterias = 0 then
       ShowMessage('Almacén vacío');
     pFIBTransaction.Commit;
-    btnAceptar.Enabled := False;
-    btnReestablecer.Enabled := False;
-    btnCancelar.Caption := 'Salir';
   except
     on E: Exception do
     begin
@@ -398,6 +406,12 @@ begin
       ShowMessage('Error al guardar los datos: ' + E.Message);
     end;
   end;
+end;
+
+procedure TFormFichaAlmacen.btnCodigoBarrasClick(Sender: TObject);
+begin
+ //
+
 end;
 
 procedure TFormFichaAlmacen.btnReestablecerClick(Sender: TObject);
@@ -587,6 +601,8 @@ begin
           (FormFichaUbicacion.edtSeccion.Text);
         SetLength(UbicacionEstanteria.lstHuecos,
           StrToInt(FormFichaUbicacion.edtFilas.Text));
+        MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY].lstHuecos :=
+          nil;
         MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY] :=
           UbicacionEstanteria;
         stat1.Panels[2].Text := 'Estantería';
@@ -595,6 +611,7 @@ begin
         FormFichaUbicacion.Close;
         FormFichaUbicacion.Free;
       end;
+
     end;
   end;
 end;
@@ -632,14 +649,111 @@ begin
 end;
 
 procedure TFormFichaAlmacen.MarcarComoPasilloClick(Sender: TObject);
+var
+  x, y: Integer;
+  pasillo, seccion: Integer;
 begin
   inherited;
-  if (CeldaSeleccionadaX >= 0) and (CeldaSeleccionadaY >= 0) then
+  if (CeldaSeleccionadaX >= 0) and (CeldaSeleccionadaY >= 0) and
+    (Length(MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY].lstHuecos)
+      > 0) then
+  begin
+    pasillo := MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY].NPasillo;
+    seccion := MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY].NSeccion;
+
+    pFIBTransaction.StartTransaction;
+    pFIBQuery.Close;
+    pFIBQuery.SQL.Text :=
+      'DELETE FROM UBICACIONES WHERE NPASILLO = :NPASILLO AND NSECCION = :NSECCION';
+    pFIBQuery.ParamByName('NPASILLO').AsInteger := pasillo;
+    pFIBQuery.ParamByName('NSECCION').AsInteger := seccion;
+    pFIBQuery.ExecQuery;
+    pFIBTransaction.Commit;
+
+    // Limpiar todas las celdas con ese pasillo y sección
+    for x := Low(MapaUbicaciones) to High(MapaUbicaciones) do
+      for y := Low(MapaUbicaciones[x]) to High(MapaUbicaciones[x]) do
+        if (MapaUbicaciones[x][y].NPasillo = pasillo) and
+          (MapaUbicaciones[x][y].NSeccion = seccion) then
+          MapaUbicaciones[x][y].lstHuecos := nil;
+
+    ShowMessage('Estantería eliminada exitosamente');
+    pnlDatos.Visible := False;
+  end
+  else
   begin
     MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY].lstHuecos := nil;
+  end;
 
-    stat1.Panels[2].Text := 'Pasillo';
-    StringGrid.Invalidate;
+  // Refrescar interfaz
+  stat1.Panels[2].Text := 'Pasillo';
+  StringGrid.Refresh;
+  StringGrid.Invalidate;
+end;
+
+procedure TFormFichaAlmacen.mniAadirfila1Click(Sender: TObject);
+begin
+  inherited;
+  strngrdFilas.RowCount := strngrdFilas.RowCount + 1;
+  SetLength(MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY].lstHuecos,
+    strngrdFilas.RowCount);
+end;
+
+procedure TFormFichaAlmacen.mniEliminarfila2Click(Sender: TObject);
+var
+  filaSeleccionada, ultimaFila: Integer;
+  pasillo, seccion: Integer;
+begin
+  inherited;
+
+  // Validar que haya filas en el grid
+  if strngrdFilas.RowCount <= 1 then
+  begin
+    ShowMessage('No se puede eliminar. Debe haber al menos una fila.');
+    Exit;
+  end;
+
+  // Validar que la celda seleccionada esté dentro de un rango válido
+  if (CeldaSeleccionadaX >= 0) and (CeldaSeleccionadaY >= 0) then
+  begin
+    filaSeleccionada := strngrdFilas.row;
+    ultimaFila := strngrdFilas.RowCount - 1;
+
+    // Verificar que la fila seleccionada esté dentro del rango válido
+    if (filaSeleccionada >= 0) and (filaSeleccionada <= ultimaFila) then
+    begin
+      // Obtener claves primarias
+      pasillo := MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY]
+        .NPasillo;
+      seccion := MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY]
+        .NSeccion;
+
+      // Eliminar en la base de datos
+      pFIBTransaction.StartTransaction;
+      pFIBQuery.Close;
+      pFIBQuery.SQL.Text :=
+        'DELETE FROM UBICACIONES WHERE NPASILLO = :NPASILLO AND NSECCION = :NSECCION AND NFILA = :NFILA';
+      pFIBQuery.ParamByName('NPASILLO').AsInteger := pasillo;
+      pFIBQuery.ParamByName('NSECCION').AsInteger := seccion;
+      pFIBQuery.ParamByName('NFILA').AsInteger := filaSeleccionada + 1;
+      // +1 porque las filas en DB son 1-indexed
+      pFIBQuery.ExecQuery;
+      pFIBTransaction.Commit;
+
+      // Eliminar visualmente del grid
+      strngrdFilas.Rows[filaSeleccionada].Clear;
+      strngrdFilas.Rows[filaSeleccionada] := strngrdFilas.Rows[ultimaFila];
+      strngrdFilas.RowCount := strngrdFilas.RowCount - 1;
+
+      // Eliminar solo el último hueco del array lstHuecos
+      with MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY] do
+      begin
+        SetLength(lstHuecos, Length(lstHuecos) - 1);
+        // Eliminar el último elemento del array
+      end;
+
+      ShowMessage('Último hueco de la fila eliminado correctamente.');
+    end;
   end;
 end;
 
@@ -731,6 +845,21 @@ begin
         row).Top + ((strngrdFilas.CellRect(col,
             row).Bottom - strngrdFilas.CellRect(col, row).Top) - textoHeight)
         div 2), texto);
+end;
+
+procedure TFormFichaAlmacen.pmMenuPopup(Sender: TObject);
+begin
+  if Length(MapaUbicaciones[CeldaSeleccionadaX][CeldaSeleccionadaY].lstHuecos)
+    = 0 then
+  begin
+    mniPasillo.Visible := False;
+    mniEstanteria.Visible := True;
+  end
+  else
+  begin
+    mniPasillo.Visible := True;
+    mniEstanteria.Visible := False;
+  end;
 end;
 
 end.

@@ -486,4 +486,7 @@ inherited FormFichaGridAlbaranVentas: TFormFichaGridAlbaranVentas
       EmptyStrToNull = True
     end
   end
+  inherited pFIBTransactionTable: TpFIBTransaction
+    Active = True
+  end
 end

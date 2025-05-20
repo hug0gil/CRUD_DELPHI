@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, FichaBase, StdCtrls, ExtCtrls, ComCtrls, FIBQuery, pFIBQuery,
-  FIBDatabase, pFIBDatabase, ModuloDatos;
+  FIBDatabase, pFIBDatabase, ModuloDatos, Mask;
 
 type
   TFormFichaCliente = class(TFormFichaBase)
@@ -18,6 +18,9 @@ type
     pnlRegimen: TPanel;
     lblRegimen: TLabel;
     ComboBoxRegimen: TComboBox;
+    pnlCode: TPanel;
+    lblCodigo: TLabel;
+    edtCodigo: TMaskEdit;
     procedure btnAceptarClick(Sender: TObject);
     constructor Create(AOwner: TComponent; Modo: Integer); overload; virtual;
     procedure btnCancelarClick(Sender: TObject);

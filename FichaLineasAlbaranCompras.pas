@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, FichaBase, StdCtrls, ExtCtrls, FIBQuery, pFIBQuery, FIBDatabase,
-  pFIBDatabase, Mask, Types;
+  pFIBDatabase, Mask, Types, FichaUbicacionAlbaran;
 
 type
   TFormFichaLineasAlbaranCompras = class(TFormFichaBase)
@@ -37,6 +37,9 @@ type
     lblNombreProducto: TLabel;
     edtFactorConversion: TEdit;
     lblDFactorConversion: TLabel;
+    pnlCode: TPanel;
+    lblCodigo: TLabel;
+    edtCodigo: TMaskEdit;
     procedure FormCreate(Sender: TObject);
     procedure getCodArticulos;
     procedure cbbCodArticuloChange(Sender: TObject);
@@ -55,6 +58,8 @@ type
     function getNombreArticulo: String;
     constructor Create(AOwner: TComponent; Modo: Integer); overload;
     procedure FormActivate(Sender: TObject);
+    procedure setCantidadFichaUbi(FichaUbicacionAlbaran
+        : TFormFichaUbicacionAlbaran);
   private
     CambiandoValor: Boolean;
 
@@ -65,6 +70,7 @@ type
     contCbb: Integer;
     mode: Integer;
     codArticulo: string;
+    fechaAlbaran: TDateTime;
   end;
 
 implementation
@@ -97,6 +103,8 @@ begin
 end;
 
 procedure TFormFichaLineasAlbaranCompras.btnAceptarClick(Sender: TObject);
+var
+  FichaUbicacionAlbaran: TFormFichaUbicacionAlbaran;
 begin
   if TodoCorrecto then
   begin
@@ -122,6 +130,17 @@ begin
       case mode of
         0: // Insertar
           begin
+
+            FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil,
+              mode, False);
+            FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
+            FichaUbicacionAlbaran.codAlbaran := edtCodigo.Text;
+            FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
+            FichaUbicacionAlbaran.Caption :=
+              'Relacionar ubicación con el producto';
+            setCantidadFichaUbi(FichaUbicacionAlbaran);
+            FichaUbicacionAlbaran.ShowModal;
+
             pFIBQuery.SQL.Text :=
               'INSERT INTO LINEAS_ALB_C (NCOD_ALBARAN, CCOD_ARTICULO, NCANTIDAD1, NCANTIDAD2, NPRECIO, NORDEN, NIVA, NRECARGO,NSUBTOTAL) '
               + 'VALUES (:NCOD_ALBARAN, :CCOD_ARTICULO, :NCANTIDAD1, :NCANTIDAD2, :NPRECIO, :NORDEN, :NIVA, :NRECARGO,:NSUBTOTAL)';
@@ -156,14 +175,38 @@ begin
               (edtRecargo.Text);
             pFIBQuery.ExecQuery;
             pFIBTransaction.Commit;
+
+            FichaUbicacionAlbaran.Close;
             Self.Close;
           end;
         1: // Ver
           begin
+            FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil,
+              mode, False);
+            FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
+            FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
+            FichaUbicacionAlbaran.codAlbaran := edtCodigo.Text;
+            FichaUbicacionAlbaran.Caption := 'Ver ubicación del producto';
+            setCantidadFichaUbi(FichaUbicacionAlbaran);
+            FichaUbicacionAlbaran.ShowModal;
+            FichaUbicacionAlbaran.Close;
             Self.Close;
+
           end;
         2: // Actualizar
           begin
+
+            FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil,
+              mode, False);
+            FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
+            FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
+            FichaUbicacionAlbaran.codAlbaran := edtCodigo.Text;
+            FichaUbicacionAlbaran.Caption :=
+              'Actualizar ubicación del producto';
+            setCantidadFichaUbi(FichaUbicacionAlbaran);
+            FichaUbicacionAlbaran.ShowModal;
+            FichaUbicacionAlbaran.Close;
+
             pFIBQuery.SQL.Text :=
               'UPDATE LINEAS_ALB_C SET CCOD_ARTICULO = :CCOD_ARTICULO, NCANTIDAD1 = :NCANTIDAD1, NCANTIDAD2 = :NCANTIDAD2, NPRECIO = :NPRECIO, NIVA = :NIVA, NRECARGO = :NRECARGO, NSUBTOTAL = :NSUBTOTAL WHERE NCOD_ALBARAN = :NCOD_ALBARAN AND NORDEN = :NORDEN';
             pFIBQuery.ParamByName('NCOD_ALBARAN').AsInteger := StrToInt
@@ -197,6 +240,7 @@ begin
               (edtRecargo.Text);
             pFIBQuery.ExecQuery;
             pFIBTransaction.Commit;
+
             Self.Close;
           end;
       end;
@@ -207,6 +251,31 @@ begin
           pFIBTransaction.Rollback;
         ShowMessage('Error en la operación: ' + E.Message);
       end;
+    end;
+  end;
+end;
+
+procedure TFormFichaLineasAlbaranCompras.setCantidadFichaUbi
+  (FichaUbicacionAlbaran: TFormFichaUbicacionAlbaran);
+begin
+  case FactorConversion of
+    0:
+      FichaUbicacionAlbaran.cantidadArticulo := StrToInt(medtCajasPiezas.Text);
+    1:
+      begin
+        if UnidadCaja = 1 then
+        begin
+          FichaUbicacionAlbaran.cantidadArticulo := StrToInt
+            (medtUnidadesPeso.Text);
+        end
+        else
+          FichaUbicacionAlbaran.cantidadArticulo := StrToInt
+            (medtCajasPiezas.Text);
+      end;
+  else
+    begin
+      FichaUbicacionAlbaran.cantidadArticulo := StrToInt(medtCajasPiezas.Text)
+        + StrToInt(medtUnidadesPeso.Text);
     end;
   end;
 end;

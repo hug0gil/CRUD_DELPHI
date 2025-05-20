@@ -36,14 +36,6 @@ inherited FormFichaUbicacion: TFormFichaUbicacion
     inherited pnlFila: TPanel
       Width = 459
       ExplicitWidth = 459
-      inherited pnlCode: TPanel
-        Left = 459
-        Visible = False
-        ExplicitLeft = 459
-        inherited lblCodigo: TLabel
-          Width = 127
-        end
-      end
       object pnlPasillo: TPanel
         AlignWithMargins = True
         Left = 3
@@ -56,7 +48,7 @@ inherited FormFichaUbicacion: TFormFichaUbicacion
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
-        TabOrder = 1
+        TabOrder = 0
         object lblPasillo: TLabel
           AlignWithMargins = True
           Left = 5
@@ -105,7 +97,7 @@ inherited FormFichaUbicacion: TFormFichaUbicacion
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
-        TabOrder = 2
+        TabOrder = 1
         object lblSeccion: TLabel
           AlignWithMargins = True
           Left = 5
@@ -154,7 +146,7 @@ inherited FormFichaUbicacion: TFormFichaUbicacion
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
-        TabOrder = 3
+        TabOrder = 2
         object lblFilas: TLabel
           AlignWithMargins = True
           Left = 5

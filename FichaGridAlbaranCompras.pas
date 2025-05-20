@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, FichaGridBase, FIBDatabase, pFIBDatabase, FIBQuery, pFIBQuery, DB,
   FIBDataSet, pFIBDataSet, Grids, DBGrids, StdCtrls, ComCtrls,
-  ModuloDatos, FichaLineasAlbaranCompras, ExtCtrls;
+  ModuloDatos, FichaLineasAlbaranCompras, ExtCtrls, FichaUbicacionAlbaran;
 
 type
   TFormFichaGridAlbaran = class(TFormFichaGridBase0)
@@ -29,6 +29,7 @@ type
     lblIVA: TLabel;
     edtSubtotal: TEdit;
     lblSubtotal: TLabel;
+    btnUbicar: TButton;
     constructor Create(AOwner: TComponent; Modo: Integer); reintroduce;
     procedure btnAceptarClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -40,6 +41,7 @@ type
     procedure ActualizarAlbaran();
     procedure CalculoTotal();
     function ConvertirStringToFloat(Valor: string): Double;
+    procedure btnUbicarClick(Sender: TObject);
   private
     function hayCambios: Boolean;
     procedure changeValues;
@@ -54,6 +56,7 @@ type
     recargo: Boolean;
     falloInsert: Boolean;
     nombreProveedor: string;
+    fechaAlbaran: TDateTime;
   end;
 
 implementation
@@ -62,29 +65,32 @@ implementation
 
 procedure TFormFichaGridAlbaran.ButtonClick(Sender: TObject);
 var
-  FichaLineasAlbaran: TFormFichaLineasAlbaranCompras;
+  FichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras;
   ultimoOrden, codAlbaran, orden: Integer;
 begin
+
+  fechaAlbaran := DateTimePickerFecha.DateTime;
 
   if TButton(Sender).Tag <> 1 then
     CalculoTotal;
 
   if TButton(Sender).Tag <> 3 then
   begin
-    FichaLineasAlbaran := TFormFichaLineasAlbaranCompras.Create(Self,
+    FichaLineasAlbaranCompras := TFormFichaLineasAlbaranCompras.Create(Self,
       TButton(Sender).Tag);
 
+    FichaLineasAlbaranCompras.fechaAlbaran := fechaAlbaran;
     try
       if recargo then
       begin
-        FichaLineasAlbaran.pnlRecargo.Enabled := False;
-        FichaLineasAlbaran.edtRecargo.Enabled := False;
-        FichaLineasAlbaran.lblRecargo.Enabled := False;
+        FichaLineasAlbaranCompras.pnlRecargo.Enabled := False;
+        FichaLineasAlbaranCompras.edtRecargo.Enabled := False;
+        FichaLineasAlbaranCompras.lblRecargo.Enabled := False;
       end;
-      FichaLineasAlbaran.edtCodigo.Text := EditCodigo.Text;
+      FichaLineasAlbaranCompras.edtCodigo.Text := EditCodigo.Text;
       if TButton(Sender).Tag <> 0 then
-        FichaLineasAlbaran.cbbCodArticulo.Text := DataSource.DataSet.FieldByName
-          ('CCOD_ARTICULO').AsString;
+        FichaLineasAlbaranCompras.cbbCodArticulo.Text :=
+          DataSource.DataSet.FieldByName('CCOD_ARTICULO').AsString;
 
       if not pFIBTransactionTable.InTransaction then
         pFIBTransactionTable.StartTransaction;
@@ -104,81 +110,81 @@ begin
         else
           ultimoOrden := 1;
 
-        FichaLineasAlbaran.edtOrden.Text := IntToStr(ultimoOrden);
+        FichaLineasAlbaranCompras.edtOrden.Text := IntToStr(ultimoOrden);
       end;
 
       case TButton(Sender).Tag of
         0:
-          FichaLineasAlbaran.Caption :=
+          FichaLineasAlbaranCompras.Caption :=
             'Añadir nueva línea albarán ' + EditCodigo.Text + ' - ' +
             nombreProveedor;
         1:
           begin
-            FichaLineasAlbaran.Caption :=
+            FichaLineasAlbaranCompras.Caption :=
               'Información de la línea albarán seleccionada ' +
               EditCodigo.Text + ' - ' + nombreProveedor;
-            FichaLineasAlbaran.edtCodigo.Text := EditCodigo.Text;
-            FichaLineasAlbaran.edtOrden.Text := DataSource.DataSet.FieldByName
-              ('NORDEN').AsString;
+            FichaLineasAlbaranCompras.edtCodigo.Text := EditCodigo.Text;
+            FichaLineasAlbaranCompras.edtOrden.Text :=
+              DataSource.DataSet.FieldByName('NORDEN').AsString;
 
-            FichaLineasAlbaran.lblNombreProducto.Caption :=
+            FichaLineasAlbaranCompras.lblNombreProducto.Caption :=
               DataSource.DataSet.FieldByName('CNOMBRE_ARTICULO').AsString;
 
-            FichaLineasAlbaran.cbbCodArticulo.Clear;
-            FichaLineasAlbaran.cbbCodArticulo.Items.Add
+            FichaLineasAlbaranCompras.cbbCodArticulo.Clear;
+            FichaLineasAlbaranCompras.cbbCodArticulo.Items.Add
               (DataSource.DataSet.FieldByName('CCOD_ARTICULO').AsString);
-            FichaLineasAlbaran.cbbCodArticulo.ItemIndex := 0;
+            FichaLineasAlbaranCompras.cbbCodArticulo.ItemIndex := 0;
 
-            FichaLineasAlbaran.medtUnidadesPeso.Text :=
+            FichaLineasAlbaranCompras.medtUnidadesPeso.Text :=
               DataSource.DataSet.FieldByName('NCANTIDAD1').AsString;
-            FichaLineasAlbaran.medtCajasPiezas.Text :=
+            FichaLineasAlbaranCompras.medtCajasPiezas.Text :=
               DataSource.DataSet.FieldByName('NCANTIDAD2').AsString;
-            FichaLineasAlbaran.medtPrecio.Text := DataSource.DataSet.FieldByName
-              ('NPRECIO').AsString;
-            FichaLineasAlbaran.edtIVA.Text := DataSource.DataSet.FieldByName
-              ('NIVA').AsString;
-            FichaLineasAlbaran.edtRecargo.Text := DataSource.DataSet.FieldByName
-              ('NRECARGO').AsString;
-            FichaLineasAlbaran.edtSubtotal.Text := FloatToStr
+            FichaLineasAlbaranCompras.medtPrecio.Text :=
+              DataSource.DataSet.FieldByName('NPRECIO').AsString;
+            FichaLineasAlbaranCompras.edtIVA.Text :=
+              DataSource.DataSet.FieldByName('NIVA').AsString;
+            FichaLineasAlbaranCompras.edtRecargo.Text :=
+              DataSource.DataSet.FieldByName('NRECARGO').AsString;
+            FichaLineasAlbaranCompras.edtSubtotal.Text := FloatToStr
               (DataSource.DataSet.FieldByName('NSUBTOTAL').AsFloat);
 
-            FichaLineasAlbaran.medtUnidadesPeso.ReadOnly := True;
-            FichaLineasAlbaran.medtCajasPiezas.ReadOnly := True;
-            FichaLineasAlbaran.medtPrecio.Enabled := False;
+            FichaLineasAlbaranCompras.medtUnidadesPeso.ReadOnly := True;
+            FichaLineasAlbaranCompras.medtCajasPiezas.ReadOnly := True;
+            FichaLineasAlbaranCompras.medtPrecio.Enabled := False;
           end;
         2:
           begin
-            FichaLineasAlbaran.Caption :=
+            FichaLineasAlbaranCompras.Caption :=
               'Actualizar línea albarán ' + EditCodigo.Text + ' - ' +
               nombreProveedor;
-            FichaLineasAlbaran.edtCodigo.Text := EditCodigo.Text;
-            FichaLineasAlbaran.edtOrden.Text := DataSource.DataSet.FieldByName
-              ('NORDEN').AsString;
-            FichaLineasAlbaran.getCodArticulos;
-            FichaLineasAlbaran.cbbCodArticulo.ItemIndex :=
-              FichaLineasAlbaran.cbbCodArticulo.Items.IndexOf
+            FichaLineasAlbaranCompras.edtCodigo.Text := EditCodigo.Text;
+            FichaLineasAlbaranCompras.edtOrden.Text :=
+              DataSource.DataSet.FieldByName('NORDEN').AsString;
+            FichaLineasAlbaranCompras.getCodArticulos;
+            FichaLineasAlbaranCompras.cbbCodArticulo.ItemIndex :=
+              FichaLineasAlbaranCompras.cbbCodArticulo.Items.IndexOf
               (DataSource.DataSet.FieldByName('CCOD_ARTICULO').AsString);
 
-            FichaLineasAlbaran.lblNombreProducto.Caption :=
+            FichaLineasAlbaranCompras.lblNombreProducto.Caption :=
               DataSource.DataSet.FieldByName('CNOMBRE_ARTICULO').AsString;
 
-            FichaLineasAlbaran.medtUnidadesPeso.Text :=
+            FichaLineasAlbaranCompras.medtUnidadesPeso.Text :=
               DataSource.DataSet.FieldByName('NCANTIDAD1').AsString;
-            FichaLineasAlbaran.medtCajasPiezas.Text :=
+            FichaLineasAlbaranCompras.medtCajasPiezas.Text :=
               DataSource.DataSet.FieldByName('NCANTIDAD2').AsString;
-            FichaLineasAlbaran.medtPrecio.Text := DataSource.DataSet.FieldByName
-              ('NPRECIO').AsString;
-            FichaLineasAlbaran.edtIVA.Text := DataSource.DataSet.FieldByName
-              ('NIVA').AsString;
-            FichaLineasAlbaran.edtRecargo.Text := DataSource.DataSet.FieldByName
-              ('NRECARGO').AsString;
-            FichaLineasAlbaran.edtSubtotal.Text :=
+            FichaLineasAlbaranCompras.medtPrecio.Text :=
+              DataSource.DataSet.FieldByName('NPRECIO').AsString;
+            FichaLineasAlbaranCompras.edtIVA.Text :=
+              DataSource.DataSet.FieldByName('NIVA').AsString;
+            FichaLineasAlbaranCompras.edtRecargo.Text :=
+              DataSource.DataSet.FieldByName('NRECARGO').AsString;
+            FichaLineasAlbaranCompras.edtSubtotal.Text :=
               DataSource.DataSet.FieldByName('NSUBTOTAL').AsString;
 
           end;
       end;
 
-      FichaLineasAlbaran.ShowModal;
+      FichaLineasAlbaranCompras.ShowModal;
     finally
       if (TButton(Sender).Tag = 0) or (TButton(Sender).Tag = 2) then
       begin
@@ -198,10 +204,10 @@ begin
         // Después verificamos si hay registros
         if pFIBDataSetTable.RecordCount > 0 then
         begin
-          if FichaLineasAlbaran.edtOrden.Text <> '' then
+          if FichaLineasAlbaranCompras.edtOrden.Text <> '' then
             pFIBDataSetTable.Locate('NCOD_ALBARAN;NORDEN',
               VarArrayOf([StrToInt(EditCodigo.Text),
-                StrToInt(FichaLineasAlbaran.edtOrden.Text)]), []);
+                StrToInt(FichaLineasAlbaranCompras.edtOrden.Text)]), []);
         end
         else
         begin
@@ -459,8 +465,7 @@ begin
     pFIBQueryTable.Close;
     pFIBQueryTable.SQL.Text :=
       'SELECT CREG_FISCAL FROM PROVEEDORES WHERE NCODIGO = :NCODIGO';
-    pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt
-      (cbbCod.Text);
+    pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt(cbbCod.Text);
     pFIBQueryTable.ExecQuery;
 
     if not pFIBQueryTable.Eof then
@@ -494,8 +499,7 @@ begin
     pFIBQueryTable.Close;
     pFIBQueryTable.SQL.Text :=
       'SELECT CNOMBRE FROM PROVEEDORES WHERE NCODIGO = :NCODIGO';
-    pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt
-      (cbbCod.Text);
+    pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt(cbbCod.Text);
     pFIBQueryTable.ExecQuery;
 
     if not pFIBQueryTable.Eof then
@@ -727,6 +731,73 @@ begin
     2:
       Self.Close;
   end;
+end;
+
+procedure TFormFichaGridAlbaran.btnUbicarClick(Sender: TObject);
+var
+  FichaUbicacionAlbaran: TFormFichaUbicacionAlbaran;
+  cantidadFaltante: Integer;
+  pFIBTransaction: TpFIBTransaction;
+begin
+  inherited;
+  pFIBTransaction := TpFIBTransaction.Create(nil);
+  pFIBTransaction.DefaultDatabase := ModuloDatos.DataModuleBDD.pFIBDatabase;
+  FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil, 2, False);
+  FichaUbicacionAlbaran.fechaAlbaran := DateTimePickerFecha.DateTime; ;
+  FichaUbicacionAlbaran.codAlbaran := EditCodigo.Text;
+  FichaUbicacionAlbaran.codArticulo := DBGrid.Fields[1].AsString;
+  FichaUbicacionAlbaran.Caption := 'Ubicar productos restantes';
+
+  pFIBQueryTable.Close;
+  pFIBTransaction.StartTransaction;
+  pFIBQueryTable.SQL.Text :=
+    'SELECT SUM(NCANTIDAD) FROM MOV_UBICACIONES WHERE CCOD_ARTICULO= :CCOD_ARTICULO AND NCOD_ALB_COMPRA= :NCOD_ALB_COMPRA';
+  pFIBQueryTable.ParamByName('CCOD_ARTICULO').AsString := DBGrid.Fields[1]
+    .AsString;
+  pFIBQueryTable.ParamByName('NCOD_ALB_COMPRA').AsInteger := StrToInt
+    (EditCodigo.Text);
+
+  pFIBQueryTable.ExecQuery;
+
+  {
+    case FactorConversion of
+    0:
+    FichaUbicacionAlbaran.cantidadArticulo := StrToInt(medtCajasPiezas.Text);
+    1:
+    begin
+    if UnidadCaja = 1 then
+    begin
+    FichaUbicacionAlbaran.cantidadArticulo := StrToInt
+    (medtUnidadesPeso.Text);
+    end
+    else
+    FichaUbicacionAlbaran.cantidadArticulo := StrToInt
+    (medtCajasPiezas.Text);
+    end;
+    else
+    begin
+    FichaUbicacionAlbaran.cantidadArticulo := StrToInt(medtCajasPiezas.Text)
+    + StrToInt(medtUnidadesPeso.Text);
+    end;
+    end; }
+
+  if (pFIBDataSetTable.FieldByName('NCANTIDAD1').AsString = '0') or
+    (pFIBDataSetTable.FieldByName('NCANTIDAD1').AsString = '1') then
+  begin
+    cantidadFaltante := pFIBDataSetTable.FieldByName('NCANTIDAD2').AsInteger;
+  end
+  else
+    cantidadFaltante := pFIBDataSetTable.FieldByName('NCANTIDAD1').AsInteger;
+
+  ShowMessage('Cantidad 1: ' + pFIBDataSetTable.FieldByName('NCANTIDAD1')
+      .AsString);
+
+  FichaUbicacionAlbaran.cantidadArticulo := cantidadFaltante;
+  FichaUbicacionAlbaran.esFaltante := True;
+
+  FichaUbicacionAlbaran.ShowModal;
+
+  pFIBTransaction.Commit;
 end;
 
 end.

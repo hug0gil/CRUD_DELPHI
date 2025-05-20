@@ -1,5 +1,5 @@
 inherited FormFichaAlmacen: TFormFichaAlmacen
-  Caption = 'FormFichaAlmacen'
+  Caption = 'Mapa almac'#233'n'
   ClientWidth = 638
   OnCreate = FormCreate
   ExplicitWidth = 644
@@ -28,14 +28,14 @@ inherited FormFichaAlmacen: TFormFichaAlmacen
     ExplicitWidth = 638
     inherited btnCancelar: TButton
       Left = 553
-      TabOrder = 3
+      TabOrder = 2
       ExplicitLeft = 553
     end
     inherited btnAceptar: TButton
       Left = 468
+      TabOrder = 0
       OnClick = btnAceptarClick
       ExplicitLeft = 468
-      ExplicitTop = 11
     end
     object stat1: TStatusBar
       AlignWithMargins = True
@@ -62,21 +62,6 @@ inherited FormFichaAlmacen: TFormFichaAlmacen
           Width = 50
         end>
     end
-    object btnReestablecer: TButton
-      AlignWithMargins = True
-      Left = 378
-      Top = 10
-      Width = 75
-      Height = 26
-      Margins.Left = 10
-      Margins.Top = 10
-      Margins.Right = 5
-      Margins.Bottom = 5
-      Align = alRight
-      Caption = 'Reestablecer'
-      TabOrder = 0
-      OnClick = btnReestablecerClick
-    end
   end
   inherited pnlObjects: TPanel
     Width = 491
@@ -85,11 +70,6 @@ inherited FormFichaAlmacen: TFormFichaAlmacen
     inherited pnlFila: TPanel
       Width = 489
       ExplicitWidth = 489
-      inherited pnlCode: TPanel
-        inherited lblCodigo: TLabel
-          Width = 127
-        end
-      end
     end
   end
   inherited pnlTitle: TPanel
@@ -207,7 +187,7 @@ inherited FormFichaAlmacen: TFormFichaAlmacen
       Left = 32
       Top = 128
       Width = 89
-      Height = 193
+      Height = 177
       ColCount = 1
       DefaultColWidth = 85
       FixedCols = 0
@@ -226,6 +206,19 @@ inherited FormFichaAlmacen: TFormFichaAlmacen
         29
         24
         24)
+    end
+    object btnCodigoBarras: TButton
+      Left = 32
+      Top = 318
+      Width = 90
+      Height = 26
+      Margins.Left = 10
+      Margins.Top = 10
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Caption = 'C'#243'digo de barras'
+      TabOrder = 1
+      OnClick = btnCodigoBarrasClick
     end
   end
   inherited pFIBTransaction: TpFIBTransaction
@@ -271,6 +264,7 @@ inherited FormFichaAlmacen: TFormFichaAlmacen
     end
   end
   object pmMenu: TPopupMenu
+    OnPopup = pmMenuPopup
     Left = 384
     Top = 8
     object MenuItem1: TMenuItem
@@ -295,11 +289,11 @@ inherited FormFichaAlmacen: TFormFichaAlmacen
     object MenuItem6: TMenuItem
       Caption = '-'
     end
-    object MenuItem7: TMenuItem
+    object mniEstanteria: TMenuItem
       Caption = 'Marcar como estanter'#237'a'
       OnClick = MarcarComoEstanteriaClick
     end
-    object MenuItem8: TMenuItem
+    object mniPasillo: TMenuItem
       Caption = 'Marcar como pasillo'
       OnClick = MarcarComoPasilloClick
     end
@@ -329,9 +323,16 @@ inherited FormFichaAlmacen: TFormFichaAlmacen
       Caption = '+ 5'
       OnClick = mniN52Click
     end
-    object mniReestablecerfila1: TMenuItem
-      Caption = 'Reestablecer fila'
-      OnClick = mniReestablecerfila1Click
+    object N3: TMenuItem
+      Caption = '-'
+    end
+    object mniAadirfila1: TMenuItem
+      Caption = 'A'#241'adir fila'
+      OnClick = mniAadirfila1Click
+    end
+    object mniEliminarfila2: TMenuItem
+      Caption = 'Eliminar fila'
+      OnClick = mniEliminarfila2Click
     end
   end
 end

@@ -108,8 +108,11 @@
 			<DCCReference Include="FichaUbicacion.pas">
 				<Form>FormFichaUbicacion</Form>
 			</DCCReference>
-			<DCCReference Include="MenuAlmacen.pas">
-				<Form>FormMenuAlmacen</Form>
+			<DCCReference Include="MenuUbicaciones.pas">
+				<Form>FormMenuUbicaciones</Form>
+			</DCCReference>
+			<DCCReference Include="FichaUbicacionAlbaran.pas">
+				<Form>FormFichaUbicacionAlbaran</Form>
 			</DCCReference>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
@@ -169,6 +172,7 @@
 						<Excluded_Packages Name="$(BDS)\bin\dclofficexp140.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
 					</Excluded_Packages>
 				</Delphi.Personality>
+				<ModelSupport>False</ModelSupport>
 			</BorlandProject>
 			<ProjectFileVersion>12</ProjectFileVersion>
 		</ProjectExtensions>

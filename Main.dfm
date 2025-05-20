@@ -2,7 +2,7 @@ object FormMain: TFormMain
   Left = 0
   Top = 0
   Caption = 'Men'#250' principal'
-  ClientHeight = 465
+  ClientHeight = 592
   ClientWidth = 635
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -10,9 +10,7 @@ object FormMain: TFormMain
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  Menu = mm1
   OldCreateOrder = False
-  PopupMenu = pm1
   Position = poScreenCenter
   ShowHint = True
   PixelsPerInch = 96
@@ -23,6 +21,7 @@ object FormMain: TFormMain
     Top = 236
     Width = 495
     Height = 73
+    Hint = 'Art'#237'culos | Men'#250' de art'#237'culos'
     Margins.Left = 70
     Margins.Top = 15
     Margins.Right = 70
@@ -38,7 +37,7 @@ object FormMain: TFormMain
     Top = 30
     Width = 495
     Height = 73
-    Hint = 'Compras'
+    Hint = 'Compras| Men'#250' de albaranes de compra y proveedores'
     Margins.Left = 70
     Margins.Top = 30
     Margins.Right = 70
@@ -46,7 +45,7 @@ object FormMain: TFormMain
     Align = alTop
     Caption = 'Compras'
     TabOrder = 0
-    OnClick = btnAlmacenClick
+    OnClick = btnComprasClick
   end
   object btnVentas: TButton
     AlignWithMargins = True
@@ -62,11 +61,12 @@ object FormMain: TFormMain
     Align = alTop
     Caption = 'Ventas'
     TabOrder = 1
-    OnClick = btnAlmacenClick
+    OnClick = ButtonAlbaranventaClick
+    ExplicitLeft = 75
   end
   object stat1: TStatusBar
     Left = 0
-    Top = 446
+    Top = 573
     Width = 635
     Height = 19
     Panels = <
@@ -77,14 +77,15 @@ object FormMain: TFormMain
       item
         Width = 50
       end>
-    ExplicitTop = 344
+    ExplicitTop = 533
   end
   object btnAlmacen: TButton
     AlignWithMargins = True
     Left = 70
-    Top = 339
+    Top = 442
     Width = 495
     Height = 73
+    Hint = 'Almac'#233'n | Mapa de almac'#233'n'
     Margins.Left = 70
     Margins.Top = 15
     Margins.Right = 70
@@ -93,45 +94,22 @@ object FormMain: TFormMain
     Caption = 'Almac'#233'n'
     TabOrder = 4
     OnClick = btnAlmacenClick
-    ExplicitLeft = 78
-    ExplicitTop = 244
   end
-  object mm1: TMainMenu
-    Left = 568
-    Top = 24
-    object Archivos1: TMenuItem
-      Caption = 'Archivos'
-      object Articulos1: TMenuItem
-        Caption = '&Art'#237'culos'
-        OnClick = ButtonArticulosClick
-      end
-      object N1: TMenuItem
-        Caption = '-'
-      end
-      object Compras1: TMenuItem
-        Caption = 'Compras'
-      end
-      object N2: TMenuItem
-        Caption = '-'
-      end
-      object Ventas1: TMenuItem
-        Caption = 'Ventas'
-      end
-    end
-  end
-  object pm1: TPopupMenu
-    Left = 576
-    Top = 104
-    object Artculos1: TMenuItem
-      Caption = 'Art'#237'culos'
-      OnClick = ButtonArticulosClick
-    end
-    object Compras2: TMenuItem
-      Caption = 'Compras'
-    end
-    object Ventas2: TMenuItem
-      Caption = 'Ventas'
-    end
+  object btnUbicaciones: TButton
+    AlignWithMargins = True
+    Left = 70
+    Top = 339
+    Width = 495
+    Height = 73
+    Hint = 'Ubicaciones | Men'#250' de ubicaciones'
+    Margins.Left = 70
+    Margins.Top = 15
+    Margins.Right = 70
+    Margins.Bottom = 15
+    Align = alTop
+    Caption = 'Ubicaciones'
+    TabOrder = 5
+    OnClick = btnUbicacionesClick
   end
   object aplctnvnts1: TApplicationEvents
     OnHint = aplctnvnts1Hint

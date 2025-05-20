@@ -15,6 +15,7 @@ object FormMenuAlmacen: TFormMenuAlmacen
   PixelsPerInch = 96
   TextHeight = 13
   object btnBorrar: TButton
+    Tag = 3
     AlignWithMargins = True
     Left = 70
     Top = 236
@@ -28,9 +29,10 @@ object FormMenuAlmacen: TFormMenuAlmacen
     Align = alTop
     Caption = 'Borrar'
     TabOrder = 2
-    ExplicitTop = 226
+    OnClick = btnClick
   end
   object btnCrear: TButton
+    Tag = 1
     AlignWithMargins = True
     Left = 70
     Top = 30
@@ -44,9 +46,10 @@ object FormMenuAlmacen: TFormMenuAlmacen
     Align = alTop
     Caption = 'Crear'
     TabOrder = 0
-    OnClick = btnCrearClick
+    OnClick = btnClick
   end
   object btnActualizar: TButton
+    Tag = 2
     AlignWithMargins = True
     Left = 70
     Top = 133
@@ -60,5 +63,6 @@ object FormMenuAlmacen: TFormMenuAlmacen
     Align = alTop
     Caption = 'Actualizar'
     TabOrder = 1
+    OnClick = btnClick
   end
 end

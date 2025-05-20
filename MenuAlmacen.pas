@@ -4,14 +4,14 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls,FichaAlmacen;
+  Dialogs, StdCtrls, FichaAlmacen;
 
 type
   TFormMenuAlmacen = class(TForm)
     btnBorrar: TButton;
     btnCrear: TButton;
     btnActualizar: TButton;
-    procedure btnCrearClick(Sender: TObject);
+    procedure btnClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -22,13 +22,25 @@ implementation
 
 {$R *.dfm}
 
-procedure TFormMenuAlmacen.btnCrearClick(Sender: TObject);
+procedure TFormMenuAlmacen.btnClick(Sender: TObject);
 var
   FormFichaAlmacen: TFormFichaAlmacen;
 begin
-  FormFichaAlmacen := TFormFichaAlmacen.Create(nil);
-  FormFichaAlmacen.ShowModal;
-  FormFichaAlmacen.Free;
+  case TButton(Sender).Tag of
+    1, 2: // Crear o Actualizar
+      begin
+        FormFichaAlmacen := TFormFichaAlmacen.Create(nil, TButton(Sender).Tag);
+        try
+          FormFichaAlmacen.ShowModal;
+        finally
+          FormFichaAlmacen.Free;
+        end;
+      end;
+
+    3: // Eliminar
+      ShowMessage('Eliminar');
+  end;
 end;
+
 
 end.
