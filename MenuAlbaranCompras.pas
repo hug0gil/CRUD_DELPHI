@@ -5,8 +5,11 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, MenuBase, DB, FIBDataSet, pFIBDataSet, FIBDatabase, pFIBDatabase,
-  Grids, DBGrids, DBCtrls, StdCtrls, ExtCtrls, FichaGridAlbaranCompras, pFIBQuery,
-  ModuloDatos, FIBQuery;
+  Grids, DBGrids, DBCtrls, StdCtrls, ExtCtrls, FichaGridAlbaranCompras,
+  pFIBQuery,
+  ModuloDatos, FIBQuery, frxBarcode, frxExportDBF, frxExportODF, frxExportMail,
+  frxExportCSV, frxExportText, frxExportImage, frxExportRTF, frxExportXML,
+  frxExportXLS, frxExportHTML, frxClass, frxExportPDF, frxDBSet;
 
 type
   TFormMenuAlbaranCompras = class(TFormMenuBase)
@@ -18,6 +21,7 @@ type
     procedure rgGroupOrdenClick(Sender: TObject);
     procedure btnClick(Sender: TObject);
     procedure getCodProveedores(FormFichaGridAlbaran: TFormFichaGridAlbaran);
+    procedure btnImprimirClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -47,7 +51,8 @@ begin
 
       1: // Actualizar artículo seleccionado
         begin
-          FormFichaGridAlbaran.Caption := 'Actualizar albarán de compra seleccionado';
+          FormFichaGridAlbaran.Caption :=
+            'Actualizar albarán de compra seleccionado';
 
           FormFichaGridAlbaran.EditCodigo.ReadOnly := True;
           FormFichaGridAlbaran.EditCodigo.Text :=
@@ -155,6 +160,35 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TFormMenuAlbaranCompras.btnImprimirClick(Sender: TObject);
+begin
+  inherited;
+  if not pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.StartTransaction;
+
+  DataSetReport.Close;
+
+  DataSetReport.SQLs.SelectSQL.Text := 'SELECT ' +
+    '  A.NCODIGO, A.DFECHA, A.COBSERVACIONES, A.NCOD_PROVEEDOR, ' +
+    '  A.NTOTAL, A.NTOTAL_BRUTO, A.NIVA, A.NRECARGO, ' +
+    '  L.NORDEN, L.CCOD_ARTICULO, L.NPRECIO, L.NIVA AS LINEA_IVA, ' +
+    '  L.NRECARGO AS LINEA_RECARGO, L.NCANTIDAD1, L.NCANTIDAD2, L.NSUBTOTAL, '
+    + '  P.NCODIGO AS PROVEEDOR_CODIGO, P.DFECHA_ULT_COMPRA, P.CNOMBRE AS PROVEEDOR_NOMBRE, P.CREG_FISCAL, ' + '  AR.CCODIGO AS ARTICULO_CODIGO, AR.CNOMBRE AS ARTICULO_NOMBRE, AR.NSTOCK, AR.NCOD_IVA AS ARTICULO_IVA, ' + '  AR.NFACTCONV, AR.NUNICAJ, AR.NPRECIO AS ARTICULO_PRECIO_VENTA, AR.NPRECIO_COMPRA, AR.NCOD_PROV, COUNT(*) OVER () AS TOTAL_LINEAS ' + 'FROM ALBARAN_C A ' + 'JOIN LINEAS_ALB_C L ON A.NCODIGO = L.NCOD_ALBARAN ' + 'JOIN PROVEEDORES P ON A.NCOD_PROVEEDOR = P.NCODIGO ' + 'JOIN ARTICULOS AR ON L.CCOD_ARTICULO = AR.CCODIGO ' + 'WHERE A.NCODIGO = :NCODIGO ' + 'AND P.NCODIGO = :NCOD_PROVEEDOR ' + 'ORDER BY L.NORDEN';
+
+  DataSetReport.ParamByName('NCODIGO').AsInteger :=
+    DataSourceTable.DataSet.FieldByName('NCODIGO').AsInteger;
+
+  DataSetReport.ParamByName('NCOD_PROVEEDOR').AsInteger :=
+    DataSourceTable.DataSet.FieldByName('NCOD_PROVEEDOR').AsInteger;
+
+  DataSetReport.Open;
+  frxReport.ShowReport;
+
+  if pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.Commit;
+
 end;
 
 procedure TFormMenuAlbaranCompras.FormCreate(Sender: TObject);

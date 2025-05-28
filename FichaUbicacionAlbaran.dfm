@@ -1,4 +1,5 @@
 inherited FormFichaUbicacionAlbaran: TFormFichaUbicacionAlbaran
+  BorderIcons = []
   Caption = 'FormFichaUbicacionAlbaran'
   ClientWidth = 777
   OnActivate = FormActivate
@@ -19,6 +20,7 @@ inherited FormFichaUbicacionAlbaran: TFormFichaUbicacionAlbaran
     ExplicitWidth = 777
     inherited btnCancelar: TButton
       Left = 692
+      Caption = 'Salir'
       TabOrder = 1
       ExplicitLeft = 692
     end
@@ -284,50 +286,73 @@ inherited FormFichaUbicacionAlbaran: TFormFichaUbicacionAlbaran
         end
       end
       object pnlLabel: TPanel
-        Left = 502
-        Top = 264
-        Width = 243
-        Height = 65
+        Left = 566
+        Top = 240
+        Width = 179
+        Height = 97
+        BevelOuter = bvNone
+        Color = cl3DLight
+        ParentBackground = False
         TabOrder = 5
         object lblRestante: TLabel
           AlignWithMargins = True
-          Left = 6
-          Top = 11
-          Width = 231
-          Height = 16
-          Margins.Left = 5
-          Margins.Top = 10
-          Margins.Right = 5
-          Margins.Bottom = 5
-          Align = alTop
-          Caption = 'Capacidad restante de la fila:'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          ExplicitWidth = 168
-        end
-        object lblCapacidad: TLabel
-          AlignWithMargins = True
-          Left = 6
-          Top = 37
-          Width = 231
+          Left = 5
+          Top = 62
+          Width = 169
           Height = 16
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
           Margins.Bottom = 5
           Align = alTop
-          Caption = 'Capacidad ocupada de la fila:'
+          Caption = 'Capacidad restante:'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -13
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 169
+          ExplicitWidth = 115
+        end
+        object lblOcupado: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 36
+          Width = 169
+          Height = 16
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Margins.Bottom = 5
+          Align = alTop
+          Caption = 'Capacidad ocupada:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 116
+        end
+        object LabelTotal: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 10
+          Width = 169
+          Height = 16
+          Margins.Left = 5
+          Margins.Top = 10
+          Margins.Right = 5
+          Margins.Bottom = 5
+          Align = alTop
+          Caption = 'Capacidad total:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 93
         end
       end
     end
@@ -337,20 +362,22 @@ inherited FormFichaUbicacionAlbaran: TFormFichaUbicacionAlbaran
     ExplicitWidth = 771
     object lblCantidad: TLabel
       AlignWithMargins = True
-      Left = 506
+      Left = 522
       Top = 26
-      Width = 234
+      Width = 197
       Height = 16
       Margins.Left = 5
       Margins.Top = 10
       Margins.Right = 5
       Margins.Bottom = 5
+      BiDiMode = bdLeftToRight
       Caption = 'Cantidad restante por almacenar: '
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = []
+      ParentBiDiMode = False
       ParentFont = False
     end
   end

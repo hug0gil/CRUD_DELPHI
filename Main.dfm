@@ -62,7 +62,6 @@ object FormMain: TFormMain
     Caption = 'Ventas'
     TabOrder = 1
     OnClick = ButtonAlbaranventaClick
-    ExplicitLeft = 75
   end
   object stat1: TStatusBar
     Left = 0
@@ -77,7 +76,6 @@ object FormMain: TFormMain
       item
         Width = 50
       end>
-    ExplicitTop = 533
   end
   object btnAlmacen: TButton
     AlignWithMargins = True
@@ -108,7 +106,7 @@ object FormMain: TFormMain
     Margins.Bottom = 15
     Align = alTop
     Caption = 'Ubicaciones'
-    TabOrder = 5
+    TabOrder = 3
     OnClick = btnUbicacionesClick
   end
   object aplctnvnts1: TApplicationEvents

@@ -7,7 +7,9 @@ uses
   Dialogs, MenuBase, DB, FIBDataSet, pFIBDataSet, FIBDatabase, pFIBDatabase,
   Grids, DBGrids, DBCtrls, StdCtrls, ExtCtrls, FichaGridAlbaranVentas,
   pFIBQuery,
-  ModuloDatos, FichaProveedor, FIBQuery;
+  ModuloDatos, FichaProveedor, FIBQuery, frxBarcode, frxExportDBF, frxExportODF,
+  frxExportMail, frxExportCSV, frxExportText, frxExportImage, frxExportRTF,
+  frxExportXML, frxExportXLS, frxExportHTML, frxClass, frxExportPDF, frxDBSet;
 
 type
   TFormMenuProveedores = class(TFormMenuBase)
@@ -21,6 +23,7 @@ type
     procedure btnClick(Sender: TObject);
     procedure pFIBDataSetTableCalcFields(DataSet: TDataSet);
     procedure CargarRegimenes(FormFichaProveedor: TFormFichaProveedor);
+    procedure btnImprimirClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -53,16 +56,17 @@ begin
       1:
         begin
           FormFichaProveedor.Caption := 'Actualizar proveedor seleccionado';
-          FormFichaProveedor.edtCodigo.Text := DataSourceTable.DataSet.FieldByName
-            ('NCODIGO').AsString;
+          FormFichaProveedor.edtCodigo.Text :=
+            DataSourceTable.DataSet.FieldByName('NCODIGO').AsString;
           FormFichaProveedor.DateTimePickerFecha.Enabled := True;
           FormFichaProveedor.DateTimePickerFecha.DateTime :=
-            DataSourceTable.DataSet.FieldByName('DFECHA_ULT_COMPRA').AsDateTime;
+            DataSourceTable.DataSet.FieldByName('DFECHA_ULT_COMPRA')
+            .AsDateTime;
           FormFichaProveedor.edtNombre.Enabled := True;
           FormFichaProveedor.edtCodigo.ReadOnly := True;
           FormFichaProveedor.DateTimePickerFecha.Enabled := False;
-          FormFichaProveedor.edtNombre.Text := DataSourceTable.DataSet.FieldByName
-            ('CNOMBRE').AsString;
+          FormFichaProveedor.edtNombre.Text :=
+            DataSourceTable.DataSet.FieldByName('CNOMBRE').AsString;
           CargarRegimenes(FormFichaProveedor);
 
           FormFichaProveedor.ComboBoxRegimen.ItemIndex :=
@@ -72,20 +76,22 @@ begin
         end;
       2:
         begin
-          FormFichaProveedor.Caption := 'Información del proveedor seleccionado';
+          FormFichaProveedor.Caption :=
+            'Información del proveedor seleccionado';
           FormFichaProveedor.edtCodigo.ReadOnly := True;
           FormFichaProveedor.edtNombre.ReadOnly := True;
-          if DataSourceTable.DataSet.FieldByName('DFECHA_ULT_COMPRA').IsNull then
+          if DataSourceTable.DataSet.FieldByName('DFECHA_ULT_COMPRA')
+            .IsNull then
             FormFichaProveedor.DateTimePickerFecha.Format := ' '
           else
             FormFichaProveedor.DateTimePickerFecha.DateTime :=
               DataSourceTable.DataSet.FieldByName('DFECHA_ULT_COMPRA')
               .AsDateTime;
 
-          FormFichaProveedor.edtCodigo.Text := DataSourceTable.DataSet.FieldByName
-            ('NCODIGO').AsString;
-          FormFichaProveedor.edtNombre.Text := DataSourceTable.DataSet.FieldByName
-            ('CNOMBRE').AsString;
+          FormFichaProveedor.edtCodigo.Text :=
+            DataSourceTable.DataSet.FieldByName('NCODIGO').AsString;
+          FormFichaProveedor.edtNombre.Text :=
+            DataSourceTable.DataSet.FieldByName('CNOMBRE').AsString;
           FormFichaProveedor.ComboBoxRegimen.Clear;
           FormFichaProveedor.ComboBoxRegimen.Items.Add
             (DataSourceTable.DataSet.FieldByName('CREG_NOMBRE').AsString);
@@ -115,13 +121,15 @@ begin
   end
 
   else
-     try
+    try
       if not pFIBTransactionTable.InTransaction then
         pFIBTransactionTable.StartTransaction;
 
       pFIBQueryDelete.Close;
-      pFIBQueryDelete.SQL.Text := 'DELETE FROM PROVEEDORES WHERE NCODIGO = :OLD_NCODIGO';
-      pFIBQueryDelete.ParamByName('OLD_NCODIGO').AsInteger := DataSourceTable.DataSet.FieldByName('NCODIGO').AsInteger;
+      pFIBQueryDelete.SQL.Text :=
+        'DELETE FROM PROVEEDORES WHERE NCODIGO = :OLD_NCODIGO';
+      pFIBQueryDelete.ParamByName('OLD_NCODIGO').AsInteger :=
+        DataSourceTable.DataSet.FieldByName('NCODIGO').AsInteger;
       pFIBQueryDelete.ExecQuery;
 
       if pFIBTransactionTable.InTransaction then
@@ -134,7 +142,8 @@ begin
     except
       on E: Exception do
       begin
-        ShowMessage('Error, no puedes eliminar un proveedor asociado en un albarán');
+        ShowMessage(
+          'Error, no puedes eliminar un proveedor asociado en un albarán');
       end;
     end;
 end;
@@ -182,6 +191,22 @@ begin
         pFIBDataSetTable.Open;
       end;
   end;
+
+end;
+
+procedure TFormMenuProveedores.btnImprimirClick(Sender: TObject);
+begin
+  inherited;
+  if not pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.StartTransaction;
+
+  // FDataSetReport.Open;
+
+  // frxReport.LoadFromFile('C:\Users\Pr1\Documents\ListadoClientes.fr3');
+  frxReport.ShowReport;
+
+  if pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.Commit;
 
 end;
 

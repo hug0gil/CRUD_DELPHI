@@ -53,7 +53,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           AlignWithMargins = True
           Left = 5
           Top = 15
-          Width = 127
+          Width = 58
           Height = 21
           Margins.Left = 5
           Margins.Top = 15
@@ -67,7 +67,6 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 58
         end
         object medtUnidadesPeso: TMaskEdit
           AlignWithMargins = True
@@ -102,7 +101,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           AlignWithMargins = True
           Left = 5
           Top = 15
-          Width = 127
+          Width = 106
           Height = 21
           Margins.Left = 5
           Margins.Top = 15
@@ -116,7 +115,6 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 106
         end
         object cbbCodArticulo: TComboBox
           AlignWithMargins = True
@@ -149,7 +147,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           AlignWithMargins = True
           Left = 5
           Top = 15
-          Width = 127
+          Width = 74
           Height = 21
           Margins.Left = 5
           Margins.Top = 15
@@ -163,7 +161,6 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 74
         end
         object medtCajasPiezas: TMaskEdit
           AlignWithMargins = True
@@ -199,7 +196,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           AlignWithMargins = True
           Left = 5
           Top = 15
-          Width = 127
+          Width = 50
           Height = 21
           Margins.Left = 5
           Margins.Top = 15
@@ -213,7 +210,6 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 50
         end
         object edtCodigo: TMaskEdit
           AlignWithMargins = True
@@ -259,7 +255,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           AlignWithMargins = True
           Left = 5
           Top = 5
-          Width = 127
+          Width = 43
           Height = 21
           Margins.Left = 5
           Margins.Top = 5
@@ -273,7 +269,6 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 43
         end
         object medtPrecio: TMaskEdit
           AlignWithMargins = True
@@ -308,7 +303,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           AlignWithMargins = True
           Left = 5
           Top = 5
-          Width = 127
+          Width = 44
           Height = 21
           Margins.Left = 5
           Margins.Top = 5
@@ -322,7 +317,6 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 44
         end
         object edtOrden: TEdit
           AlignWithMargins = True
@@ -355,7 +349,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           AlignWithMargins = True
           Left = 5
           Top = 5
-          Width = 127
+          Width = 40
           Height = 21
           Margins.Left = 5
           Margins.Top = 5
@@ -369,7 +363,6 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 40
         end
         object edtIVA: TEdit
           AlignWithMargins = True
@@ -402,7 +395,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           AlignWithMargins = True
           Left = 5
           Top = 5
-          Width = 127
+          Width = 74
           Height = 21
           Margins.Left = 5
           Margins.Top = 5
@@ -416,7 +409,6 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 74
         end
         object edtRecargo: TEdit
           AlignWithMargins = True
@@ -450,7 +442,7 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
         AlignWithMargins = True
         Left = 5
         Top = 40
-        Width = 127
+        Width = 73
         Height = 21
         Margins.Left = 5
         Margins.Top = 40
@@ -464,7 +456,6 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
         Font.Name = 'Segoe UI'
         Font.Style = []
         ParentFont = False
-        ExplicitWidth = 73
       end
       object edtSubTotal: TEdit
         AlignWithMargins = True
@@ -490,14 +481,12 @@ inherited FormFichaLineasAlbaranCompras: TFormFichaLineasAlbaranCompras
       AlignWithMargins = True
       Left = 3
       Top = 7
-      Width = 776
-      Height = 34
+      Width = 272
+      Height = 31
       Margins.Top = 7
       Align = alClient
       Alignment = taCenter
       Caption = 'lblNombreProducto'
-      ExplicitWidth = 272
-      ExplicitHeight = 31
     end
     object lblDFactorConversion: TLabel
       Left = 617

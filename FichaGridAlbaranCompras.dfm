@@ -69,13 +69,13 @@ inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
     ExplicitWidth = 841
     inherited btnAceptar: TButton
       Left = 671
-      TabOrder = 4
+      TabOrder = 5
       OnClick = btnAceptarClick
       ExplicitLeft = 671
     end
     inherited btnCancelar: TButton
       Left = 756
-      TabOrder = 5
+      TabOrder = 6
       ExplicitLeft = 756
     end
     inherited ButtonBorrar: TButton
@@ -110,7 +110,8 @@ inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
       Margins.Bottom = 5
       Align = alLeft
       Caption = 'Ubicar'
-      TabOrder = 6
+      TabOrder = 4
+      Visible = False
       OnClick = btnUbicarClick
     end
   end
@@ -505,8 +506,5 @@ inherited FormFichaGridAlbaran: TFormFichaGridAlbaran
       Size = 100
       EmptyStrToNull = True
     end
-  end
-  inherited pFIBTransactionTable: TpFIBTransaction
-    Active = True
   end
 end

@@ -112,6 +112,8 @@
     <Transaction>2025/05/14 14:04:39.953.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\UnidadMenuPrincipal.dfm</Transaction>
     <Transaction>2025/05/15 07:14:25.474.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\UnidadMenuPrincipal.pas=</Transaction>
     <Transaction>2025/05/15 07:14:25.474.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\UnidadMenuPrincipal.dfm=</Transaction>
+    <Transaction>2025/05/20 11:55:37.986.pas,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\Pr1\Documents\RAD Studio\Projects\PruebaReport.pas</Transaction>
+    <Transaction>2025/05/20 11:55:37.986.dfm,C:\Users\Pr1\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\Pr1\Documents\RAD Studio\Projects\PruebaReport.dfm</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="FichaArticulos.pas"/>
@@ -160,5 +162,7 @@
     <File Path="MenuUbicaciones.dfm"/>
     <File Path="FichaUbicacionAlbaran.pas"/>
     <File Path="FichaUbicacionAlbaran.dfm"/>
+    <File Path="PruebaReport.pas"/>
+    <File Path="PruebaReport.dfm"/>
   </ProjectSortOrder>
 </BorlandProject>

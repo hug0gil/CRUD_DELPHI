@@ -14,9 +14,6 @@ type
     dbgrd1: TDBGrid;
     dsTable: TDataSource;
     pfbdtstTable: TpFIBDataSet;
-    pnl: TPanel;
-    shp1: TShape;
-    rgGroupOrden: TRadioGroup;
     pFIBTransaction1: TpFIBTransaction;
     rgGroupOrden1: TRadioGroup;
     fbntgrfldTableNCODIGO: TFIBIntegerField;
@@ -28,6 +25,7 @@ type
     fbdtmfldTableDFECHA_MOVIMIENTO: TFIBDateTimeField;
     fbntgrfldTableNCOD_ALB_COMPRA: TFIBIntegerField;
     fbntgrfldTableNCOD_ALB_VENTA: TFIBIntegerField;
+    rgGroupOrden: TRadioGroup;
     procedure FormCreate(Sender: TObject);
     procedure rgGroupOrdenClick(Sender: TObject);
   private

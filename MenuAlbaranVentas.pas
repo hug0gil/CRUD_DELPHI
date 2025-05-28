@@ -5,8 +5,11 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, MenuBase, DB, FIBDataSet, pFIBDataSet, FIBDatabase, pFIBDatabase,
-  Grids, DBGrids, DBCtrls, StdCtrls, ExtCtrls, FichaGridAlbaranVentas, pFIBQuery,
-  ModuloDatos, FIBQuery;
+  Grids, DBGrids, DBCtrls, StdCtrls, ExtCtrls, FichaGridAlbaranVentas,
+  pFIBQuery,
+  ModuloDatos, FIBQuery, frxBarcode, frxExportDBF, frxExportODF, frxExportMail,
+  frxExportCSV, frxExportText, frxExportImage, frxExportRTF, frxExportXML,
+  frxExportXLS, frxExportHTML, frxClass, frxExportPDF, frxDBSet;
 
 type
   TFormMenuAlbaranVentas = class(TFormMenuBase)
@@ -18,7 +21,9 @@ type
     procedure FormCreate(Sender: TObject);
     procedure rgGroupOrdenClick(Sender: TObject);
     procedure btnClick(Sender: TObject);
-    procedure getCodClientes(FormFichaGridAlbaranVentas: TFormFichaGridAlbaranVentas);
+    procedure getCodClientes(FormFichaGridAlbaranVentas
+        : TFormFichaGridAlbaranVentas);
+    procedure btnImprimirClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -48,7 +53,8 @@ begin
 
       1: // Actualizar artículo seleccionado
         begin
-          FormFichaGridAlbaranVentas.Caption := 'Actualizar albarán de venta seleccionado';
+          FormFichaGridAlbaranVentas.Caption :=
+            'Actualizar albarán de venta seleccionado';
 
           FormFichaGridAlbaranVentas.EditCodigo.ReadOnly := True;
           FormFichaGridAlbaranVentas.EditCodigo.Text :=
@@ -123,8 +129,8 @@ begin
       pFIBDataSetTable.Open;
 
       // Realiza la búsqueda solo si el código no está vacío para que al salir estemos en el registro creado/modificado/leido
-      pFIBDataSetTable.Locate('NCODIGO', FormFichaGridAlbaranVentas.EditCodigo.Text,
-        []);
+      pFIBDataSetTable.Locate('NCODIGO',
+        FormFichaGridAlbaranVentas.EditCodigo.Text, []);
     end;
 
     FormFichaGridAlbaranVentas.Free;
@@ -156,6 +162,34 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TFormMenuAlbaranVentas.btnImprimirClick(Sender: TObject);
+begin
+  inherited;
+  if not pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.StartTransaction;
+
+  DataSetReport.Close;
+
+  DataSetReport.SQLs.SelectSQL.Text := 'SELECT ' +
+    '  A.NCODIGO, A.DFECHA, A.COBSERVACIONES, A.NCOD_CLIENTE, ' +
+    '  A.NTOTAL, A.NTOTAL_BRUTO, A.NIVA, A.NRECARGO, ' +
+    '  L.NORDEN, L.CCOD_ARTICULO, L.NPRECIO, L.NIVA AS LINEA_IVA, ' +
+    '  L.NRECARGO AS LINEA_RECARGO, L.NCANTIDAD1, L.NCANTIDAD2, L.NSUBTOTAL, '
+    + '  C.NCODIGO AS CLIENTE_CODIGO, C.DFECHA_ULT_VENTA, C.CNOMBRE AS CLIENTE_NOMBRE, C.CREG_FISCAL, ' + '  AR.CCODIGO AS ARTICULO_CODIGO, AR.CNOMBRE AS ARTICULO_NOMBRE, AR.NSTOCK, AR.NCOD_IVA AS ARTICULO_IVA, ' + '  AR.NFACTCONV, AR.NUNICAJ, AR.NPRECIO AS ARTICULO_PRECIO_VENTA, AR.NPRECIO_COMPRA, AR.NCOD_PROV, ' + '  COUNT(*) OVER () AS TOTAL_LINEAS ' + 'FROM ALBARAN_V A ' + 'JOIN LINEAS_ALB_V L ON A.NCODIGO = L.NCOD_ALBARAN ' + 'JOIN CLIENTES C ON A.NCOD_CLIENTE = C.NCODIGO ' + 'JOIN ARTICULOS AR ON L.CCOD_ARTICULO = AR.CCODIGO ' + 'WHERE A.NCODIGO = :NCODIGO ' + 'AND C.NCODIGO = :NCOD_CLIENTE ' + 'ORDER BY L.NORDEN';
+
+  DataSetReport.ParamByName('NCODIGO').AsInteger :=
+    DataSourceTable.DataSet.FieldByName('NCODIGO').AsInteger;
+
+  DataSetReport.ParamByName('NCOD_CLIENTE').AsInteger :=
+    DataSourceTable.DataSet.FieldByName('NCOD_CLIENTE').AsInteger;
+
+  DataSetReport.Open;
+  frxReport.ShowReport;
+
+  if pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.Commit;
 end;
 
 procedure TFormMenuAlbaranVentas.FormCreate(Sender: TObject);

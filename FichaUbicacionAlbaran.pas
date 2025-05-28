@@ -26,40 +26,161 @@ type
     dtpFecha: TDateTimePicker;
     pnlLabel: TPanel;
     lblRestante: TLabel;
-    lblCapacidad: TLabel;
+    lblOcupado: TLabel;
     lblCantidad: TLabel;
+    LabelTotal: TLabel;
     constructor Create(AOwner: TComponent; Modo: Integer; TipoVenta: Boolean);
       overload;
+    function GenerarNuevoCodigo(): Integer;
+    function todoCorrecto(): Boolean;
+    procedure edtCantidadKeyPress(Sender: TObject; var Key: Char);
+    procedure btnAceptarClick(Sender: TObject);
+    procedure metodosVenta(mode: Integer);
+    procedure metodosCompra(mode: Integer);
     procedure FormActivate(Sender: TObject);
     procedure cbbPasilloChange(Sender: TObject);
     procedure cbbSeccionChange(Sender: TObject);
-    procedure btnAceptarClick(Sender: TObject);
-    function GenerarNuevoCodigo(): Integer;
-    function todoCorrecto(): Boolean;
-    function estaAlmacenado(): Integer;
     procedure cbbFilaChange(Sender: TObject);
-    procedure edtCantidadKeyPress(Sender: TObject; var Key: Char);
+    procedure ubicarRestantes();
+    procedure recargarLabels();
+    procedure btnCancelarClick(Sender: TObject);
   private
     { Private declarations }
     mode: Integer;
     esVenta: Boolean;
-    cantidadOcupada, capacidadFila: Integer;
-    cantidadActual: Integer;
+    cantidadOcupadaFila, capacidadTotalFila: Integer;
+    cantidadActualArticulo: Integer;
   public
     { Public declarations }
     fechaAlbaran: TDateTime;
-    codAlbaran: string;
     codArticulo: string;
     cantidadArticulo: Integer;
     hayStock: Boolean;
     esFaltante: Boolean;
-    realizada: Boolean;
+
+    codigoAlbaran: Integer;
+    NPasillo, NSeccion, NFila: Integer;
+    huboRollback: Boolean;
 
   end;
+
+var
+  FormFichaUbicacionAlbaran: TFormFichaUbicacionAlbaran;
 
 implementation
 
 {$R *.dfm}
+
+procedure TFormFichaUbicacionAlbaran.btnAceptarClick(Sender: TObject);
+begin
+  // cantidadActual
+  if esVenta then
+  begin
+    metodosVenta(mode);
+  end
+  else
+    metodosCompra(mode);
+
+end;
+
+procedure TFormFichaUbicacionAlbaran.btnCancelarClick(Sender: TObject);
+begin
+  if (esVenta) and (mode = 0) then
+  begin
+    if MessageDlg(
+      'Elige obligatoriamente una ubicación de la que extraer el producto, ¿estás seguro de querer salir?', mtWarning, [mbYes, mbNo], 0) = mrYes then
+    begin
+      if pFIBTransaction.InTransaction then
+        pFIBTransaction.Rollback;
+      huboRollback := True;
+      Close; // Cerramos el formulario
+    end;
+    // Si el usuario dice que NO, no hacemos nada y se queda en la pantalla
+  end
+  else
+    Self.Close;
+end;
+
+procedure TFormFichaUbicacionAlbaran.cbbFilaChange(Sender: TObject);
+begin
+  inherited;
+  recargarLabels();
+end;
+
+procedure TFormFichaUbicacionAlbaran.cbbPasilloChange(Sender: TObject);
+begin
+  inherited;
+  cbbSeccion.Clear;
+  cbbFila.Clear;
+
+  pFIBQuery.Close;
+
+  if not esVenta then
+  begin
+    // Mostrar todas las secciones posibles del pasillo
+    pFIBQuery.SQL.Text := 'SELECT DISTINCT NSECCION FROM UBICACIONES ' +
+      'WHERE NPASILLO = :NPASILLO ORDER BY NSECCION';
+  end
+  else
+  begin
+    // Mostrar solo secciones con stock del artículo en ese pasillo
+    pFIBQuery.SQL.Text := 'SELECT DISTINCT U.NSECCION FROM UBICACIONES U ' +
+      'JOIN MOV_UBICACIONES M ON U.NPASILLO = M.NPASILLO AND U.NSECCION = M.NSECCION AND U.NFILA = M.NFILA '
+      + 'WHERE M.CCOD_ARTICULO = :COD_ARTICULO AND U.NPASILLO = :NPASILLO ' +
+      'ORDER BY U.NSECCION';
+    pFIBQuery.ParamByName('COD_ARTICULO').AsString := codArticulo;
+  end;
+
+  pFIBQuery.ParamByName('NPASILLO').AsInteger := StrToInt(cbbPasillo.Text);
+
+  pFIBTransaction.StartTransaction;
+  pFIBQuery.ExecQuery;
+
+  while not pFIBQuery.Eof do
+  begin
+    cbbSeccion.Items.Add(pFIBQuery.FieldByName('NSECCION').AsString);
+    pFIBQuery.Next;
+  end;
+
+  pFIBTransaction.Commit;
+end;
+
+procedure TFormFichaUbicacionAlbaran.cbbSeccionChange(Sender: TObject);
+begin
+  inherited;
+  cbbFila.Clear;
+
+  pFIBQuery.Close;
+
+  if not esVenta then
+  begin
+    // Mostrar todas las filas posibles
+    pFIBQuery.SQL.Text := 'SELECT DISTINCT NFILA FROM UBICACIONES ' +
+      'WHERE NPASILLO = :NPASILLO AND NSECCION = :NSECCION ' + 'ORDER BY NFILA';
+  end
+  else
+  begin
+    // Mostrar solo filas con stock del artículo en la sección y pasillo seleccionados
+    pFIBQuery.SQL.Text := 'SELECT DISTINCT U.NFILA ' + 'FROM UBICACIONES U ' +
+      'JOIN MOV_UBICACIONES M ON U.NPASILLO = M.NPASILLO AND U.NSECCION = M.NSECCION AND U.NFILA = M.NFILA '
+      + 'WHERE M.CCOD_ARTICULO = :COD_ARTICULO AND U.NPASILLO = :NPASILLO AND U.NSECCION = :NSECCION ' + 'ORDER BY U.NFILA';
+    pFIBQuery.ParamByName('COD_ARTICULO').AsString := codArticulo;
+  end;
+
+  pFIBQuery.ParamByName('NPASILLO').AsInteger := StrToInt(cbbPasillo.Text);
+  pFIBQuery.ParamByName('NSECCION').AsInteger := StrToInt(cbbSeccion.Text);
+
+  pFIBTransaction.StartTransaction;
+  pFIBQuery.ExecQuery;
+
+  while not pFIBQuery.Eof do
+  begin
+    cbbFila.Items.Add(pFIBQuery.FieldByName('NFILA').AsString);
+    pFIBQuery.Next;
+  end;
+
+  pFIBTransaction.Commit;
+end;
 
 constructor TFormFichaUbicacionAlbaran.Create(AOwner: TComponent;
   Modo: Integer; TipoVenta: Boolean);
@@ -67,348 +188,6 @@ begin
   inherited Create(AOwner);
   mode := Modo;
   esVenta := TipoVenta;
-
-  cantidadOcupada := 0;
-  capacidadFila := 0;
-  realizada := False;
-
-end;
-
-procedure TFormFichaUbicacionAlbaran.btnAceptarClick(Sender: TObject);
-begin
-  if mode = 1 then
-  begin
-    Self.Close;
-  end
-  else
-  begin
-    if (capacidadFila < (cantidadOcupada + StrToInt(edtCantidad.Text))) and
-      (not esVenta) then
-    begin
-      ShowMessage('Introduce una cantidad que quepa en la fila');
-    end
-    else
-    begin
-      if todoCorrecto then
-      begin
-        pFIBTransaction.StartTransaction;
-        pFIBQuery.Close;
-        pFIBQuery.SQL.Clear;
-        pFIBQuery.Params.ClearValues;
-        pFIBQuery.SQL.Text := 'UPDATE OR INSERT INTO MOV_UBICACIONES ' +
-          '(NCODIGO, CCOD_ARTICULO, NPASILLO, NSECCION, NFILA, NCANTIDAD, DFECHA_MOVIMIENTO, NCOD_ALB_COMPRA, NCOD_ALB_VENTA) ' + 'VALUES (:NCODIGO, :CCOD_ARTICULO, :NPASILLO, :NSECCION, :NFILA, :NCANTIDAD, :DFECHA_MOVIMIENTO, :NCOD_ALB_COMPRA, :NCOD_ALB_VENTA) ' + 'MATCHING (NCODIGO)';
-
-        try
-          // Asignación de parámetros
-          pFIBQuery.ParamByName('NCODIGO').AsInteger := GenerarNuevoCodigo();
-          if codArticulo = '' then
-            raise Exception.Create('El código del artículo está vacío');
-
-          pFIBQuery.ParamByName('CCOD_ARTICULO').AsString := codArticulo;
-          pFIBQuery.ParamByName('NPASILLO').AsInteger := StrToInt
-            (cbbPasillo.Text);
-          pFIBQuery.ParamByName('NSECCION').AsInteger := StrToInt
-            (cbbSeccion.Text);
-          pFIBQuery.ParamByName('NFILA').AsInteger := StrToInt(cbbFila.Text);
-          pFIBQuery.ParamByName('NCANTIDAD').AsInteger := StrToInt
-            (edtCantidad.Text);
-          pFIBQuery.ParamByName('DFECHA_MOVIMIENTO').AsDateTime := Now;
-          if esVenta then
-          begin
-            pFIBQuery.ParamByName('NCOD_ALB_COMPRA').Clear;
-            pFIBQuery.ParamByName('NCOD_ALB_VENTA').AsInteger := StrToInt
-              (codAlbaran);
-          end
-          else
-          begin
-            pFIBQuery.ParamByName('NCOD_ALB_COMPRA').AsInteger := StrToInt
-              (codAlbaran);
-            pFIBQuery.ParamByName('NCOD_ALB_VENTA').Clear;
-          end;
-          pFIBQuery.ExecQuery;
-          pFIBQuery.Close;
-          pFIBTransaction.Commit;
-
-          ShowMessage('Movimiento de ubicación guardado correctamente.');
-          realizada := True;
-
-          cantidadActual := cantidadArticulo - StrToInt(edtCantidad.Text);
-          if not esVenta then
-            lblCantidad.Caption := 'Cantidad restante por vender : ' + IntToStr
-              (cantidadActual);
-
-          if ((not esVenta) and (cantidadActual = 0)) or
-            ((esVenta) and (cantidadActual = 0)) then
-            Self.Close;
-
-        except
-          on E: Exception do
-          begin
-            ShowMessage('Error al guardar el movimiento: ' + E.Message);
-            pFIBTransaction.Rollback;
-          end;
-        end;
-      end;
-    end;
-  end;
-end;
-
-procedure TFormFichaUbicacionAlbaran.cbbFilaChange(Sender: TObject);
-begin
-  // Resetear variables
-  cantidadOcupada := 0;
-  capacidadFila := 0;
-
-  // Calcular capacidad restante
-  pFIBQuery.Close;
-
-  pFIBQuery.SQL.Text :=
-    'SELECT U.NCAPACIDAD, A.NSTOCK ' +
-    'FROM UBICACIONES U ' + 'LEFT JOIN ARTIUBICACIONES A ' +
-    'ON A.NPASILLO = U.NPASILLO AND A.NSECCION = U.NSECCION AND A.NFILA = U.NFILA ' + 'WHERE U.NPASILLO = :NPASILLO AND U.NSECCION = :NSECCION AND U.NFILA = :NFILA';
-
-  if esVenta then
-    pFIBQuery.SQL.Text := pFIBQuery.SQL.Text + ' AND U.NCAPACIDAD > 0';
-
-  pFIBTransaction.StartTransaction;
-  try
-    pFIBQuery.ParamByName('NPASILLO').AsInteger := StrToInt(cbbPasillo.Text);
-    pFIBQuery.ParamByName('NSECCION').AsInteger := StrToInt(cbbSeccion.Text);
-    pFIBQuery.ParamByName('NFILA').AsInteger := StrToInt(cbbFila.Text);
-    pFIBQuery.ExecQuery;
-
-    // Obtener la capacidad
-    if not pFIBQuery.Eof then
-      capacidadFila := pFIBQuery.FieldByName('NCAPACIDAD').AsInteger;
-
-    // Calcular cantidad ocupada sumando NSTOCK si hay
-    while not pFIBQuery.Eof do
-    begin
-      if not pFIBQuery.FieldByName('NSTOCK').IsNull then
-        cantidadOcupada := cantidadOcupada + pFIBQuery.FieldByName('NSTOCK')
-          .AsInteger;
-      // ShowMessage(pFIBQuery.FieldByName('NSTOCK').AsString);
-      pFIBQuery.Next;
-    end;
-
-    ShowMessage(IntToStr(capacidadFila));
-    ShowMessage(IntToStr(cantidadArticulo));
-
-    if esFaltante then
-    begin
-      edtCantidad.Text := IntToStr(capacidadFila - cantidadArticulo);
-    end;
-
-    lblRestante.Caption := 'Capacidad restante de la fila: ' + IntToStr
-      (capacidadFila - cantidadOcupada);
-    lblCapacidad.Caption := 'Capacidad ocupada de la fila: ' + IntToStr
-      (cantidadOcupada);
-
-    // Mensaje si está llena
-    if (capacidadFila - cantidadOcupada <= 0) and not esVenta then
-      ShowMessage('Fila llena, no se pueden almacenar más artículos aquí');
-  finally
-    pFIBQuery.Close;
-    pFIBTransaction.Commit;
-  end;
-end;
-
-procedure TFormFichaUbicacionAlbaran.cbbPasilloChange(Sender: TObject);
-begin
-
-  if esVenta then
-  begin
-    pFIBQuery.Close;
-    pFIBTransaction.StartTransaction;
-    pFIBQuery.SQL.Text := 'SELECT DISTINCT NSECCION FROM ARTIUBICACIONES ' +
-      'WHERE CARTICULO = :CARTICULO AND NPASILLO = :NPASILLO AND NSTOCK > 0 ' +
-      'ORDER BY NSECCION';
-    pFIBQuery.ParamByName('CARTICULO').AsString := codArticulo;
-    pFIBQuery.ParamByName('NPASILLO').AsString := cbbPasillo.Text;
-    pFIBQuery.ExecQuery;
-
-    cbbSeccion.Clear;
-    while not pFIBQuery.Eof do
-    begin
-      cbbSeccion.Items.Add(pFIBQuery.FieldByName('NSECCION').AsString);
-      pFIBQuery.Next;
-    end;
-
-    pFIBTransaction.Commit;
-    cbbFila.Clear;
-    pFIBQuery.Close;
-  end
-  else
-  begin
-    pFIBQuery.Close;
-    pFIBTransaction.StartTransaction;
-    pFIBQuery.SQL.Text := 'SELECT DISTINCT NSECCION FROM UBICACIONES ' +
-      'WHERE NPASILLO = :NPASILLO ORDER BY NSECCION';
-    pFIBQuery.ParamByName('NPASILLO').AsString := cbbPasillo.Text;
-    pFIBQuery.ExecQuery;
-
-    cbbSeccion.Clear;
-    while not pFIBQuery.Eof do
-    begin
-      cbbSeccion.Items.Add(pFIBQuery.FieldByName('NSECCION').AsString);
-      pFIBQuery.Next;
-    end;
-
-    pFIBTransaction.Commit;
-    cbbFila.Clear;
-    pFIBQuery.Close;
-  end;
-end;
-
-procedure TFormFichaUbicacionAlbaran.cbbSeccionChange(Sender: TObject);
-begin
-  inherited;
-  cbbFila.Clear;
-  pFIBQuery.Close;
-
-  if esVenta then
-  begin
-    pFIBQuery.Close;
-    pFIBTransaction.StartTransaction;
-    pFIBQuery.SQL.Text := 'SELECT DISTINCT NFILA FROM ARTIUBICACIONES ' +
-      'WHERE CARTICULO = :CARTICULO AND NPASILLO = :NPASILLO AND NSECCION = :NSECCION AND NSTOCK > 0 ' + 'ORDER BY NFILA';
-    pFIBQuery.ParamByName('CARTICULO').AsString := codArticulo;
-    pFIBQuery.ParamByName('NPASILLO').AsString := cbbPasillo.Text;
-    pFIBQuery.ParamByName('NSECCION').AsString := cbbSeccion.Text;
-    pFIBQuery.ExecQuery;
-
-    cbbFila.Clear;
-    while not pFIBQuery.Eof do
-    begin
-      cbbFila.Items.Add(pFIBQuery.FieldByName('NFILA').AsString);
-      pFIBQuery.Next;
-    end;
-
-    pFIBQuery.Close;
-    pFIBTransaction.Commit;
-  end
-  else
-  begin
-    pFIBQuery.Close;
-    pFIBTransaction.StartTransaction;
-
-    pFIBQuery.SQL.Text := 'SELECT U.NFILA, U.NCAPACIDAD ' +
-      'FROM UBICACIONES U ' +
-      'LEFT JOIN ARTIUBICACIONES A ON A.NPASILLO = U.NPASILLO AND A.NSECCION = U.NSECCION AND A.NFILA = U.NFILA '
-      + 'WHERE U.NPASILLO = :NPASILLO AND U.NSECCION = :NSECCION ' +
-      'GROUP BY U.NFILA, U.NCAPACIDAD ' +
-      'HAVING COALESCE(SUM(A.NSTOCK), 0) < U.NCAPACIDAD ' + 'ORDER BY U.NFILA';
-
-    pFIBQuery.ParamByName('NPASILLO').AsString := cbbPasillo.Text;
-    pFIBQuery.ParamByName('NSECCION').AsString := cbbSeccion.Text;
-    pFIBQuery.ExecQuery;
-
-    cbbFila.Clear;
-    while not pFIBQuery.Eof do
-    begin
-      cbbFila.Items.Add(pFIBQuery.FieldByName('NFILA').AsString);
-      pFIBQuery.Next;
-    end;
-
-    pFIBQuery.Close;
-    pFIBTransaction.Commit;
-  end;
-
-end;
-
-procedure TFormFichaUbicacionAlbaran.FormActivate(Sender: TObject);
-begin
-  inherited;
-  hayStock := True;
-  cantidadActual := cantidadArticulo;
-
-  edtCantidad.Text := IntToStr(cantidadArticulo);
-
-  if esVenta then
-  begin
-    lblRestante.Caption := 'Cantidad restante por vender : ' + edtCantidad.Text;
-    pFIBQuery.Close;
-
-    // Verificar si hay stock para el artículo
-    pFIBQuery.SQL.Text :=
-      'SELECT FIRST 1 1 FROM ARTIUBICACIONES WHERE CARTICULO = :CARTICULO AND NSTOCK > 0';
-
-    pFIBTransaction.StartTransaction;
-    try
-      pFIBQuery.ParamByName('CARTICULO').AsString := codArticulo;
-      pFIBQuery.ExecQuery;
-
-      if pFIBQuery.Eof then
-      begin
-        cbbPasillo.Clear;
-        cbbSeccion.Clear;
-        cbbFila.Clear;
-        hayStock := False;
-
-        ShowMessage('Este artículo no tiene stock en el almacén.');
-        CloseModal;
-      end
-      else
-      begin
-        hayStock := True;
-        // ShowMessage(BoolToStr(hayStock));
-
-        lblCantidad.Caption := 'Cantidad restante por almacenar: ' + IntToStr
-          (cantidadArticulo);
-        dtpFecha.DateTime := fechaAlbaran;
-
-        // Cargar pasillos con stock para ese artículo
-        pFIBQuery.Close;
-        pFIBQuery.SQL.Text :=
-          'SELECT DISTINCT NPASILLO FROM ARTIUBICACIONES WHERE CARTICULO = :CARTICULO AND NSTOCK > 0 ORDER BY NPASILLO';
-        pFIBQuery.ParamByName('CARTICULO').AsString := codArticulo;
-        pFIBQuery.ExecQuery;
-
-        cbbPasillo.Clear;
-        while not pFIBQuery.Eof do
-        begin
-          cbbPasillo.Items.Add(pFIBQuery.FieldByName('NPASILLO').AsString);
-          pFIBQuery.Next;
-        end;
-
-        // Limpiar seccion y fila porque aún no se ha seleccionado pasillo
-        cbbSeccion.Clear;
-        cbbFila.Clear;
-      end;
-
-      pFIBQuery.Close;
-      pFIBTransaction.Commit;
-    except
-      on E: Exception do
-      begin
-        pFIBTransaction.Rollback;
-        ShowMessage('Error al consultar ubicaciones: ' + E.Message);
-      end;
-    end;
-  end
-  else
-  begin
-
-    lblCantidad.Caption :=
-      'Cantidad restante por almacenar: ' + edtCantidad.Text;
-
-    dtpFecha.DateTime := fechaAlbaran;
-    pFIBQuery.Close;
-    pFIBQuery.SQL.Text := 'SELECT DISTINCT NPASILLO FROM UBICACIONES';
-    pFIBTransaction.StartTransaction;
-
-    try
-      pFIBQuery.ExecQuery;
-      while not pFIBQuery.Eof do
-      begin
-        cbbPasillo.Items.Add(pFIBQuery.FieldByName('NPASILLO').AsString);
-        pFIBQuery.Next;
-      end;
-    finally
-      pFIBQuery.Close;
-      pFIBTransaction.Commit;
-    end;
-  end;
 end;
 
 function TFormFichaUbicacionAlbaran.GenerarNuevoCodigo: Integer;
@@ -429,6 +208,178 @@ begin
   pFIBQueryGenerator.ExecQuery;
   Result := pFIBQueryGenerator.Fields[0].AsInteger;
   pFIBTransactionGenerator.Commit;
+end;
+
+procedure TFormFichaUbicacionAlbaran.metodosCompra(mode: Integer);
+begin
+  if not todoCorrecto then
+    Exit;
+
+  case mode of
+    // Insertar y Actualizar
+    0, 2:
+      begin
+        if not pFIBTransaction.InTransaction then
+          pFIBTransaction.StartTransaction;
+
+        pFIBQuery.Close;
+        pFIBQuery.SQL.Text :=
+          'INSERT INTO MOV_UBICACIONES ' +
+          '(NCODIGO, CCOD_ARTICULO, NPASILLO, NSECCION, NFILA, NCANTIDAD, DFECHA_MOVIMIENTO, NCOD_ALB_COMPRA) ' +
+          'VALUES (:NCODIGO, :CCOD_ARTICULO, :NPASILLO, :NSECCION, :NFILA, :NCANTIDAD, :DFECHA_MOVIMIENTO, :NCOD_ALB_COMPRA)';
+
+        // Asignación de parámetros
+        pFIBQuery.Params.ParamByName('NCODIGO').AsInteger := GenerarNuevoCodigo();
+        pFIBQuery.Params.ParamByName('CCOD_ARTICULO').AsString := codArticulo;
+        pFIBQuery.Params.ParamByName('NPASILLO').AsInteger := StrToInt(cbbPasillo.Text);
+        pFIBQuery.Params.ParamByName('NSECCION').AsInteger := StrToInt(cbbSeccion.Text);
+        pFIBQuery.Params.ParamByName('NFILA').AsInteger := StrToInt(cbbFila.Text);
+        pFIBQuery.Params.ParamByName('NCANTIDAD').AsInteger := StrToInt(edtCantidad.Text);
+        pFIBQuery.Params.ParamByName('DFECHA_MOVIMIENTO').AsDate := Date;
+        pFIBQuery.Params.ParamByName('NCOD_ALB_COMPRA').AsInteger := codigoAlbaran;
+
+        pFIBQuery.ExecQuery;
+
+        // Actualizar cantidad y etiquetas
+        cantidadArticulo := cantidadArticulo - StrToInt(edtCantidad.Text);
+        recargarLabels;
+
+        // Cerrar si no queda más
+        if cantidadArticulo = 0 then
+        begin
+          pFIBTransaction.Commit;
+          Self.Close;
+        end;
+      end;
+
+    // Ver
+    1:
+      begin
+        Self.Close;
+      end;
+  end;
+end;
+
+
+procedure TFormFichaUbicacionAlbaran.metodosVenta(mode: Integer);
+begin
+  if not todoCorrecto then
+    Exit;
+
+  case mode of
+    // Insertar y Actualizar
+    0, 2:
+      begin
+        if not pFIBTransaction.InTransaction then
+          pFIBTransaction.StartTransaction;
+
+        pFIBQuery.Close;
+        pFIBQuery.SQL.Text :=
+          'INSERT INTO MOV_UBICACIONES ' +
+          '(NCODIGO, CCOD_ARTICULO, NPASILLO, NSECCION, NFILA, NCANTIDAD, DFECHA_MOVIMIENTO, NCOD_ALB_VENTA) ' +
+          'VALUES (:NCODIGO, :CCOD_ARTICULO, :NPASILLO, :NSECCION, :NFILA, :NCANTIDAD, :DFECHA_MOVIMIENTO, :NCOD_ALB_VENTA)';
+
+        // Asignación de parámetros
+        pFIBQuery.Params.ParamByName('NCODIGO').AsInteger := GenerarNuevoCodigo();
+        pFIBQuery.Params.ParamByName('CCOD_ARTICULO').AsString := codArticulo;
+        pFIBQuery.Params.ParamByName('NPASILLO').AsInteger := StrToInt(cbbPasillo.Text);
+        pFIBQuery.Params.ParamByName('NSECCION').AsInteger := StrToInt(cbbSeccion.Text);
+        pFIBQuery.Params.ParamByName('NFILA').AsInteger := StrToInt(cbbFila.Text);
+        pFIBQuery.Params.ParamByName('NCANTIDAD').AsInteger := StrToInt(edtCantidad.Text);
+        pFIBQuery.Params.ParamByName('DFECHA_MOVIMIENTO').AsDate := Date;
+        pFIBQuery.Params.ParamByName('NCOD_ALB_VENTA').AsInteger := codigoAlbaran;
+
+        pFIBQuery.ExecQuery;
+
+        // Actualizar cantidad y etiquetas
+        cantidadArticulo := cantidadArticulo - StrToInt(edtCantidad.Text);
+        recargarLabels;
+
+        // Cerrar si no queda más
+        if cantidadArticulo = 0 then
+        begin
+          pFIBTransaction.Commit;
+          Self.Close;
+        end;
+      end;
+
+    // Ver
+    1:
+      begin
+        Self.Close;
+      end;
+  end;
+end;
+
+
+
+// bloqueado en donde esta el valor supuesto que ibamos a insertar, lo necesito para poder hacer la ubicación del artículo
+// en varios pasos
+
+procedure TFormFichaUbicacionAlbaran.recargarLabels;
+var
+  pFIBQueryLabel: TpFIBQuery;
+  pFIBTransactionLabel: TpFIBTransaction;
+begin
+
+  pFIBTransactionLabel := TpFIBTransaction.Create(nil);
+  pFIBTransactionLabel.DefaultDatabase :=
+    ModuloDatos.DataModuleBDD.pFIBDatabase;
+
+  pFIBQueryLabel := TpFIBQuery.Create(nil);
+  pFIBQueryLabel.Transaction := pFIBTransactionLabel;
+
+  pFIBQueryLabel.Close;
+  pFIBQueryLabel.SQL.Text :=
+    'SELECT COALESCE(SUM(NSTOCK), 0) AS TOTAL_STOCK ' +
+    'FROM ARTIUBICACIONES ' +
+    'WHERE NPASILLO = :NPASILLO AND NSECCION = :NSECCION AND NFILA = :NFILA';
+
+  pFIBQueryLabel.Params.ParamByName('NPASILLO').AsInteger := StrToInt
+    (cbbPasillo.Text);
+  pFIBQueryLabel.Params.ParamByName('NSECCION').AsInteger := StrToInt
+    (cbbSeccion.Text);
+  pFIBQueryLabel.Params.ParamByName('NFILA').AsInteger := StrToInt
+    (cbbFila.Text);
+
+  pFIBTransactionLabel.StartTransaction;
+  pFIBQueryLabel.ExecQuery;
+
+  cantidadOcupadaFila := pFIBQueryLabel.FieldByName('TOTAL_STOCK').AsInteger;
+
+  pFIBQueryLabel.Close;
+  pFIBQueryLabel.SQL.Text := 'SELECT NCAPACIDAD ' + 'FROM UBICACIONES ' +
+    'WHERE NPASILLO = :NPASILLO AND NSECCION = :NSECCION AND NFILA = :NFILA';
+
+  pFIBQueryLabel.Params.ParamByName('NPASILLO').AsInteger := StrToInt
+    (cbbPasillo.Text);
+  pFIBQueryLabel.Params.ParamByName('NSECCION').AsInteger := StrToInt
+    (cbbSeccion.Text);
+  pFIBQueryLabel.Params.ParamByName('NFILA').AsInteger := StrToInt
+    (cbbFila.Text);
+
+  pFIBTransactionLabel.StartTransaction;
+  pFIBQueryLabel.ExecQuery;
+
+  capacidadTotalFila := pFIBQueryLabel.FieldByName('NCAPACIDAD').AsInteger;
+
+  LabelTotal.Caption := 'Capacidad total: ' + IntToStr(capacidadTotalFila);
+  lblOcupado.Caption := 'Capacidad ocupada: ' + IntToStr(cantidadOcupadaFila);
+  if not esVenta then
+  begin
+    lblRestante.Caption := 'Capacidad restante: ' + IntToStr
+      (capacidadTotalFila - cantidadOcupadaFila);
+    lblCantidad.Caption := 'Cantidad restante por almacenar: ' + IntToStr
+      (cantidadActualArticulo);
+  end
+  else
+  begin
+    lblRestante.Caption := 'Capacidad restante: ' + IntToStr
+      (capacidadTotalFila - cantidadOcupadaFila);
+    lblCantidad.Caption := 'Cantidad restante por extraer: ' + IntToStr
+      (cantidadActualArticulo);
+  end;
+
 end;
 
 procedure TFormFichaUbicacionAlbaran.edtCantidadKeyPress(Sender: TObject;
@@ -467,13 +418,73 @@ begin
 
 end;
 
-function TFormFichaUbicacionAlbaran.estaAlmacenado: Integer;
+procedure TFormFichaUbicacionAlbaran.FormActivate(Sender: TObject);
 begin
-  { cantidadArticulo := cantidadArticulo - StrToInt(edtCantidad.Text);
-    Result := cantidadArticulo;
+  inherited;
+
+  cantidadActualArticulo := cantidadArticulo;
+  huboRollback := False;
+
+  // Pasar desde el otro form para que no haga la query
+  // cantidadArticulo := 10;
+
+  if mode = 4 then
+  begin
+    ubicarRestantes();
+  end;
+
+  if not esVenta then
+  begin
     lblCantidad.Caption := 'Cantidad restante por almacenar: ' + IntToStr
-    (cantidadArticulo);
-    ShowMessage(IntToStr(Result)); }
+      (cantidadArticulo);
+    // Mostrar todas las ubicaciones (todos los pasillos)
+    pFIBQuery.Close;
+    pFIBTransaction.StartTransaction;
+    pFIBQuery.SQL.Text :=
+      'SELECT DISTINCT NPASILLO FROM UBICACIONES ORDER BY NPASILLO';
+    pFIBQuery.ExecQuery;
+    while not pFIBQuery.Eof do
+    begin
+      cbbPasillo.Items.Add(pFIBQuery.FieldByName('NPASILLO').AsString);
+      pFIBQuery.Next;
+    end;
+    pFIBTransaction.Commit;
+  end
+  else
+  begin
+    lblCantidad.Caption := 'Cantidad restante por extraer: ' + IntToStr
+      (cantidadArticulo);
+
+    // Mostrar solo los pasillos donde esté el artículo
+    pFIBQuery.Close;
+    pFIBTransaction.StartTransaction;
+    pFIBQuery.SQL.Text :=
+      'SELECT DISTINCT U.NPASILLO ' +
+      'FROM UBICACIONES U ' + 'JOIN MOV_UBICACIONES M ON U.NPASILLO = M.NPASILLO AND U.NSECCION = M.NSECCION AND U.NFILA = M.NFILA ' + 'WHERE M.CCOD_ARTICULO = :COD_ARTICULO ' + 'ORDER BY U.NPASILLO';
+    pFIBQuery.ParamByName('COD_ARTICULO').AsString := codArticulo;
+    pFIBQuery.ExecQuery;
+
+    // Forma correcta de comprobar si no hay resultados
+    if pFIBQuery.BOF and pFIBQuery.Eof then
+    begin
+      pFIBTransaction.Commit; // Cierra la transacción antes de salir
+      ShowMessage('No hay stock de ese artículo en ninguna ubicación.');
+      Self.Close;
+
+    end;
+
+    pFIBTransaction.StartTransaction;
+
+    // Si hay stock, rellenar pasillos
+    while not pFIBQuery.Eof do
+    begin
+      cbbPasillo.Items.Add(pFIBQuery.FieldByName('NPASILLO').AsString);
+      pFIBQuery.Next;
+    end;
+
+    pFIBTransaction.Commit;
+  end;
+
 end;
 
 function TFormFichaUbicacionAlbaran.todoCorrecto: Boolean;
@@ -499,7 +510,7 @@ begin
   end;
   if not esVenta then
   begin
-    if (capacidadFila - cantidadOcupada) = 0 then
+    if (capacidadTotalFila - cantidadOcupadaFila) = 0 then
     begin
       ShowMessage(
         'El espacio restante para almacenar en esa fila es de 0, busca otra');
@@ -508,6 +519,43 @@ begin
   end;
 
   Result := correcto;
+end;
+
+procedure TFormFichaUbicacionAlbaran.ubicarRestantes;
+begin
+  if cantidadArticulo = 0 then
+  begin
+    if not esVenta then
+    begin
+      pFIBQuery.Close;
+      pFIBQuery.SQL.Text :=
+        'SELECT a.NSTOCK - COALESCE(SUM(m.NCANTIDAD), 0) AS CantidadFaltante '
+        + 'FROM ARTIUBICACIONES a ' + 'LEFT JOIN MOV_UBICACIONES m ON ' +
+        'a.CARTICULO = m.CCOD_ARTICULO AND ' + 'a.NPASILLO = m.NPASILLO AND ' +
+        'a.NSECCION = m.NSECCION AND ' + 'a.NFILA = m.NFILA AND ' +
+        'm.NCOD_ALB_COMPRA = :CodigoAlbaran ' +
+        'WHERE a.CARTICULO = :CodigoArticulo AND ' +
+        'a.NPASILLO = :NPasillo AND ' + 'a.NSECCION = :NSeccion AND ' +
+        'a.NFILA = :NFila ' + 'GROUP BY a.NSTOCK';
+
+      pFIBQuery.Params.ParamByName('CodigoAlbaran').AsInteger := codigoAlbaran;
+      pFIBQuery.Params.ParamByName('CodigoArticulo').AsString := codArticulo;
+      pFIBQuery.Params.ParamByName('NPasillo').AsInteger := NPasillo;
+      pFIBQuery.Params.ParamByName('NSeccion').AsInteger := NSeccion;
+      pFIBQuery.Params.ParamByName('NFila').AsInteger := NFila;
+
+      pFIBTransaction.StartTransaction;
+      pFIBQuery.ExecQuery;
+
+      cantidadActualArticulo := pFIBQuery.FieldByName('CantidadFaltante')
+        .AsInteger;
+
+      ShowMessage('Falta por ubicar de esta línea ' + IntToStr
+          (cantidadActualArticulo) + ' unidades');
+
+      pFIBTransaction.Commit;
+    end;
+  end;
 end;
 
 end.

@@ -6,7 +6,9 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, MenuBase, FIBDatabase, pFIBDatabase, DB, FIBDataSet, pFIBDataSet,
   DBCtrls, Grids, DBGrids, StdCtrls, ExtCtrls, ModuloDatos, FichaCliente,
-  FIBQuery, pFIBQuery;
+  FIBQuery, pFIBQuery, frxClass, frxDBSet, frxExportDBF, frxExportODF,
+  frxExportMail, frxExportCSV, frxExportText, frxExportImage, frxExportRTF,
+  frxExportXML, frxExportXLS, frxExportHTML, frxExportPDF, frxBarcode;
 
 type
   TFormMenuClientes = class(TFormMenuBase)
@@ -20,6 +22,7 @@ type
     procedure CargarRegimenes(FormFichaCliente: TFormFichaCliente);
     procedure rgGroupOrdenClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure btnImprimirClick(Sender: TObject);
 
   private
     { Private declarations }
@@ -115,13 +118,15 @@ begin
   end
 
   else
-     try
+    try
       if not pFIBTransactionTable.InTransaction then
         pFIBTransactionTable.StartTransaction;
 
       pFIBQueryDelete.Close;
-      pFIBQueryDelete.SQL.Text := 'DELETE FROM CLIENTES WHERE NCODIGO = :OLD_NCODIGO';
-      pFIBQueryDelete.ParamByName('OLD_NCODIGO').AsInteger := DataSourceTable.DataSet.FieldByName('NCODIGO').AsInteger;
+      pFIBQueryDelete.SQL.Text :=
+        'DELETE FROM CLIENTES WHERE NCODIGO = :OLD_NCODIGO';
+      pFIBQueryDelete.ParamByName('OLD_NCODIGO').AsInteger :=
+        DataSourceTable.DataSet.FieldByName('NCODIGO').AsInteger;
       pFIBQueryDelete.ExecQuery;
 
       if pFIBTransactionTable.InTransaction then
@@ -134,10 +139,26 @@ begin
     except
       on E: Exception do
       begin
-        ShowMessage('Error, no puedes eliminar un cliente asociado en un albarán');
+        ShowMessage(
+          'Error, no puedes eliminar un cliente asociado en un albarán');
       end;
     end;
 
+end;
+
+procedure TFormMenuClientes.btnImprimirClick(Sender: TObject);
+begin
+  inherited;
+  if not pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.StartTransaction;
+
+  //FDataSetReport.Open;
+
+  // frxReport.LoadFromFile('C:\Users\Pr1\Documents\ListadoClientes.fr3');
+  frxReport.ShowReport;
+
+  if pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.Commit;
 end;
 
 procedure TFormMenuClientes.CargarRegimenes

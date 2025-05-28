@@ -6,7 +6,9 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, MenuBase, DB, FIBDataSet, pFIBDataSet, FIBDatabase, pFIBDatabase,
   Grids, DBGrids, DBCtrls, StdCtrls, ExtCtrls, FichaArticulos, ModuloDatos,
-  pFIBQuery, FIBQuery;
+  pFIBQuery, FIBQuery, frxBarcode, frxExportDBF, frxExportODF, frxExportMail,
+  frxExportCSV, frxExportText, frxExportImage, frxExportRTF, frxExportXML,
+  frxExportXLS, frxExportHTML, frxClass, frxExportPDF, frxDBSet;
 
 type
   TFormMenuArticulos = class(TFormMenuBase)
@@ -18,12 +20,15 @@ type
     fbsmlntfldFIBDataSetTableNUNICAJ: TFIBSmallIntField;
     fbcdfldFIBDataSetTableNPRECIO: TFIBBCDField;
     strngfldFIBDataSetTableCNOMBRE_IVA: TStringField;
+    pFIBDataSetTableNPRECIO_COMPRA: TFIBBCDField;
+    pFIBDataSetTableNCOD_PROV: TFIBIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure rgGroupOrdenClick(Sender: TObject);
     procedure btnClick(Sender: TObject);
     function ObtenerCodigos: TArray<string>;
     procedure pFIBDataSetTableCalcFields(DataSet: TDataSet);
     procedure CargarIVAS(FormFichaArticulos: TFormFichaArticulos);
+    procedure btnImprimirClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,6 +42,7 @@ implementation
 procedure TFormMenuArticulos.btnClick(Sender: TObject);
 var
   FormFichaArticulos: TFormFichaArticulos;
+  codProv: string;
 begin
   if TButton(Sender).Tag <> 3 then
   begin
@@ -47,6 +53,7 @@ begin
           FormFichaArticulos.Caption := 'Artículo nuevo';
           CargarIVAS(FormFichaArticulos);
           FormFichaArticulos.cbbCodIVA.ItemIndex := 3;
+          FormFichaArticulos.edtCodigo.Enabled := True;
           // Valor por defecto si lo deseas
         end;
 
@@ -63,6 +70,22 @@ begin
             DataSourceTable.DataSet.FieldByName('CNOMBRE').AsString;
           FormFichaArticulos.edtStock.Text :=
             DataSourceTable.DataSet.FieldByName('NSTOCK').AsString;
+
+          FormFichaArticulos.EditFactor.Text :=
+            DataSourceTable.DataSet.FieldByName('NFACTCONV').AsString;
+
+          FormFichaArticulos.EditlUniCaja.Text :=
+            DataSourceTable.DataSet.FieldByName('NUNICAJ').AsString;
+
+          FormFichaArticulos.EditPrecio.Text :=
+            DataSourceTable.DataSet.FieldByName('NPRECIO').AsString;
+
+          FormFichaArticulos.EditPrecioCompra.Text :=
+            DataSourceTable.DataSet.FieldByName('NPRECIO_COMPRA').AsString;
+
+          codProv := DataSourceTable.DataSet.FieldByName('NCOD_PROV').AsString;
+          FormFichaArticulos.cbbProveedor.ItemIndex :=
+            FormFichaArticulos.cbbProveedor.Items.IndexOf(codProv);
 
           // Limpiar y cargar las opciones de IVA en el ComboBox
           FormFichaArticulos.cbbCodIVA.Clear;
@@ -101,10 +124,26 @@ begin
             FormFichaArticulos.cbbCodIVA.Items.IndexOf
             (DataSourceTable.DataSet.FieldByName('CNOMBRE_IVA').AsString);
 
+          FormFichaArticulos.EditFactor.Text :=
+            DataSourceTable.DataSet.FieldByName('NFACTCONV').AsString;
+
+          FormFichaArticulos.EditlUniCaja.Text :=
+            DataSourceTable.DataSet.FieldByName('NUNICAJ').AsString;
+
+          FormFichaArticulos.EditPrecio.Text :=
+            DataSourceTable.DataSet.FieldByName('NPRECIO').AsString;
+
+          FormFichaArticulos.EditPrecioCompra.Text :=
+            DataSourceTable.DataSet.FieldByName('NPRECIO_COMPRA').AsString;
+
+          codProv := DataSourceTable.DataSet.FieldByName('NCOD_PROV').AsString;
+          FormFichaArticulos.cbbProveedor.ItemIndex :=
+            FormFichaArticulos.cbbProveedor.Items.IndexOf(codProv);
+
           if FormFichaArticulos.cbbCodIVA.ItemIndex = -1 then
             FormFichaArticulos.cbbCodIVA.ItemIndex := 0;
-            FormFichaArticulos.edtNombre.ReadOnly := True;
-            FormFichaArticulos.edtStock.ReadOnly := True;
+          FormFichaArticulos.edtNombre.ReadOnly := True;
+          FormFichaArticulos.edtStock.ReadOnly := True;
         end;
     end;
 
@@ -146,11 +185,26 @@ begin
     except
       on E: Exception do
       begin
-        ShowMessage('Error, no puedes eliminar un artículo asociado en un albarán');
+        ShowMessage(
+          'Error, no puedes eliminar un artículo asociado en un albarán');
 
       end;
     end;
   end;
+end;
+
+procedure TFormMenuArticulos.btnImprimirClick(Sender: TObject);
+begin
+
+  inherited;
+  if not pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.StartTransaction;
+
+  frxReport.ShowReport;
+
+  if pFIBTransactionReport.InTransaction then
+    pFIBTransactionReport.Commit;
+
 end;
 
 procedure TFormMenuArticulos.CargarIVAS

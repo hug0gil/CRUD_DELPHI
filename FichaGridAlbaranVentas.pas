@@ -286,7 +286,7 @@ begin
       // Obtener régimen fiscal del cliente
       pFIBQueryCalculo.Close;
       pFIBQueryCalculo.SQL.Text :=
-        'SELECT CREG_FISCAL FROM CLIENTES WHERE NCODIGO = :NCODIGO';
+        'SELECT CREG_FISCAL FROM PROVEEDORES WHERE NCODIGO = :NCODIGO';
       pFIBQueryCalculo.ParamByName('NCODIGO').AsString := cbbCod.Text;
       pFIBQueryCalculo.ExecQuery;
 
@@ -466,7 +466,7 @@ begin
 
     pFIBQueryTable.Close;
     pFIBQueryTable.SQL.Text :=
-      'SELECT CREG_FISCAL FROM CLIENTES WHERE NCODIGO = :NCODIGO';
+      'SELECT CREG_FISCAL FROM PROVEEDORES WHERE NCODIGO = :NCODIGO';
     pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt(cbbCod.Text);
     pFIBQueryTable.ExecQuery;
 
@@ -500,7 +500,7 @@ begin
   try
     pFIBQueryTable.Close;
     pFIBQueryTable.SQL.Text :=
-      'SELECT CNOMBRE FROM CLIENTES WHERE NCODIGO = :NCODIGO';
+      'SELECT CNOMBRE FROM PROVEEDORES WHERE NCODIGO = :NCODIGO';
     pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt(cbbCod.Text);
     pFIBQueryTable.ExecQuery;
 
@@ -534,7 +534,7 @@ begin
 
   pFIBQueryTable.Close;
   pFIBQueryTable.SQL.Text :=
-    'SELECT CREG_FISCAL FROM CLIENTES WHERE NCODIGO = :NCODIGO';
+    'SELECT CREG_FISCAL FROM PROVEEDORES WHERE NCODIGO = :NCODIGO';
   pFIBQueryTable.ParamByName('NCODIGO').AsString := cbbCod.Text;
   pFIBQueryTable.ExecQuery;
 
@@ -570,12 +570,12 @@ begin
     pFIBQueryTable.ParamByName('NTOTAL').AsFloat := ConvertirStringToFloat
       (edtTotal.Text);
 
-    pFIBQueryTable.ParamByName('NTOTAL_BRUTO').AsFloat := StrToFloat
-      (edtTotal.Text);
+    pFIBQueryTable.ParamByName('NTOTAL_BRUTO').AsFloat := ConvertirStringToFloat
+      (edtSubtotal.Text);
 
-    pFIBQueryTable.ParamByName('NIVA').AsFloat := StrToFloat(edtIVA.Text);
+    pFIBQueryTable.ParamByName('NIVA').AsFloat := ConvertirStringToFloat(edtIVA.Text);
 
-    pFIBQueryTable.ParamByName('NRECARGO').AsFloat := StrToFloat
+    pFIBQueryTable.ParamByName('NRECARGO').AsFloat := ConvertirStringToFloat
       (edtRecargo.Text);
 
     pFIBDataSetTable.Close;
@@ -668,7 +668,7 @@ begin
               ConvertirStringToFloat(edtTotal.Text);
 
             pFIBQueryTable.ParamByName('NTOTAL_BRUTO').AsFloat := StrToFloat
-              (edtTotal.Text);
+              (edtSubtotal.Text);
 
             pFIBQueryTable.ParamByName('NIVA').AsFloat := StrToFloat
               (edtIVA.Text);
@@ -704,7 +704,7 @@ begin
             (edtTotal.Text);
 
           pFIBQueryTable.ParamByName('NTOTAL_BRUTO').AsFloat := StrToFloat
-            (edtTotal.Text);
+            (edtSubtotal.Text);
 
           pFIBQueryTable.ParamByName('NIVA').AsFloat := StrToFloat(edtIVA.Text);
 

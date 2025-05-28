@@ -23,12 +23,11 @@ object FormMenuUbicaciones: TFormMenuUbicaciones
     Margins.Top = 100
     Align = alLeft
     TabOrder = 0
-    ExplicitHeight = 483
     object DBNavigator: TDBNavigator
       Left = 1
       Top = 0
       Width = 464
-      Height = 70
+      Height = 81
       Margins.Bottom = 300
       DataSource = dsTable
       VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
@@ -36,9 +35,9 @@ object FormMenuUbicaciones: TFormMenuUbicaciones
     end
     object dbgrd1: TDBGrid
       Left = 1
-      Top = 70
+      Top = 78
       Width = 824
-      Height = 465
+      Height = 457
       TabStop = False
       DataSource = dsTable
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -112,43 +111,11 @@ object FormMenuUbicaciones: TFormMenuUbicaciones
           Visible = True
         end>
     end
-    object pnl: TPanel
-      Left = 631
-      Top = -6
-      Width = 187
-      Height = 70
-      BevelOuter = bvNone
-      TabOrder = 2
-      object shp1: TShape
-        Left = -11
-        Top = 73
-        Width = 196
-        Height = 0
-      end
-      object rgGroupOrden: TRadioGroup
-        Tag = 1
-        Left = 30
-        Top = 13
-        Width = 131
-        Height = 52
-        Margins.Left = 25
-        Margins.Top = 10
-        Margins.Right = 25
-        Margins.Bottom = 5
-        ItemIndex = 0
-        Items.Strings = (
-          'Ordenar por c'#243'digo'
-          'Ordenar por fecha')
-        TabOrder = 0
-        TabStop = True
-        OnClick = rgGroupOrdenClick
-      end
-    end
     object rgGroupOrden1: TRadioGroup
       Left = 480
-      Top = 7
+      Top = 5
       Width = 131
-      Height = 55
+      Height = 65
       Margins.Left = 25
       Margins.Top = 10
       Margins.Right = 25
@@ -158,6 +125,24 @@ object FormMenuUbicaciones: TFormMenuUbicaciones
         'Compras'
         'Ventas'
         'Todos')
+      TabOrder = 2
+      TabStop = True
+      OnClick = rgGroupOrdenClick
+    end
+    object rgGroupOrden: TRadioGroup
+      Tag = 1
+      Left = 653
+      Top = 5
+      Width = 131
+      Height = 65
+      Margins.Left = 25
+      Margins.Top = 10
+      Margins.Right = 25
+      Margins.Bottom = 5
+      ItemIndex = 0
+      Items.Strings = (
+        'Ordenar por c'#243'digo'
+        'Ordenar por fecha')
       TabOrder = 3
       TabStop = True
       OnClick = rgGroupOrdenClick

@@ -24,7 +24,8 @@ uses
   FichaAlmacen in 'FichaAlmacen.pas' {FormFichaAlmacen},
   FichaUbicacion in 'FichaUbicacion.pas' {FormFichaUbicacion},
   MenuUbicaciones in 'MenuUbicaciones.pas' {FormMenuUbicaciones},
-  FichaUbicacionAlbaran in 'FichaUbicacionAlbaran.pas' {FormFichaUbicacionAlbaran};
+  FichaUbicacionAlbaran in 'FichaUbicacionAlbaran.pas' {FormFichaUbicacionAlbaran},
+  PruebaReport in 'PruebaReport.pas' {Form1};
 
 {$R *.res}
 
@@ -33,6 +34,7 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TDataModuleBDD, DataModuleBDD);
   Application.CreateForm(TFormMain, FormMain);
+  Application.CreateForm(TFormFichaUbicacionAlbaran, FormFichaUbicacionAlbaran);
   Application.Run;
 
 end.

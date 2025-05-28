@@ -133,7 +133,7 @@ begin
             FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil,
               mode, True);
             FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
-            FichaUbicacionAlbaran.codAlbaran := edtCodigo.Text;
+            FichaUbicacionAlbaran.codigoAlbaran := StrToInt(edtCodigo.Text);
             FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
             FichaUbicacionAlbaran.Caption :=
               'Relacionar ubicación con el producto';
@@ -142,10 +142,8 @@ begin
 
             FichaUbicacionAlbaran.ShowModal;
 
-            // ShowMessage(BoolToStr(FichaUbicacionAlbaran.realizada,True));
-
             pFIBQuery.SQL.Text :=
-              'UPDATE INTO LINEAS_ALB_V (NCOD_ALBARAN, CCOD_ARTICULO, NCANTIDAD1, NCANTIDAD2, NPRECIO, NORDEN, NIVA, NRECARGO,NSUBTOTAL) '
+              'INSERT INTO LINEAS_ALB_V (NCOD_ALBARAN, CCOD_ARTICULO, NCANTIDAD1, NCANTIDAD2, NPRECIO, NORDEN, NIVA, NRECARGO,NSUBTOTAL) '
               + 'VALUES (:NCOD_ALBARAN, :CCOD_ARTICULO, :NCANTIDAD1, :NCANTIDAD2, :NPRECIO, :NORDEN, :NIVA, :NRECARGO,:NSUBTOTAL)';
             pFIBQuery.ParamByName('NCOD_ALBARAN').AsInteger := StrToInt
               (edtCodigo.Text);
@@ -177,85 +175,72 @@ begin
             pFIBQuery.ParamByName('NRECARGO').AsFloat := StrToFloat
               (edtRecargo.Text);
             pFIBQuery.ExecQuery;
-            pFIBTransaction.Commit;
+            if not FichaUbicacionAlbaran.huboRollback then
+            begin
+              pFIBTransaction.Commit;
+            end
+            else
+              pFIBTransaction.Rollback;
 
-            FichaUbicacionAlbaran.Close;
-
-            Self.Close;
-          end;
-        1: // Ver
-          begin
-            FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil,
-              mode, True);
-            FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
-            FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
-            FichaUbicacionAlbaran.codAlbaran := edtCodigo.Text;
-            FichaUbicacionAlbaran.Caption := 'Ver ubicación del producto';
-            setCantidadFichaUbi(FichaUbicacionAlbaran);
-            FichaUbicacionAlbaran.ShowModal;
-            FichaUbicacionAlbaran.Close;
             Self.Close;
           end;
         2: // Actualizar
           begin
 
-            FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil,
-              mode, True);
-            FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
-            FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
-            FichaUbicacionAlbaran.codAlbaran := edtCodigo.Text;
-            FichaUbicacionAlbaran.Caption :=
-              'Actualizar ubicación del producto';
-            setCantidadFichaUbi(FichaUbicacionAlbaran);
-            FichaUbicacionAlbaran.ShowModal;
-
-            FichaUbicacionAlbaran.Close;
-
-            if FichaUbicacionAlbaran.realizada = True then
+            if MessageDlg('¿Quieres actualizar la ubicación del producto?',
+              mtConfirmation, [mbYes, mbNo], 0) = mrYes then
             begin
-              pFIBQuery.SQL.Text :=
-                'UPDATE LINEAS_ALB_V SET CCOD_ARTICULO = :CCOD_ARTICULO, NCANTIDAD1 = :NCANTIDAD1, NCANTIDAD2 = :NCANTIDAD2, NPRECIO = :NPRECIO, NIVA = :NIVA, NRECARGO = :NRECARGO, NSUBTOTAL = :NSUBTOTAL WHERE NCOD_ALBARAN = :NCOD_ALBARAN AND NORDEN = :NORDEN';
-              pFIBQuery.ParamByName('NCOD_ALBARAN').AsInteger := StrToInt
-                (edtCodigo.Text);
-              pFIBQuery.ParamByName('CCOD_ARTICULO').AsString :=
-                cbbCodArticulo.Text;
-
-              pFIBQuery.ParamByName('NCANTIDAD1').AsFloat := StrToFloat
-                (medtUnidadesPeso.Text);
-
-              pFIBQuery.ParamByName('NCANTIDAD2').AsFloat := StrToFloat
-                (medtCajasPiezas.Text);
-
-              if FactorConversion > 1 then
-              begin
-                pFIBQuery.ParamByName('NPRECIO').AsFloat := StrToFloat
-                  (medtPrecio.Text) / FactorConversion;
-              end
-              else
-                pFIBQuery.ParamByName('NPRECIO').AsFloat := StrToFloat
-                  (medtPrecio.Text);
-
-              pFIBQuery.ParamByName('NORDEN').AsInteger := StrToInt
-                (edtOrden.Text);
-              pFIBQuery.ParamByName('NIVA').AsFloat := StrToFloat(edtIVA.Text);
-
-              pFIBQuery.ParamByName('NSUBTOTAL').AsFloat := StrToFloat
-                (edtSubTotal.Text);
-              pFIBQuery.ParamByName('NRECARGO').AsFloat := StrToFloat
-                (edtRecargo.Text);
-              pFIBQuery.ExecQuery;
-              pFIBTransaction.Commit;
-
+              FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil,
+                mode, True);
+              FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
+              FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
+              FichaUbicacionAlbaran.codigoAlbaran := StrToInt(edtCodigo.Text);
+              FichaUbicacionAlbaran.Caption :=
+                'Actualizar ubicación del producto';
+              setCantidadFichaUbi(FichaUbicacionAlbaran);
               FichaUbicacionAlbaran.ShowModal;
 
-              ShowMessage(
-                'Artículo de la línea de albarán distribuido con éxito');
+              FichaUbicacionAlbaran.Close;
             end;
 
-            Self.Close;
+            pFIBQuery.SQL.Text :=
+              'UPDATE LINEAS_ALB_V SET CCOD_ARTICULO = :CCOD_ARTICULO, NCANTIDAD1 = :NCANTIDAD1, NCANTIDAD2 = :NCANTIDAD2, NPRECIO = :NPRECIO, NIVA = :NIVA, NRECARGO = :NRECARGO, NSUBTOTAL = :NSUBTOTAL WHERE NCOD_ALBARAN = :NCOD_ALBARAN AND NORDEN = :NORDEN';
+            pFIBQuery.ParamByName('NCOD_ALBARAN').AsInteger := StrToInt
+              (edtCodigo.Text);
+            pFIBQuery.ParamByName('CCOD_ARTICULO').AsString :=
+              cbbCodArticulo.Text;
 
+            pFIBQuery.ParamByName('NCANTIDAD1').AsFloat := StrToFloat
+              (medtUnidadesPeso.Text);
+
+            pFIBQuery.ParamByName('NCANTIDAD2').AsFloat := StrToFloat
+              (medtCajasPiezas.Text);
+
+            if FactorConversion > 1 then
+            begin
+              pFIBQuery.ParamByName('NPRECIO').AsFloat := StrToFloat
+                (medtPrecio.Text) / FactorConversion;
+            end
+            else
+              pFIBQuery.ParamByName('NPRECIO').AsFloat := StrToFloat
+                (medtPrecio.Text);
+
+            pFIBQuery.ParamByName('NORDEN').AsInteger := StrToInt
+              (edtOrden.Text);
+            pFIBQuery.ParamByName('NIVA').AsFloat := StrToFloat(edtIVA.Text);
+
+            pFIBQuery.ParamByName('NSUBTOTAL').AsFloat := StrToFloat
+              (edtSubTotal.Text);
+            pFIBQuery.ParamByName('NRECARGO').AsFloat := StrToFloat
+              (edtRecargo.Text);
+            pFIBQuery.ExecQuery;
+            pFIBTransaction.Commit;
+
+            Self.Close;
           end;
+
       end;
+
     except
       on E: Exception do
       begin

@@ -1,34 +1,66 @@
 inherited FormFichaArticulos: TFormFichaArticulos
   Caption = 'FormFichaArticulos'
-  ExplicitWidth = 640
-  ExplicitHeight = 480
+  ClientHeight = 532
+  ClientWidth = 772
+  OnActivate = FormActivate
+  ExplicitWidth = 778
+  ExplicitHeight = 561
   PixelsPerInch = 96
   TextHeight = 13
+  inherited shp: TShape
+    Width = 772
+  end
+  inherited shp1: TShape
+    Top = 489
+    Width = 772
+    ExplicitLeft = -1
+    ExplicitTop = 484
+    ExplicitWidth = 1134
+  end
   inherited pnlBtns: TPanel
+    Top = 491
+    Width = 772
+    TabOrder = 1
+    ExplicitTop = 493
+    ExplicitWidth = 772
+    inherited btnCancelar: TButton
+      Left = 687
+      TabOrder = 1
+    end
     inherited btnAceptar: TButton
+      Left = 602
+      TabOrder = 0
       OnClick = btnAceptarClick
     end
   end
   inherited pnlObjects: TPanel
-    ExplicitLeft = 145
-    ExplicitWidth = 489
+    Width = 772
+    Height = 440
+    TabOrder = 0
+    ExplicitWidth = 1134
+    ExplicitHeight = 446
     inherited pnlFila: TPanel
-      ExplicitLeft = 233
-      ExplicitTop = 41
+      Width = 770
+      Height = 220
+      ExplicitWidth = 1132
+      ExplicitHeight = 220
       object pnlNombre: TPanel
         AlignWithMargins = True
-        Left = 155
-        Top = 100
+        Left = 152
+        Top = 30
         Width = 137
-        Height = 148
-        Margins.Top = 100
-        Margins.Right = 12
-        Margins.Bottom = 100
+        Height = 160
+        Margins.Left = 5
+        Margins.Top = 30
+        Margins.Right = 5
+        Margins.Bottom = 30
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
-        TabOrder = 0
-        ExplicitLeft = 3
+        TabOrder = 1
+        ExplicitLeft = 155
+        ExplicitTop = 100
+        ExplicitHeight = 148
         object lblNombre: TLabel
           AlignWithMargins = True
           Left = 5
@@ -52,7 +84,7 @@ inherited FormFichaArticulos: TFormFichaArticulos
         object edtNombre: TEdit
           AlignWithMargins = True
           Left = 15
-          Top = 87
+          Top = 99
           Width = 107
           Height = 21
           Margins.Left = 15
@@ -62,22 +94,26 @@ inherited FormFichaArticulos: TFormFichaArticulos
           Align = alBottom
           Alignment = taCenter
           TabOrder = 0
+          ExplicitTop = 87
         end
       end
       object pnlStock: TPanel
         AlignWithMargins = True
-        Left = 307
-        Top = 100
+        Left = 299
+        Top = 30
         Width = 137
-        Height = 148
-        Margins.Top = 100
-        Margins.Right = 12
-        Margins.Bottom = 100
+        Height = 160
+        Margins.Left = 5
+        Margins.Top = 30
+        Margins.Right = 5
+        Margins.Bottom = 30
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
         TabOrder = 2
-        ExplicitLeft = 155
+        ExplicitLeft = 307
+        ExplicitTop = 100
+        ExplicitHeight = 148
         object lblStock: TLabel
           AlignWithMargins = True
           Left = 5
@@ -101,7 +137,7 @@ inherited FormFichaArticulos: TFormFichaArticulos
         object edtStock: TEdit
           AlignWithMargins = True
           Left = 15
-          Top = 87
+          Top = 99
           Width = 107
           Height = 21
           Margins.Left = 15
@@ -111,75 +147,80 @@ inherited FormFichaArticulos: TFormFichaArticulos
           Align = alBottom
           Alignment = taCenter
           TabOrder = 0
+          ExplicitTop = 87
         end
       end
-      object pnlCodigoIVA: TPanel
+      object PanelPrecio: TPanel
         AlignWithMargins = True
-        Left = 459
-        Top = 100
-        Width = 158
-        Height = 148
-        Margins.Top = 100
-        Margins.Right = 12
-        Margins.Bottom = 100
+        Left = 446
+        Top = 30
+        Width = 137
+        Height = 160
+        Margins.Left = 5
+        Margins.Top = 30
+        Margins.Right = 5
+        Margins.Bottom = 30
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
-        TabOrder = 1
-        ExplicitLeft = 307
-        object lblCodigoIVA: TLabel
+        TabOrder = 3
+        ExplicitLeft = 579
+        ExplicitTop = 76
+        ExplicitHeight = 148
+        object Label4: TLabel
           AlignWithMargins = True
           Left = 5
           Top = 5
-          Width = 148
+          Width = 127
           Height = 21
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
           Align = alTop
           Alignment = taCenter
-          Caption = 'C'#243'digo IVA'
+          Caption = 'Precio base'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -16
           Font.Name = 'Segoe UI'
           Font.Style = []
           ParentFont = False
-          ExplicitWidth = 77
+          ExplicitWidth = 79
         end
-        object cbbCodIVA: TComboBox
+        object EditPrecio: TEdit
           AlignWithMargins = True
           Left = 15
-          Top = 87
-          Width = 128
+          Top = 99
+          Width = 107
           Height = 21
           Margins.Left = 15
           Margins.Top = 40
           Margins.Right = 15
           Margins.Bottom = 40
           Align = alBottom
-          Style = csDropDownList
+          Alignment = taCenter
           TabOrder = 0
+          ExplicitTop = 87
         end
       end
-      object pnlCode: TPanel
+      object PanelCodigo: TPanel
         AlignWithMargins = True
-        Left = 3
-        Top = 100
+        Left = 5
+        Top = 30
         Width = 137
-        Height = 148
-        Margins.Top = 100
-        Margins.Right = 12
-        Margins.Bottom = 100
+        Height = 160
+        Margins.Left = 5
+        Margins.Top = 30
+        Margins.Right = 5
+        Margins.Bottom = 30
         Align = alLeft
         BevelOuter = bvNone
         ShowCaption = False
-        TabOrder = 3
-        Visible = False
-        ExplicitLeft = 5
+        TabOrder = 0
+        ExplicitLeft = 3
         ExplicitTop = 3
-        ExplicitHeight = 342
-        object lblCodigo: TLabel
+        ExplicitHeight = 214
+        object Label8: TLabel
           AlignWithMargins = True
           Left = 5
           Top = 15
@@ -202,7 +243,7 @@ inherited FormFichaArticulos: TFormFichaArticulos
         object edtCodigo: TMaskEdit
           AlignWithMargins = True
           Left = 15
-          Top = 87
+          Top = 99
           Width = 107
           Height = 21
           Margins.Left = 15
@@ -213,9 +254,297 @@ inherited FormFichaArticulos: TFormFichaArticulos
           Alignment = taCenter
           Enabled = False
           TabOrder = 0
-          ExplicitTop = 281
+        end
+      end
+      object PanelPrecioCompra: TPanel
+        AlignWithMargins = True
+        Left = 593
+        Top = 30
+        Width = 137
+        Height = 160
+        Margins.Left = 5
+        Margins.Top = 30
+        Margins.Right = 5
+        Margins.Bottom = 30
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 4
+        ExplicitLeft = 622
+        ExplicitTop = 27
+        object Label5: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 127
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Precio compra'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 100
+        end
+        object EditPrecioCompra: TEdit
+          AlignWithMargins = True
+          Left = 15
+          Top = 99
+          Width = 107
+          Height = 21
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Alignment = taCenter
+          TabOrder = 0
         end
       end
     end
+    object PanelFila2: TPanel
+      Left = 1
+      Top = 221
+      Width = 770
+      Height = 220
+      Align = alTop
+      BevelOuter = bvNone
+      Caption = 'pnlFila'
+      ShowCaption = False
+      TabOrder = 1
+      ExplicitTop = 220
+      object pnlCodigoIVA: TPanel
+        AlignWithMargins = True
+        Left = 5
+        Top = 30
+        Width = 137
+        Height = 160
+        Margins.Left = 5
+        Margins.Top = 30
+        Margins.Right = 5
+        Margins.Bottom = 30
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 0
+        object lblCodigoIVA: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 127
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'C'#243'digo IVA'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 77
+        end
+        object cbbCodIVA: TComboBox
+          AlignWithMargins = True
+          Left = 15
+          Top = 99
+          Width = 107
+          Height = 21
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Style = csDropDownList
+          TabOrder = 0
+          ExplicitWidth = 128
+        end
+      end
+      object PanelProveedor: TPanel
+        AlignWithMargins = True
+        Left = 152
+        Top = 30
+        Width = 137
+        Height = 160
+        Margins.Left = 5
+        Margins.Top = 30
+        Margins.Right = 5
+        Margins.Bottom = 30
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 1
+        ExplicitLeft = 167
+        object Label3: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 127
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'C'#243'digo proveedor'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 126
+        end
+        object cbbProveedor: TComboBox
+          AlignWithMargins = True
+          Left = 15
+          Top = 99
+          Width = 107
+          Height = 21
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Style = csDropDownList
+          TabOrder = 0
+          ExplicitWidth = 131
+        end
+      end
+      object PanelFactor: TPanel
+        AlignWithMargins = True
+        Left = 299
+        Top = 30
+        Width = 137
+        Height = 160
+        Margins.Left = 5
+        Margins.Top = 30
+        Margins.Right = 5
+        Margins.Bottom = 30
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 2
+        ExplicitLeft = 339
+        object Label1: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 127
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Factor conversi'#243'n'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 122
+        end
+        object EditFactor: TEdit
+          AlignWithMargins = True
+          Left = 15
+          Top = 99
+          Width = 107
+          Height = 21
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Alignment = taCenter
+          NumbersOnly = True
+          TabOrder = 0
+          OnChange = EditFactorChange
+          ExplicitWidth = 123
+        end
+      end
+      object PanelUniCaja: TPanel
+        AlignWithMargins = True
+        Left = 446
+        Top = 30
+        Width = 137
+        Height = 160
+        Margins.Left = 5
+        Margins.Top = 30
+        Margins.Right = 5
+        Margins.Bottom = 30
+        Align = alLeft
+        BevelOuter = bvNone
+        ShowCaption = False
+        TabOrder = 3
+        Visible = False
+        ExplicitLeft = 502
+        object Label2: TLabel
+          AlignWithMargins = True
+          Left = 5
+          Top = 5
+          Width = 127
+          Height = 21
+          Margins.Left = 5
+          Margins.Top = 5
+          Margins.Right = 5
+          Align = alTop
+          Alignment = taCenter
+          Caption = 'Unidad/Caja'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -16
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          ExplicitWidth = 86
+        end
+        object EditlUniCaja: TEdit
+          AlignWithMargins = True
+          Left = 15
+          Top = 99
+          Width = 107
+          Height = 21
+          Margins.Left = 15
+          Margins.Top = 40
+          Margins.Right = 15
+          Margins.Bottom = 40
+          Align = alBottom
+          Alignment = taCenter
+          TabOrder = 0
+          OnChange = EditlUniCajaChange
+          OnExit = EditlUniCajaExit
+          OnKeyPress = EditlUniCajaKeyPress
+          ExplicitWidth = 123
+        end
+      end
+    end
+  end
+  inherited pnlTitle: TPanel
+    Width = 766
+  end
+  inherited pFIBTransaction: TpFIBTransaction
+    Left = 280
+    Top = 0
+  end
+  inherited pFIBQuery: TpFIBQuery
+    Left = 376
+    Top = 0
+  end
+  object Timer: TTimer
+    Enabled = False
+    Interval = 300
+    OnTimer = TimerTimer
+    Left = 464
   end
 end

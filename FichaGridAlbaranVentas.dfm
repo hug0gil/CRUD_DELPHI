@@ -27,9 +27,9 @@ inherited FormFichaGridAlbaranVentas: TFormFichaGridAlbaranVentas
       ExplicitTop = 13
     end
     inherited LabelCodCliente: TLabel
-      Width = 84
-      Caption = 'C'#243'digo cliente'
-      ExplicitWidth = 84
+      Width = 109
+      Caption = 'C'#243'digo proveedor'
+      ExplicitWidth = 109
     end
     inherited EditCodigo: TEdit
       Width = 44

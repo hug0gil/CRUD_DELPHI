@@ -5,7 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, DBCtrls, Grids, DBGrids, StdCtrls, DB, FIBDatabase,
-  pFIBDatabase, FIBDataSet, pFIBDataSet, FIBQuery, pFIBQuery;
+  pFIBDatabase, FIBDataSet, pFIBDataSet, FIBQuery, pFIBQuery, frxExportDBF,
+  frxExportODF, frxExportMail, frxExportCSV, frxExportText, frxExportImage,
+  frxExportRTF, frxExportXML, frxExportXLS, frxExportHTML, frxClass,
+  frxExportPDF, frxDBSet, frxBarcode;
 
 type
   TFormMenuBase = class(TForm)
@@ -24,6 +27,28 @@ type
     shp1: TShape;
     rgGroupOrden: TRadioGroup;
     pFIBQueryDelete: TpFIBQuery;
+    btnImprimir: TButton;
+    DataSetReport: TpFIBDataSet;
+    frxDBDatasetReport: TfrxDBDataset;
+    frxReport: TfrxReport;
+    pFIBTransactionReport: TpFIBTransaction;
+    DataSourceReport: TDataSource;
+    frxPDFExport1: TfrxPDFExport;
+    frxHTMLExport1: TfrxHTMLExport;
+    frxXLSExport1: TfrxXLSExport;
+    frxXMLExport1: TfrxXMLExport;
+    frxRTFExport1: TfrxRTFExport;
+    frxBMPExport1: TfrxBMPExport;
+    frxJPEGExport1: TfrxJPEGExport;
+    frxTIFFExport1: TfrxTIFFExport;
+    frxGIFExport1: TfrxGIFExport;
+    frxSimpleTextExport1: TfrxSimpleTextExport;
+    frxCSVExport1: TfrxCSVExport;
+    frxMailExport1: TfrxMailExport;
+    frxODSExport1: TfrxODSExport;
+    frxODTExport1: TfrxODTExport;
+    frxDBFExport1: TfrxDBFExport;
+    frxBarCodeObject1: TfrxBarCodeObject;
     procedure FormCreate(Sender: TObject);
     // function GetLastCodigo(const PrimaryKey: String;
     // const TableName: String): Integer;

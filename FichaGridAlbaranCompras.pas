@@ -391,6 +391,7 @@ begin
         ButtonVer.Enabled := True;
         ButtonActualizar.Enabled := True;
         ButtonBorrar.Enabled := True;
+        btnUbicar.Enabled := True;
       end;
     2:
       begin
@@ -405,6 +406,7 @@ begin
         ButtonInsertar.Enabled := False;
         ButtonActualizar.Enabled := False;
         ButtonBorrar.Enabled := False;
+        btnUbicar.Enabled := False;
       end;
   end;
   if (Modo = 1) or (Modo = 2) then
@@ -427,12 +429,14 @@ begin
       ButtonActualizar.Enabled := True;
       ButtonVer.Enabled := True;
       ButtonBorrar.Enabled := True;
+      btnUbicar.Enabled := True;
     end
     else if pFIBDataSetTable.RecordCount = 0 then
     begin
       ButtonActualizar.Enabled := False;
       ButtonVer.Enabled := False;
       ButtonBorrar.Enabled := False;
+      btnUbicar.Enabled := False;
     end;
   end;
   if mode = 2 then
@@ -451,6 +455,7 @@ begin
     ButtonActualizar.Enabled := False;
     ButtonVer.Enabled := False;
     ButtonBorrar.Enabled := False;
+    btnUbicar.Enabled := False;
   end
   else
   begin
@@ -555,7 +560,8 @@ begin
   try
     pFIBQueryTable.Close;
     pFIBQueryTable.SQL.Text :=
-      'UPDATE ALBARAN_C SET DFECHA = :DFECHA, COBSERVACIONES = :COBSERVACIONES, NCOD_PROVEEDOR = :NCOD_PROVEEDOR, NTOTAL = :NTOTAL, NTOTAL_BRUTO = :NTOTAL_BRUTO,NIVA = :NIVA,NRECARGO = :NRECARGO  ' + 'WHERE NCODIGO = :NCODIGO';
+      'UPDATE ALBARAN_C SET DFECHA = :DFECHA, COBSERVACIONES = :COBSERVACIONES, NCOD_PROVEEDOR = :NCOD_PROVEEDOR, NTOTAL = :NTOTAL, NTOTAL_BRUTO = :NTOTAL_BRUTO, NIVA = :NIVA, NRECARGO = :NRECARGO WHERE NCODIGO = :NCODIGO';
+
     pFIBQueryTable.ParamByName('DFECHA').AsDateTime :=
       DateTimePickerFecha.DateTime;
     pFIBQueryTable.ParamByName('COBSERVACIONES').AsString :=
@@ -564,20 +570,18 @@ begin
       (cbbCod.Text);
     pFIBQueryTable.ParamByName('NCODIGO').AsInteger := StrToInt
       (EditCodigo.Text);
+
     pFIBQueryTable.ParamByName('NTOTAL').AsFloat := ConvertirStringToFloat
       (edtTotal.Text);
-
-    pFIBQueryTable.ParamByName('NTOTAL_BRUTO').AsFloat := StrToFloat
+    pFIBQueryTable.ParamByName('NTOTAL_BRUTO').AsFloat := ConvertirStringToFloat
       (edtTotal.Text);
-
-    pFIBQueryTable.ParamByName('NIVA').AsFloat := StrToFloat(edtIVA.Text);
-
-    pFIBQueryTable.ParamByName('NRECARGO').AsFloat := StrToFloat
+    pFIBQueryTable.ParamByName('NIVA').AsFloat := ConvertirStringToFloat
+      (edtIVA.Text);
+    pFIBQueryTable.ParamByName('NRECARGO').AsFloat := ConvertirStringToFloat
       (edtRecargo.Text);
 
     pFIBDataSetTable.Close;
     pFIBQueryTable.ExecQuery;
-
     pFIBTransactionTable.Commit;
     pFIBDataSetTable.Open;
     changeValues;
@@ -617,12 +621,14 @@ begin
               ButtonActualizar.Enabled := True;
               ButtonVer.Enabled := True;
               ButtonBorrar.Enabled := True;
+              btnUbicar.Enabled := True;
             end
             else
             begin
               ButtonActualizar.Enabled := False;
               ButtonVer.Enabled := False;
               ButtonBorrar.Enabled := False;
+              btnUbicar.Enabled := False;
             end;
 
             pFIBQueryTable.Close;
@@ -643,6 +649,7 @@ begin
               ButtonActualizar.Enabled := False;
               ButtonVer.Enabled := False;
               ButtonBorrar.Enabled := False;
+              btnUbicar.Enabled := False;
               Exit;
             end;
 
@@ -736,66 +743,69 @@ end;
 procedure TFormFichaGridAlbaran.btnUbicarClick(Sender: TObject);
 var
   FichaUbicacionAlbaran: TFormFichaUbicacionAlbaran;
-  cantidadFaltante: Integer;
   pFIBTransaction: TpFIBTransaction;
+  codArticulo: string;
+  FactorConversion: Integer;
 begin
   inherited;
+  codArticulo := DBGrid.Fields[1].AsString;
   pFIBTransaction := TpFIBTransaction.Create(nil);
   pFIBTransaction.DefaultDatabase := ModuloDatos.DataModuleBDD.pFIBDatabase;
   FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil, 2, False);
   FichaUbicacionAlbaran.fechaAlbaran := DateTimePickerFecha.DateTime; ;
-  FichaUbicacionAlbaran.codAlbaran := EditCodigo.Text;
-  FichaUbicacionAlbaran.codArticulo := DBGrid.Fields[1].AsString;
+  FichaUbicacionAlbaran.codigoAlbaran := StrToInt(EditCodigo.Text);
   FichaUbicacionAlbaran.Caption := 'Ubicar productos restantes';
 
   pFIBQueryTable.Close;
   pFIBTransaction.StartTransaction;
   pFIBQueryTable.SQL.Text :=
     'SELECT SUM(NCANTIDAD) FROM MOV_UBICACIONES WHERE CCOD_ARTICULO= :CCOD_ARTICULO AND NCOD_ALB_COMPRA= :NCOD_ALB_COMPRA';
-  pFIBQueryTable.ParamByName('CCOD_ARTICULO').AsString := DBGrid.Fields[1]
-    .AsString;
+  pFIBQueryTable.ParamByName('CCOD_ARTICULO').AsString := codArticulo;
   pFIBQueryTable.ParamByName('NCOD_ALB_COMPRA').AsInteger := StrToInt
     (EditCodigo.Text);
 
   pFIBQueryTable.ExecQuery;
 
-  {
-    case FactorConversion of
-    0:
-    FichaUbicacionAlbaran.cantidadArticulo := StrToInt(medtCajasPiezas.Text);
-    1:
+  ShowMessage(IntToStr(pFIBQueryTable.Fields[0].AsInteger));
+  pFIBTransaction.Commit;
+
+  pFIBQueryTable.Close;
+  if not pFIBTransaction.InTransaction then
+    pFIBTransaction.StartTransaction;
+  pFIBQueryTable.SQL.Text :=
+    'SELECT A.NFACTCONV, A.NUNICAJ FROM ARTICULOS A WHERE A.CCODIGO = :COD_ARTICULO';
+  pFIBQueryTable.ParamByName('COD_ARTICULO').AsString := codArticulo;
+  pFIBQueryTable.ExecQuery;
+
+  FactorConversion := pFIBQueryTable.FieldByName('NFACTCONV').AsInteger;
+
+  if FactorConversion = 1 then
+  begin
+    if (pFIBDataSetTable.FieldByName('NCANTIDAD1').AsString = '0') or
+      (pFIBDataSetTable.FieldByName('NCANTIDAD1').AsString = '1') then
     begin
-    if UnidadCaja = 1 then
-    begin
-    FichaUbicacionAlbaran.cantidadArticulo := StrToInt
-    (medtUnidadesPeso.Text);
+      FichaUbicacionAlbaran.cantidadArticulo := pFIBDataSetTable.FieldByName
+        ('NCANTIDAD2').AsInteger - pFIBQueryTable.Fields[0].AsInteger;
     end
     else
-    FichaUbicacionAlbaran.cantidadArticulo := StrToInt
-    (medtCajasPiezas.Text);
-    end;
-    else
-    begin
-    FichaUbicacionAlbaran.cantidadArticulo := StrToInt(medtCajasPiezas.Text)
-    + StrToInt(medtUnidadesPeso.Text);
-    end;
-    end; }
-
-  if (pFIBDataSetTable.FieldByName('NCANTIDAD1').AsString = '0') or
-    (pFIBDataSetTable.FieldByName('NCANTIDAD1').AsString = '1') then
-  begin
-    cantidadFaltante := pFIBDataSetTable.FieldByName('NCANTIDAD2').AsInteger;
+      FichaUbicacionAlbaran.cantidadArticulo := pFIBDataSetTable.FieldByName
+        ('NCANTIDAD1').AsInteger - pFIBQueryTable.Fields[0].AsInteger;
   end
   else
-    cantidadFaltante := pFIBDataSetTable.FieldByName('NCANTIDAD1').AsInteger;
+    FichaUbicacionAlbaran.cantidadArticulo :=
+      (pFIBDataSetTable.FieldByName('NCANTIDAD1')
+        .AsInteger + pFIBDataSetTable.FieldByName('NCANTIDAD2').AsInteger)
+      - pFIBQueryTable.Fields[0].AsInteger;
 
-  ShowMessage('Cantidad 1: ' + pFIBDataSetTable.FieldByName('NCANTIDAD1')
-      .AsString);
-
-  FichaUbicacionAlbaran.cantidadArticulo := cantidadFaltante;
   FichaUbicacionAlbaran.esFaltante := True;
-
-  FichaUbicacionAlbaran.ShowModal;
+  FichaUbicacionAlbaran.codArticulo := DBGrid.Fields[1].AsString;
+  FichaUbicacionAlbaran.codigoAlbaran := StrToInt(EditCodigo.Text);
+  if FichaUbicacionAlbaran.cantidadArticulo > 0 then
+  begin
+    FichaUbicacionAlbaran.ShowModal;
+  end
+  else
+    ShowMessage('Todos los artículos de este tipo están ya ubicados');
 
   pFIBTransaction.Commit;
 end;

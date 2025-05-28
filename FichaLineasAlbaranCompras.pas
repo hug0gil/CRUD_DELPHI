@@ -134,11 +134,16 @@ begin
             FichaUbicacionAlbaran := TFormFichaUbicacionAlbaran.Create(nil,
               mode, False);
             FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
-            FichaUbicacionAlbaran.codAlbaran := edtCodigo.Text;
+            FichaUbicacionAlbaran.codigoAlbaran := StrToInt(edtCodigo.Text);
             FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
             FichaUbicacionAlbaran.Caption :=
               'Relacionar ubicación con el producto';
             setCantidadFichaUbi(FichaUbicacionAlbaran);
+
+            FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
+
+
+
             FichaUbicacionAlbaran.ShowModal;
 
             pFIBQuery.SQL.Text :=
@@ -185,7 +190,7 @@ begin
               mode, False);
             FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
             FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
-            FichaUbicacionAlbaran.codAlbaran := edtCodigo.Text;
+            FichaUbicacionAlbaran.codigoAlbaran := StrToInt(edtCodigo.Text);
             FichaUbicacionAlbaran.Caption := 'Ver ubicación del producto';
             setCantidadFichaUbi(FichaUbicacionAlbaran);
             FichaUbicacionAlbaran.ShowModal;
@@ -200,7 +205,7 @@ begin
               mode, False);
             FichaUbicacionAlbaran.fechaAlbaran := fechaAlbaran;
             FichaUbicacionAlbaran.codArticulo := cbbCodArticulo.Text;
-            FichaUbicacionAlbaran.codAlbaran := edtCodigo.Text;
+            FichaUbicacionAlbaran.codigoAlbaran := StrToInt(edtCodigo.Text);
             FichaUbicacionAlbaran.Caption :=
               'Actualizar ubicación del producto';
             setCantidadFichaUbi(FichaUbicacionAlbaran);
