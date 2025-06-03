@@ -17,7 +17,7 @@ uses
   FichaGridAlbaranVentas in 'FichaGridAlbaranVentas.pas' {FormFichaGridAlbaranVentas},
   FichaLineasAlbaranVentas in 'FichaLineasAlbaranVentas.pas' {FormFichaLineasAlbaranVentas},
   MenuAlbaranCompras in 'MenuAlbaranCompras.pas' {FormMenuAlbaranCompras},
-  FichaGridAlbaranCompras in 'FichaGridAlbaranCompras.pas' {FormFichaGridAlbaran},
+  FichaGridAlbaranCompras in 'FichaGridAlbaranCompras.pas' {FormFichaGridAlbaranCompras},
   FichaLineasAlbaranCompras in 'FichaLineasAlbaranCompras.pas' {FormFichaLineasAlbaranCompras},
   MenuProveedores in 'MenuProveedores.pas' {FormMenuProveedores},
   FichaProveedor in 'FichaProveedor.pas' {FormFichaProveedor},
@@ -25,7 +25,7 @@ uses
   FichaUbicacion in 'FichaUbicacion.pas' {FormFichaUbicacion},
   MenuUbicaciones in 'MenuUbicaciones.pas' {FormMenuUbicaciones},
   FichaUbicacionAlbaran in 'FichaUbicacionAlbaran.pas' {FormFichaUbicacionAlbaran},
-  PruebaReport in 'PruebaReport.pas' {Form1};
+  Unit_principal in '..\..\..\Desktop\webservices\Unit_principal.pas' {Form_Principal};
 
 {$R *.res}
 
@@ -34,7 +34,7 @@ begin
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TDataModuleBDD, DataModuleBDD);
   Application.CreateForm(TFormMain, FormMain);
-  Application.CreateForm(TFormFichaUbicacionAlbaran, FormFichaUbicacionAlbaran);
+  Application.CreateForm(TForm_Principal, Form_Principal);
   Application.Run;
 
 end.

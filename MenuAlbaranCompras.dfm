@@ -1,8 +1,7 @@
 inherited FormMenuAlbaranCompras: TFormMenuAlbaranCompras
   Caption = 'Albaranes de compra'
+  OnActivate = FormActivate
   OnCreate = FormCreate
-  ExplicitWidth = 716
-  ExplicitHeight = 615
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel1: TPanel
@@ -583,5 +582,8 @@ inherited FormMenuAlbaranCompras: TFormMenuAlbaranCompras
         VAlign = vaCenter
       end
     end
+  end
+  inherited pFIBTransactionReport: TpFIBTransaction
+    Active = True
   end
 end

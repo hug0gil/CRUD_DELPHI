@@ -91,7 +91,7 @@
 				<Form>FormMenuAlbaranCompras</Form>
 			</DCCReference>
 			<DCCReference Include="FichaGridAlbaranCompras.pas">
-				<Form>FormFichaGridAlbaran</Form>
+				<Form>FormFichaGridAlbaranCompras</Form>
 			</DCCReference>
 			<DCCReference Include="FichaLineasAlbaranCompras.pas">
 				<Form>FormFichaLineasAlbaranCompras</Form>
@@ -114,8 +114,8 @@
 			<DCCReference Include="FichaUbicacionAlbaran.pas">
 				<Form>FormFichaUbicacionAlbaran</Form>
 			</DCCReference>
-			<DCCReference Include="PruebaReport.pas">
-				<Form>Form1</Form>
+			<DCCReference Include="..\..\..\Desktop\webservices\Unit_principal.pas">
+				<Form>Form_Principal</Form>
 			</DCCReference>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>

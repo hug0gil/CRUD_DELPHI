@@ -8,7 +8,9 @@ uses
   pFIBDatabase, FIBDataSet, pFIBDataSet, FIBQuery, pFIBQuery, frxExportDBF,
   frxExportODF, frxExportMail, frxExportCSV, frxExportText, frxExportImage,
   frxExportRTF, frxExportXML, frxExportXLS, frxExportHTML, frxClass,
-  frxExportPDF, frxDBSet, frxBarcode;
+  frxExportPDF, frxDBSet, frxBarcode, IdIOHandler, IdIOHandlerSocket,
+  IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IdBaseComponent, IdComponent,
+  IdTCPConnection, IdTCPClient, IdHTTP;
 
 type
   TFormMenuBase = class(TForm)
@@ -49,6 +51,8 @@ type
     frxODTExport1: TfrxODTExport;
     frxDBFExport1: TfrxDBFExport;
     frxBarCodeObject1: TfrxBarCodeObject;
+    IdHTTP: TIdHTTP;
+    IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     procedure FormCreate(Sender: TObject);
     // function GetLastCodigo(const PrimaryKey: String;
     // const TableName: String): Integer;

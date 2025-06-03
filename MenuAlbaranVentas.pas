@@ -1,4 +1,4 @@
-unit MenuAlbaranVentas;
+Ôªøunit MenuAlbaranVentas;
 
 interface
 
@@ -9,7 +9,9 @@ uses
   pFIBQuery,
   ModuloDatos, FIBQuery, frxBarcode, frxExportDBF, frxExportODF, frxExportMail,
   frxExportCSV, frxExportText, frxExportImage, frxExportRTF, frxExportXML,
-  frxExportXLS, frxExportHTML, frxClass, frxExportPDF, frxDBSet;
+  frxExportXLS, frxExportHTML, frxClass, frxExportPDF, frxDBSet, IdIOHandler,
+  IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IdBaseComponent,
+  IdComponent, IdTCPConnection, IdTCPClient, IdHTTP, IdURI, StrUtils,IdCookieManager;
 
 type
   TFormMenuAlbaranVentas = class(TFormMenuBase)
@@ -24,10 +26,15 @@ type
     procedure getCodClientes(FormFichaGridAlbaranVentas
         : TFormFichaGridAlbaranVentas);
     procedure btnImprimirClick(Sender: TObject);
+    function GetUUIDByTitle(const Title: string): string;
+    procedure DrupalDELETE;
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+  private
+    username, pass: string;
   end;
 
 implementation
@@ -44,17 +51,17 @@ begin
     FormFichaGridAlbaranVentas := TFormFichaGridAlbaranVentas.Create(Self,
       TButton(Sender).Tag);
     case TButton(Sender).Tag of
-      0: // AÒadir nuevo artÌculo
+      0: // A√±adir nuevo art√≠culo
         begin
-          FormFichaGridAlbaranVentas.Caption := 'Albar·n de venta nuevo';
+          FormFichaGridAlbaranVentas.Caption := 'Albar√°n de venta nuevo';
           getCodClientes(FormFichaGridAlbaranVentas);
           FormFichaGridAlbaranVentas.EditCodigo.ReadOnly := False;
         end;
 
-      1: // Actualizar artÌculo seleccionado
+      1: // Actualizar art√≠culo seleccionado
         begin
           FormFichaGridAlbaranVentas.Caption :=
-            'Actualizar albar·n de venta seleccionado';
+            'Actualizar albar√°n de venta seleccionado';
 
           FormFichaGridAlbaranVentas.EditCodigo.ReadOnly := True;
           FormFichaGridAlbaranVentas.EditCodigo.Text :=
@@ -82,7 +89,7 @@ begin
           if FormFichaGridAlbaranVentas.cbbCod.ItemIndex = -1 then
           begin
             ShowMessage(
-              'El cÛdigo de cliente no se encuentra. Se seleccionar· el primer cliente.');
+              'El c√≥digo de cliente no se encuentra. Se seleccionar√° el primer cliente.');
             FormFichaGridAlbaranVentas.cbbCod.ItemIndex := 0;
           end;
 
@@ -92,10 +99,10 @@ begin
           end;
         end;
 
-      2: // Ver artÌculo seleccionado
+      2: // Ver art√≠culo seleccionado
         begin
           FormFichaGridAlbaranVentas.Caption :=
-            'InformaciÛn del albar·n de venta seleccionado';
+            'Informaci√≥n del albar√°n de venta seleccionado';
 
           FormFichaGridAlbaranVentas.EditCodigo.ReadOnly := True;
           FormFichaGridAlbaranVentas.EditCodigo.Text :=
@@ -128,7 +135,7 @@ begin
       pFIBTransactionTable.StartTransaction;
       pFIBDataSetTable.Open;
 
-      // Realiza la b˙squeda solo si el cÛdigo no est· vacÌo para que al salir estemos en el registro creado/modificado/leido
+      // Realiza la b√∫squeda solo si el c√≥digo no est√° vac√≠o para que al salir estemos en el registro creado/modificado/leido
       pFIBDataSetTable.Locate('NCODIGO',
         FormFichaGridAlbaranVentas.EditCodigo.Text, []);
     end;
@@ -148,19 +155,91 @@ begin
         DataSourceTable.DataSet.FieldByName('NCODIGO').AsInteger;
       pFIBQueryDelete.ExecQuery;
 
+      DrupalDELETE;
       if pFIBTransactionTable.InTransaction then
         pFIBTransactionTable.Commit;
 
       pFIBDataSetTable.Close;
       pFIBDataSetTable.Open;
 
-      ShowMessage('El albar·n de venta se ha eliminado con Èxito.');
+      ShowMessage('El albar√°n de venta se ha eliminado con √©xito.');
     except
       on E: Exception do
       begin
         ShowMessage('Error al eliminar el registro: ' + E.Message);
       end;
     end;
+  end;
+end;
+
+procedure TFormMenuAlbaranVentas.DrupalDELETE;
+var
+  uuid, url: string;
+begin
+  uuid := GetUUIDByTitle(pFIBDataSetTable.FieldByName('NCODIGO').AsString);
+
+  if uuid = '' then
+  begin
+    ShowMessage('No se encontr√≥ albar√°n con ese c√≥digo para eliminar.');
+    Exit;
+  end;
+
+  url := 'https://barraca.demoastec.es/jsonapi/node/albaran_venta/' + uuid;
+
+  try
+    IdHTTP.Request.Clear;
+    IdHTTP.Request.BasicAuthentication := True;
+    IdHTTP.Request.username := username;
+    IdHTTP.Request.Password := pass;
+
+    IdHTTP.Request.Accept := 'application/vnd.api+json';
+    IdHTTP.Request.ContentType := 'application/vnd.api+json';
+    IdHTTP.Request.Method := 'DELETE';
+
+    IdHTTP.Delete(url);
+
+    if (IdHTTP.ResponseCode = 204) then
+      // ShowMessage('‚úì Albar√°n eliminado correctamente')
+    else
+      ShowMessage('‚úó Error al eliminar albar√°n. C√≥digo HTTP: ' + IntToStr
+          (IdHTTP.ResponseCode));
+  except
+    on E: Exception do
+      ShowMessage('‚úó Error al eliminar albar√°n: ' + E.Message);
+  end;
+end;
+
+function TFormMenuAlbaranVentas.GetUUIDByTitle(const Title: string): string;
+var
+  response, url: string;
+  pStart, pEnd: Integer;
+  filterTitle: string;
+begin
+  Result := '';
+
+  // Para evitar problemas con caracteres especiales en la URL, codificamos el t√≠tulo
+  filterTitle := TIdURI.ParamsEncode(Title);
+  url :=
+    'https://barraca.demoastec.es/jsonapi/node/albaran_compra?filter[title]='
+    + filterTitle;
+  try
+    response := IdHTTP.Get(url);
+
+    // Buscar la cadena "id":" para extraer el UUID
+    pStart := Pos('"id":"', response);
+    if pStart > 0 then
+    begin
+      Inc(pStart, Length('"id":"')); // posici√≥n inicial del UUID
+      pEnd := PosEx('"', response, pStart); // buscar cierre de comillas despu√©s del id
+      if (pEnd > pStart) and ((pEnd - pStart) = 36) then
+      begin
+        Result := Copy(response, pStart, 36);
+        // UUID est√°ndar tiene 36 caracteres
+      end;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Error buscando UUID: ' + E.Message);
   end;
 end;
 
@@ -190,6 +269,24 @@ begin
 
   if pFIBTransactionReport.InTransaction then
     pFIBTransactionReport.Commit;
+end;
+
+procedure TFormMenuAlbaranVentas.FormActivate(Sender: TObject);
+begin
+  inherited;
+  username := 'adminastec';
+  pass := '[Di!A&5b95(S';
+
+  if IdHTTP.CookieManager = nil then
+    IdHTTP.CookieManager := TIdCookieManager.Create(IdHTTP);
+
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.Method := sslvTLSv1_2;
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.SSLVersions := [sslvTLSv1_2];
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.mode := sslmClient;
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.VerifyMode := [];
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.VerifyDepth := 0;
+
+  IdHTTP.IOHandler := IdSSLIOHandlerSocketOpenSSL1;
 end;
 
 procedure TFormMenuAlbaranVentas.FormCreate(Sender: TObject);

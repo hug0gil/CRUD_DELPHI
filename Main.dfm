@@ -109,6 +109,15 @@ object FormMain: TFormMain
     TabOrder = 3
     OnClick = btnUbicacionesClick
   end
+  object Button1: TButton
+    Left = 506
+    Top = 542
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 6
+    OnClick = Button1Click
+  end
   object aplctnvnts1: TApplicationEvents
     OnHint = aplctnvnts1Hint
     Left = 584

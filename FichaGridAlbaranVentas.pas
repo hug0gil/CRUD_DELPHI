@@ -1,4 +1,4 @@
-unit FichaGridAlbaranVentas;
+Ôªøunit FichaGridAlbaranVentas;
 
 interface
 
@@ -6,7 +6,11 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, FichaGridBase, FIBDatabase, pFIBDatabase, FIBQuery, pFIBQuery, DB,
   FIBDataSet, pFIBDataSet, Grids, DBGrids, StdCtrls, ComCtrls,
-  ModuloDatos, FichaLineasAlbaranVentas, ExtCtrls;
+  ModuloDatos, FichaLineasAlbaranVentas, ExtCtrls, IdIOHandler,
+  IdIOHandlerSocket, IdIOHandlerStack, IdSSL, IdSSLOpenSSL, IdBaseComponent,
+  IdComponent, IdTCPConnection, IdTCPClient, IdHTTP, IdURI,
+  StrUtils,
+  IdCookieManager;
 
 type
   TFormFichaGridAlbaranVentas = class(TFormFichaGridBase0)
@@ -29,6 +33,8 @@ type
     lblIVA: TLabel;
     edtSubtotal: TEdit;
     lblSubtotal: TLabel;
+    IdHTTP: TIdHTTP;
+    IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     constructor Create(AOwner: TComponent; Modo: Integer); reintroduce;
     procedure btnAceptarClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -40,6 +46,10 @@ type
     procedure ActualizarAlbaran();
     procedure CalculoTotal();
     function ConvertirStringToFloat(Valor: string): Double;
+    function GetUUIDByTitle(const Title: string): string;
+    function LimpiarNumero(const S: string): string;
+    function EscapeJSONString(const S: string): string;
+    procedure DrupalPOSTPATCH();
   private
     function hayCambios: Boolean;
     procedure changeValues;
@@ -55,6 +65,9 @@ type
     falloInsert: Boolean;
     nombreCliente: string;
     fechaAlbaran: TDateTime;
+  private
+    username: string;
+    pass: string;
   end;
 
 implementation
@@ -116,12 +129,12 @@ begin
       case TButton(Sender).Tag of
         0:
           FichaLineasAlbaranVentas.Caption :=
-            'AÒadir nueva lÌnea albar·n ' + EditCodigo.Text + ' - ' +
+            'A√±adir nueva l√≠nea albar√°n ' + EditCodigo.Text + ' - ' +
             nombreCliente;
         1:
           begin
             FichaLineasAlbaranVentas.Caption :=
-              'InformaciÛn de la lÌnea albar·n seleccionada ' +
+              'Informaci√≥n de la l√≠nea albar√°n seleccionada ' +
               EditCodigo.Text + ' - ' + nombreCliente;
             FichaLineasAlbaranVentas.edtCodigo.Text := EditCodigo.Text;
             FichaLineasAlbaranVentas.edtOrden.Text :=
@@ -155,7 +168,7 @@ begin
         2:
           begin
             FichaLineasAlbaranVentas.Caption :=
-              'Actualizar lÌnea albar·n ' + EditCodigo.Text + ' - ' +
+              'Actualizar l√≠nea albar√°n ' + EditCodigo.Text + ' - ' +
               nombreCliente;
             FichaLineasAlbaranVentas.edtCodigo.Text := EditCodigo.Text;
             FichaLineasAlbaranVentas.edtOrden.Text :=
@@ -201,7 +214,7 @@ begin
         // Abrir el dataset
         pFIBDataSetTable.Open;
 
-        // DespuÈs verificamos si hay registros
+        // Despu√©s verificamos si hay registros
         if pFIBDataSetTable.RecordCount > 0 then
         begin
           if FichaLineasAlbaranVentas.edtOrden.Text <> '' then
@@ -241,7 +254,7 @@ begin
       pFIBDataSetTable.Open;
 
       CalculoTotal;
-      ShowMessage('La lÌnea albar·n se ha eliminado con Èxito.');
+      ShowMessage('La l√≠nea albar√°n se ha eliminado con √©xito.');
     except
       on E: Exception do
       begin
@@ -268,9 +281,9 @@ begin
   sumaIVA := 0;
   sumaREQ := 0;
 
-  // Crear transacciÛn y consulta
+  // Crear transacci√≥n y consulta
   pFIBTransactionCalculo := TpFIBTransaction.Create(nil);
-  // Inicializar transacciÛn
+  // Inicializar transacci√≥n
   try
     pFIBTransactionCalculo.DefaultDatabase :=
       ModuloDatos.DataModuleBDD.pFIBDatabase;
@@ -283,7 +296,7 @@ begin
       pFIBQueryCalculo.Database := ModuloDatos.DataModuleBDD.pFIBDatabase;
       pFIBQueryCalculo.Transaction := ModuloDatos.DataModuleBDD.pFIBTransaction;
 
-      // Obtener rÈgimen fiscal del cliente
+      // Obtener r√©gimen fiscal del cliente
       pFIBQueryCalculo.Close;
       pFIBQueryCalculo.SQL.Text :=
         'SELECT CREG_FISCAL FROM PROVEEDORES WHERE NCODIGO = :NCODIGO';
@@ -298,7 +311,7 @@ begin
 
       pFIBQueryCalculo.Close;
 
-      // Cargar todas las lÌneas del albar·n sin agrupar
+      // Cargar todas las l√≠neas del albar√°n sin agrupar
       pFIBQueryCalculo.SQL.Text :=
         'SELECT NSUBTOTAL, NIVA, NRECARGO FROM LINEAS_ALB_V WHERE NCOD_ALBARAN = :NCOD_ALBARAN';
       pFIBQueryCalculo.ParamByName('NCOD_ALBARAN').AsString := EditCodigo.Text;
@@ -338,7 +351,7 @@ begin
       pFIBQueryCalculo.Free; // Liberar la consulta
     end;
 
-    pFIBTransactionCalculo.Commit; // Confirmar la transacciÛn
+    pFIBTransactionCalculo.Commit; // Confirmar la transacci√≥n
 
   except
     on E: Exception do
@@ -347,7 +360,7 @@ begin
       ShowMessage('Error: ' + E.Message);
     end;
   end;
-  pFIBTransactionCalculo.Free; // Liberar la transacciÛn
+  pFIBTransactionCalculo.Free; // Liberar la transacci√≥n
 end;
 
 procedure TFormFichaGridAlbaranVentas.cbbCodClienteChange(Sender: TObject);
@@ -374,7 +387,7 @@ begin
   // Reemplazar coma por punto
   ValorFormateado := StringReplace(ValorFormateado, '.', ',', [rfReplaceAll]);
 
-  // Utilizar StrToFloatDef con un formato explÌcito de punto como separador decimal
+  // Utilizar StrToFloatDef con un formato expl√≠cito de punto como separador decimal
   Result := StrToFloat(ValorFormateado);
 end;
 
@@ -482,6 +495,20 @@ begin
 
   if mode = 1 then
     CalculoTotal;
+
+  username := 'adminastec';
+  pass := '[Di!A&5b95(S';
+
+  if IdHTTP.CookieManager = nil then
+    IdHTTP.CookieManager := TIdCookieManager.Create(IdHTTP);
+
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.Method := sslvTLSv1_2;
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.SSLVersions := [sslvTLSv1_2];
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.mode := sslmClient;
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.VerifyMode := [];
+  IdSSLIOHandlerSocketOpenSSL1.SSLOptions.VerifyDepth := 0;
+
+  IdHTTP.IOHandler := IdSSLIOHandlerSocketOpenSSL1;
 end;
 
 function TFormFichaGridAlbaranVentas.getNombreCliente: string;
@@ -519,6 +546,42 @@ begin
   end;
 end;
 
+function TFormFichaGridAlbaranVentas.GetUUIDByTitle(const Title: string)
+  : string;
+var
+  response, url: string;
+  pStart, pEnd: Integer;
+  filterTitle: string;
+begin
+  Result := '';
+
+  // Para evitar problemas con caracteres especiales en la URL, codificamos el t√≠tulo
+  filterTitle := TIdURI.ParamsEncode(Title);
+  url :=
+    'https://barraca.demoastec.es/jsonapi/node/albaran_venta?filter[title]=' + filterTitle;
+
+  try
+    response := IdHTTP.Get(url);
+
+    // Buscar la cadena "id":" para extraer el UUID
+    pStart := Pos('"id":"', response);
+    if pStart > 0 then
+    begin
+      Inc(pStart, Length('"id":"')); // posici√≥n inicial del UUID
+      pEnd := PosEx('"', response, pStart); // buscar cierre de comillas despu√©s del id
+      if (pEnd > pStart) and ((pEnd - pStart) = 36) then
+      begin
+        Result := Copy(response, pStart, 36);
+        // UUID est√°ndar tiene 36 caracteres
+      end;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Error buscando UUID: ' + E.Message);
+  end;
+
+end;
+
 function TFormFichaGridAlbaranVentas.hayCambios: Boolean;
 begin
   Result := (DateTimePickerFecha.Date <> originalFecha) or
@@ -542,7 +605,7 @@ begin
   begin
     if Trim(pFIBQueryTable.FieldByName('CREG_FISCAL').AsString) = 'G' then
     begin
-      // El DataSet ya deberÌa estar en Insert por estar en NewRecord,
+      // El DataSet ya deber√≠a estar en Insert por estar en NewRecord,
       // pero si no, lo forzamos por seguridad
       if not(DataSet.State in [dsInsert, dsEdit]) then
         DataSet.Edit;
@@ -573,7 +636,8 @@ begin
     pFIBQueryTable.ParamByName('NTOTAL_BRUTO').AsFloat := ConvertirStringToFloat
       (edtSubtotal.Text);
 
-    pFIBQueryTable.ParamByName('NIVA').AsFloat := ConvertirStringToFloat(edtIVA.Text);
+    pFIBQueryTable.ParamByName('NIVA').AsFloat := ConvertirStringToFloat
+      (edtIVA.Text);
 
     pFIBQueryTable.ParamByName('NRECARGO').AsFloat := ConvertirStringToFloat
       (edtRecargo.Text);
@@ -584,13 +648,13 @@ begin
     pFIBTransactionTable.Commit;
     pFIBDataSetTable.Open;
     changeValues;
-    ShowMessage('Albar·n actualizado correctamente.');
+    ShowMessage('Albar√°n actualizado correctamente.');
   except
     on E: Exception do
     begin
       if pFIBTransactionTable.InTransaction then
         pFIBTransactionTable.Rollback;
-      ShowMessage('Error al actualizar albar·n: ' + E.Message);
+      ShowMessage('Error al actualizar albar√°n: ' + E.Message);
     end;
   end;
 end;
@@ -602,6 +666,8 @@ begin
 
   if mode = 1 then
     CalculoTotal;
+  if MemoObservaciones.Text = '' then
+    MemoObservaciones.Text := 'MemoObservaciones';
   case mode of
     0: // Insertar
       begin
@@ -639,7 +705,7 @@ begin
             else if StrToInt(EditCodigo.Text) > CodigoGenerador then
             begin
               ShowMessage(
-                'El cÛdigo proporcionado es mayor que el valor del generador. Por favor, use un cÛdigo menor o igual.');
+                'El c√≥digo proporcionado es mayor que el valor del generador. Por favor, use un c√≥digo menor o igual.');
               pFIBTransactionTable.Rollback;
               falloInsert := False;
               ButtonInsertar.Enabled := False;
@@ -679,7 +745,8 @@ begin
             pFIBQueryTable.ExecQuery;
 
             pFIBTransactionTable.Commit;
-            ShowMessage('Albar·n de venta insertado correctamente.');
+            DrupalPOSTPATCH();
+            ShowMessage('Albar√°n de venta insertado correctamente.');
             DateTimePickerFecha.Enabled := False;
             contInsertar := contInsertar + 1;
           except
@@ -687,7 +754,7 @@ begin
             begin
               if pFIBTransactionTable.InTransaction then
                 pFIBTransactionTable.Rollback;
-              ShowMessage('Error al insertar albar·n: ' + E.Message);
+              ShowMessage('Error al insertar albar√°n: ' + E.Message);
             end;
           end;
         end
@@ -730,11 +797,106 @@ begin
         else
         begin
           ActualizarAlbaran();
+          DrupalPOSTPATCH();
         end;
       end;
     2:
       Self.Close;
   end;
 end;
+
+procedure TFormFichaGridAlbaranVentas.DrupalPOSTPATCH;
+var
+  uuid, url, cJSON: string;
+  jsonNode: TMemoryStream;
+  cUTF8: AnsiString;
+  crespuesta: string;
+
+begin
+  uuid := GetUUIDByTitle(EditCodigo.Text);
+  cJSON := '{"data":{';
+
+  if uuid <> '' then
+    cJSON := cJSON + '"id":"' + uuid + '",';
+
+  cJSON := cJSON + '"type":"node--albaran_venta",' + '"attributes":{' +
+    '"title":"' + EditCodigo.Text + '",' + '"field_fecha":"' + FormatDateTime
+    ('yyyy-mm-dd', DateTimePickerFecha.DateTime) + '",' +
+    '"field_codigo_cliente":' + cbbCod.Text + ',' +
+    '"field_nombre_del_cliente":"' + getNombreCliente + '",' +
+    '"field_observaciones":{"value":"' + EscapeJSONString
+    (MemoObservaciones.Text) + '","format":"basic_html"},' +
+    '"field_total_bruto":' + LimpiarNumero(edtSubtotal.Text)
+    + ',' + '"field_total_recargo":' + LimpiarNumero(edtRecargo.Text)
+    + ',' + '"field_total_iva":' + LimpiarNumero(edtIVA.Text)
+    + ',' + '"field_total":' + LimpiarNumero(edtTotal.Text) + '}}}';
+
+
+
+  jsonNode := TMemoryStream.Create;
+  try
+    cUTF8 := UTF8Encode(cJSON);
+    jsonNode.Write(cUTF8[1], Length(cUTF8));
+    jsonNode.Position := 0;
+
+    IdHTTP.ConnectTimeout := 10000;
+    IdHTTP.Request.Clear;
+    IdHTTP.Request.CustomHeaders.Clear;
+
+    IdHTTP.Request.BasicAuthentication := True;
+    IdHTTP.Request.username := username;
+    IdHTTP.Request.Password := pass;
+    IdHTTP.Request.ContentType := 'application/vnd.api+json';
+    IdHTTP.Request.Accept := 'application/vnd.api+json';
+
+    if uuid = '' then
+    begin
+      // Crear nuevo nodo con POST
+      url := 'https://barraca.demoastec.es/jsonapi/node/albaran_venta';
+
+      crespuesta := IdHTTP.Post(url, jsonNode);
+
+    end
+    else
+    begin
+      // Actualizar nodo existente con PATCH
+      url := 'https://barraca.demoastec.es/jsonapi/node/albaran_venta' + uuid;
+      IdHTTP.Request.Method := 'PATCH';
+      crespuesta := IdHTTP.Patch(url, jsonNode);
+    end;
+
+    if (IdHTTP.ResponseCode = 200) or (IdHTTP.ResponseCode = 201) then
+      // ShowMessage('‚úì Albar√°n guardado correctamente')
+    else
+      ShowMessage('‚úó Error HTTP ' + IntToStr(IdHTTP.ResponseCode));
+
+  finally
+    jsonNode.Free;
+  end;
+
+end;
+
+function TFormFichaGridAlbaranVentas.LimpiarNumero(const S: string): string;
+begin
+  Result := StringReplace(S, '.', '', [rfReplaceAll]);
+  Result := StringReplace(Result, ',', '.', [rfReplaceAll]);
+end;
+
+function TFormFichaGridAlbaranVentas.EscapeJSONString(const S: string): string;
+begin
+  Result := S;
+  // Escapamos la barra invertida primero
+  Result := StringReplace(Result, '\', '\\', [rfReplaceAll]);
+  // Escapamos las comillas dobles
+  Result := StringReplace(Result, '"', '\"', [rfReplaceAll]);
+  // Escapamos el salto de l√≠nea CR+LF
+  Result := StringReplace(Result, #13#10, '\n', [rfReplaceAll]);
+  // Escapamos el salto de l√≠nea LF
+  Result := StringReplace(Result, #10, '\n', [rfReplaceAll]);
+  // Escapamos el retorno de carro (por si acaso)
+  Result := StringReplace(Result, #13, '\n', [rfReplaceAll]);
+end;
+
+
 
 end.

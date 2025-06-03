@@ -1,8 +1,7 @@
 inherited FormMenuAlbaranVentas: TFormMenuAlbaranVentas
   Caption = 'Albaranes de venta'
+  OnActivate = FormActivate
   OnCreate = FormCreate
-  ExplicitWidth = 716
-  ExplicitHeight = 615
   PixelsPerInch = 96
   TextHeight = 13
   inherited Panel1: TPanel
@@ -645,6 +644,9 @@ inherited FormMenuAlbaranVentas: TFormMenuAlbaranVentas
         end
       end
     end
+  end
+  inherited pFIBTransactionReport: TpFIBTransaction
+    Active = True
   end
   inherited DataSourceReport: TDataSource
     Left = 280

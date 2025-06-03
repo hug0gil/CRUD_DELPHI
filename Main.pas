@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, MenuVentas, MenuArticulos, MenuCompras, Menus, AppEvnts,
-  ComCtrls, FichaAlmacen, MenuUbicaciones;
+  ComCtrls, FichaAlmacen, MenuUbicaciones, Unit_principal;
 
 type
   TFormMain = class(TForm)
@@ -16,12 +16,14 @@ type
     aplctnvnts1: TApplicationEvents;
     btnAlmacen: TButton;
     btnUbicaciones: TButton;
+    Button1: TButton;
     procedure btnComprasClick(Sender: TObject);
     procedure ButtonArticulosClick(Sender: TObject);
     procedure ButtonAlbaranventaClick(Sender: TObject);
     procedure aplctnvnts1Hint(Sender: TObject);
     procedure btnAlmacenClick(Sender: TObject);
     procedure btnUbicacionesClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -34,6 +36,15 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TFormMain.Button1Click(Sender: TObject);
+var
+  Principal: TForm_Principal;
+begin
+  Principal := TForm_Principal.Create(nil);
+  Principal.ShowModal;
+  Principal.Free;
+end;
 
 procedure TFormMain.ButtonAlbaranventaClick(Sender: TObject);
 var
